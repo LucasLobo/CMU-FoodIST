@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">FoodIST 16</string>
+    <string name="title_food_service_list">Food services</string>
+    <string name="action_settings">Settings</string>
 </resources>
