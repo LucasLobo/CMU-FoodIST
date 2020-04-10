@@ -1,6 +1,5 @@
 package pt.ulisboa.tecnico.cmov.g16.foodist.model;
 
-
 import java.util.ArrayList;
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 
@@ -29,17 +28,19 @@ public class FoodService {
     private ArrayList<AccessRestriction> accessRestrictions = new ArrayList<>();
 
     private String name;
+    private String foodType;
 
-    public FoodService(String name) {
+    public FoodService(String name, String foodType) {
         this.name = name;
+        this.foodType = foodType;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getFoodType() {
+        return foodType;
     }
 
     public void addAccessRestriction(AccessRestriction accessRestriction) {

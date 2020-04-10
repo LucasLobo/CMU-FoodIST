@@ -1,6 +1,7 @@
 package pt.ulisboa.tecnico.cmov.g16.foodist.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
+import pt.ulisboa.tecnico.cmov.g16.foodist.activities.FoodServiceActivity;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodService;
 
 public class FoodServiceListRecyclerAdapter extends RecyclerView.Adapter<FoodServiceListRecyclerAdapter.FoodServiceListItemViewHolder>   {
@@ -39,26 +41,15 @@ public class FoodServiceListRecyclerAdapter extends RecyclerView.Adapter<FoodSer
 
     @Override
     public void onBindViewHolder(@NonNull FoodServiceListItemViewHolder holder, final int position) {
-        holder.text.setText(foodServiceList.get(position).getName());
+        final FoodService foodService = foodServiceList.get(position);
+        holder.text.setText(foodService.getName());
 
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                ArrayList<FoodService.AccessRestriction> accessRestrictions = foodServiceList.get(position).getAccessRestrictions();
-
-                StringBuilder restrictions = new StringBuilder();
-                restrictions.append(" Restrictions: ");
-
-                for (FoodService.AccessRestriction restriction : accessRestrictions) {
-                    restrictions.append(context.getString(restriction.resourceId));
-                    restrictions.append(",");
-                }
-
-                Snackbar.make(v,
-                        foodServiceList.get(position).getName() + restrictions.toString(),
-                        Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent(context, FoodServiceActivity.class);
+                intent.putExtra("index", position);
+                context.startActivity(intent);
             }
         });
     }

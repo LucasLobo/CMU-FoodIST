@@ -1,4 +1,4 @@
-package pt.ulisboa.tecnico.cmov.g16.foodist;
+package pt.ulisboa.tecnico.cmov.g16.foodist.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -11,23 +11,19 @@ import android.view.View;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.ArrayList;
-
+import pt.ulisboa.tecnico.cmov.g16.foodist.Data;
+import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 import pt.ulisboa.tecnico.cmov.g16.foodist.adapters.FoodServiceListRecyclerAdapter;
-import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodService;
 
 public class MainActivity extends AppCompatActivity {
 
-    RecyclerView rv;
-    ArrayList<FoodService> foodServiceList;
+    Data data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        this.foodServiceList = new ArrayList<>();
-
+        data = (Data) getApplicationContext();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -40,27 +36,13 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-
         initFoodServiceRecyclerView();
     }
 
     private void initFoodServiceRecyclerView() {
-        rv = findViewById(R.id.food_service_list);
-        FoodServiceListRecyclerAdapter adapter = new FoodServiceListRecyclerAdapter(this, foodServiceList);
+        RecyclerView rv = findViewById(R.id.food_service_list);
+        FoodServiceListRecyclerAdapter adapter = new FoodServiceListRecyclerAdapter(this, data.getFoodServiceList());
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
-
-        FoodService foodService = new FoodService("Food Service " + 0);
-        foodService.addAccessRestriction(FoodService.AccessRestriction.ELEVATOR);
-        foodService.addAccessRestriction(FoodService.AccessRestriction.RAMP);
-        foodServiceList.add(foodService);
-
-        foodService = new FoodService("Food Service " + 1);
-        foodService.addAccessRestriction(FoodService.AccessRestriction.STAIRS);
-        foodServiceList.add(foodService);
-
-        for (int i = 2; i < 50; i++) {
-            foodServiceList.add(new FoodService("Food Service " + i));
-        }
     }
 }
