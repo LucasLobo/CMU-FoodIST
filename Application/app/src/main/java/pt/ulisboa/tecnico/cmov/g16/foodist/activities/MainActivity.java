@@ -5,8 +5,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -16,6 +19,7 @@ import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 import pt.ulisboa.tecnico.cmov.g16.foodist.adapters.FoodServiceListRecyclerAdapter;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "MainActivity";
 
     Data data;
 
@@ -37,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         initFoodServiceRecyclerView();
+
     }
 
     private void initFoodServiceRecyclerView() {
@@ -44,5 +49,11 @@ public class MainActivity extends AppCompatActivity {
         FoodServiceListRecyclerAdapter adapter = new FoodServiceListRecyclerAdapter(this, data.getFoodServiceList());
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    public void openTermiteActivity(View view) {
+        Log.i(TAG, "hello");
+        Intent intent = new Intent(this, PeerScannerActivity.class);
+        startActivity(intent);
     }
 }
