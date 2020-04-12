@@ -12,6 +12,7 @@ import android.widget.ToggleButton;
 import androidx.appcompat.app.AppCompatActivity;
 
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.Data;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodCourse;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.Menu;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.MenuItem;
@@ -21,6 +22,7 @@ import pt.ulisboa.tecnico.cmov.g16.foodist.model.TypeOfFood;
 public class MainActivity extends AppCompatActivity {
 
     private Menu menu;
+    Data data;
     ListView listView;
     MenuItemAdapter adapter;
 
@@ -28,14 +30,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-        menu = new Menu();
+        data = (Data) getApplicationContext();
+        menu = data.getMenu();
+
         adapter = new MenuItemAdapter(this, menu.getMenuList());
         listView = findViewById(R.id.list);
         listView.setAdapter(adapter);
-        menu.addMenuItem("Menu A", 2, TypeOfFood.MEAT,true, "dkajsdkajdaksdjladkas", FoodCourse.MAIN);
-        menu.addMenuItem("Menu B", 2, TypeOfFood.FISH,true, "knmsokmdaosdjasdia", FoodCourse.MAIN);
-        menu.addMenuItem("Menu C", 2, TypeOfFood.VEGETARIAN,true, "abcd", FoodCourse.MAIN);
-        menu.addMenuItem("Menu D", 2, TypeOfFood.VEGAN,true, "qiwoehioqhe", FoodCourse.MAIN);
+
 
 
         Button buttonNewMenuItem = findViewById(R.id.buttonNewMenuItem);
@@ -89,15 +90,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 MenuItem item = adapter.getItem(i);
                 Intent intent = new Intent(MainActivity.this, MenuItemActivity.class);
-                Bundle extras = new Bundle();
-                extras.putString("title", item.getName());
-                extras.putInt("price", item.getPrice());
-                extras.putInt("discount", item.getDiscount());
-                extras.putString("foodType", item.getFoodType().toString());
-                extras.putString("description", item.getDescription());
-                //Image
-
-                intent.putExtras(extras);
+                intent.putExtra("index", menu.getMenuList().indexOf(item));
                 startActivity(intent);
 
             }

@@ -50,6 +50,8 @@ public class MenuItemAdapter extends ArrayAdapter<MenuItem> implements Filterabl
         TextView foodType = listItem.findViewById(R.id.foodType);
         foodType.setText(item.getFoodType().toString());
         ImageView image = listItem.findViewById(R.id.foodImage);
+        if(item.getImages().size()>0)
+            image.setImageDrawable(item.getImages().getLast().getDrawable());
 
         return listItem;
 

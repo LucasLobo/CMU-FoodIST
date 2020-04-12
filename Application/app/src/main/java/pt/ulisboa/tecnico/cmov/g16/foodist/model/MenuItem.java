@@ -1,6 +1,7 @@
 package pt.ulisboa.tecnico.cmov.g16.foodist.model;
 
 import android.media.Image;
+import android.widget.ImageView;
 
 import java.util.LinkedList;
 
@@ -13,7 +14,7 @@ public class MenuItem {
     private String description;
     private FoodCourse foodCourse;
     private TypeOfFood foodType;
-    private LinkedList<Image> images;
+    private LinkedList<ImageView> images;
 
 
     MenuItem(String name, int price, TypeOfFood foodType, boolean availability, String description, FoodCourse foodCourse) {
@@ -23,6 +24,7 @@ public class MenuItem {
         this.price = price;
         this.description = description;
         this.foodCourse = foodCourse;
+        images = new LinkedList<>();
     }
 
     // * GETTERS * //
@@ -50,7 +52,7 @@ public class MenuItem {
         return foodType;
     }
 
-    public LinkedList<Image> getImages() {
+    public LinkedList<ImageView> getImages() {
         return images;
     }
 
@@ -85,10 +87,6 @@ public class MenuItem {
 
     public void setFoodType(TypeOfFood foodType) {
         this.foodType = foodType;
-    }
-
-    public void addImages(Image image) {
-        images.add(image);
     }
 
     public void setAvailability(boolean availability) {
