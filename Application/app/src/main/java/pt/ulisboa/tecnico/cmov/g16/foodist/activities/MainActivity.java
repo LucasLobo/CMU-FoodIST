@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.Data;
-import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodCourse;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.Menu;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.MenuItem;
 import pt.ulisboa.tecnico.cmov.g16.foodist.adapters.MenuItemAdapter;
@@ -43,7 +42,8 @@ public class MainActivity extends AppCompatActivity {
         buttonNewMenuItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                menu.addMenuItem("abc", 2, TypeOfFood.MEAT,true, "abcd", FoodCourse.MAIN);
+                Intent intent = new Intent(MainActivity.this, NewMenuItemActivity.class);
+                startActivity(intent);
                 adapter.getFilter().filter(" ");
             }
         });
@@ -96,6 +96,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        adapter.getFilter().filter(" ");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
         adapter.getFilter().filter(" ");
     }
 }

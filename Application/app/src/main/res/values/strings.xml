@@ -2,4 +2,14 @@
     <string name="app_name">FoodIST 16</string>
     <string name="title_food_service_list">Food services</string>
     <string name="action_settings">Settings</string>
+    <string name="meat" />
+    <string name="fish" />
+    <string name="vegetarian" />
+    <string name="vegan" />
+    <string-array name="food_type_array">
+        <item>MEAT</item>
+        <item>FISH</item>
+        <item>VEGETARIAN</item>
+        <item>VEGAN</item>
+    </string-array>
 </resources>

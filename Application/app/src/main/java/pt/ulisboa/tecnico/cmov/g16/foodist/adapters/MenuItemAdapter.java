@@ -52,6 +52,8 @@ public class MenuItemAdapter extends ArrayAdapter<MenuItem> implements Filterabl
         ImageView image = listItem.findViewById(R.id.foodImage);
         if(item.getImages().size()>0)
             image.setImageDrawable(item.getImages().getLast().getDrawable());
+        else
+            image.setImageResource(android.R.drawable.ic_delete);
 
         return listItem;
 

@@ -18,8 +18,8 @@ public class Menu {
         return lastUpdated.toString();
     }
 
-    public void addMenuItem(String name, int price, TypeOfFood foodType, boolean availability, String description, FoodCourse foodCourse){
-        MenuItem item = new MenuItem(name, price, foodType, availability, description, foodCourse);
+    public void addMenuItem(String name, double price, TypeOfFood foodType, boolean availability, String description){
+        MenuItem item = new MenuItem(name, price, foodType, availability, description);
         menuList.add(item);
     }
 
