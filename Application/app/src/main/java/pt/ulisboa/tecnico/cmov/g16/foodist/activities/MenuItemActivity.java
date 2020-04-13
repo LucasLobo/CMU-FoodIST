@@ -1,13 +1,9 @@
 package pt.ulisboa.tecnico.cmov.g16.foodist.activities;
 
-import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -16,7 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import java.util.LinkedList;
 
@@ -28,9 +23,10 @@ import pt.ulisboa.tecnico.cmov.g16.foodist.model.MenuItem;
 public class MenuItemActivity extends AppCompatActivity {
 
     private static final int PICK_IMAGE = 100;
-    Data data;
-    MenuItem item;
-    LinearLayout imageLayout;
+    private Data data;
+    private MenuItem item;
+    private LinearLayout imageLayout;
+    private boolean zoomOut = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +66,20 @@ public class MenuItemActivity extends AppCompatActivity {
         }
     }
 
+    private void setupImage(final ImageView imageView){
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MenuItemActivity.this, FullscreenImageActivity.class);
+                Bundle extras = new Bundle();
+                extras.putInt("imageIndex", item.getImages().indexOf(imageView));
+                extras.putInt("itemIndex", data.getMenu().getMenuList().indexOf(item));
+                intent.putExtras(extras);
+                startActivity(intent);
+            }
+        });
+    }
+
     private void chooseImageFromGallery(){
         Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         startActivityForResult(galleryIntent, PICK_IMAGE);
@@ -96,7 +106,7 @@ public class MenuItemActivity extends AppCompatActivity {
     private void showImage(ImageView imageView){
         imageView.setVisibility(View.VISIBLE);
         imageLayout.addView(imageView);
-
+        setupImage(imageView);
     }
 
 }

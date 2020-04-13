@@ -22,6 +22,7 @@
         </activity>
         <activity android:name=".activities.MenuItemActivity"/>
         <activity android:name=".activities.NewMenuItemActivity"/>
+        <activity android:name=".activities.FullscreenImageActivity"/>
     </application>
 
 </manifest>

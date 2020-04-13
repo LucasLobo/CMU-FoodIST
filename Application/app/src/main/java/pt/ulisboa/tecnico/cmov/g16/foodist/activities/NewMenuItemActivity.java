@@ -6,6 +6,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -42,6 +43,7 @@ public class NewMenuItemActivity extends AppCompatActivity {
                 MenuItem item = new MenuItem(title.getText().toString(), Double.parseDouble(price.getText().toString()), TypeOfFood.valueOf(typeOfFood.getSelectedItem().toString()), true, description.getText().toString());
                 item.setDiscount(Integer.parseInt(discount.getText().toString()));
                 data.getMenu().getMenuList().add(item);
+                Toast.makeText(getApplicationContext(), title.getText().toString() + " created successfully!", Toast.LENGTH_LONG).show();
                 finish();
             }
         });
