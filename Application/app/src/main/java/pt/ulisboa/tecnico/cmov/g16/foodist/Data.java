@@ -5,10 +5,12 @@ import android.app.Application;
 import java.util.ArrayList;
 
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodService;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.User;
 
 public class Data extends Application {
 
     ArrayList<FoodService> foodServiceList;
+    User user;
 
     @Override
     public void onCreate() {
@@ -27,6 +29,8 @@ public class Data extends Application {
         for (int i = 2; i < 50; i++) {
             foodServiceList.add(new FoodService("Food Service " + i, "Something"));
         }
+
+        user = new User();
     }
 
     public ArrayList<FoodService> getFoodServiceList() {
@@ -35,5 +39,9 @@ public class Data extends Application {
 
     public FoodService getFoodService(Integer index) {
         return foodServiceList.get(index);
+    }
+
+    public User getUser() {
+        return user;
     }
 }

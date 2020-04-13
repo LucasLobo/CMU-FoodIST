@@ -8,7 +8,34 @@
     <string name="ramp">Ramp</string>
     <string name="wheel_chair">Wheel Chair</string>
 
+
+    <!--USER PROFILE ACTIVITY-->
+    <string name="status">Select Status</string>
+    <string name="campus">Select Campus</string>
+    <string name="dietary">My Dietary Constraints</string>
+    <string name="addNewDietary">Add Constraints</string>
+
+    <string name="signIn">Sign In</string>
+    <string name="username">Username unknown. Please sign in.</string>
+
+    <string name="alameda">Alameda</string>
+    <string name="tagus">Taguspark</string>
+    <string name="unknown_campus">Unknown</string>
+
+    <string name="student">Student</string>
+    <string name="professor">Professor</string>
+    <string name="researcher">Researcher</string>
+    <string name="staff">Staff</string>
+    <string name="generalPublic">General Public</string>
+
+    <string name="meat">Meat</string>
+    <string name="fish">Fish</string>
+    <string name="vegetarian">Vegetarian</string>
+    <string name="vegan">Vegan</string>
+  
+    <!--TERMITE-->
     <string name="serviceButton">WiFi On</string>
     <string name="cancelButton">WiFi Off</string>
     <string name="inRangeButton">In Range</string>
+
 </resources>

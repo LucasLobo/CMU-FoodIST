@@ -3,6 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="pt.ulisboa.tecnico.cmov.g16.foodist">
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+
     <application
         android:name=".Data"
         android:allowBackup="true"
@@ -12,6 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
+        <uses-library android:name="com.google.android.maps" />
         <activity android:name=".activities.PeerScannerActivity" />
         <activity android:name=".activities.FoodServiceActivity" />
         <activity
@@ -24,8 +33,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <service android:name="pt.inesc.termite.wifidirect.service.SimWifiP2pService" />
+        <activity
+            android:name=".activities.UserProfileActivity"
+            android:label="UserProfile"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.PICK_ACTIVITY"/>
+                <category android:name="android.intent.category.ALTERNATIVE"/>
+            </intent-filter>
+        </activity>
+      
+      <service android:name="pt.inesc.termite.wifidirect.service.SimWifiP2pService" />
     </application>
-
 </manifest>
