@@ -54,6 +54,8 @@ public class UserProfileActivity extends Activity {
         campusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                listStatusView.setAdapter(null);
+                listDietaryConstraintsView.setAdapter(null);
                 listCampusView.setAdapter(adapterCampus);
                 listCampusView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -76,6 +78,8 @@ public class UserProfileActivity extends Activity {
         statusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                listCampusView.setAdapter(null);
+                listDietaryConstraintsView.setAdapter(null);
                 listStatusView.setAdapter(adapterStatus);
                 listStatusView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -96,6 +100,8 @@ public class UserProfileActivity extends Activity {
         addConstraintsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                listStatusView.setAdapter(null);
+                listCampusView.setAdapter(null);
                 listDietaryConstraintsView.setAdapter(adapterDietary);
                 listDietaryConstraintsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -121,7 +127,10 @@ public class UserProfileActivity extends Activity {
         dietaryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                listStatusView.setAdapter(null);
+                listCampusView.setAdapter(null);
                 if(user.getDietaryConstraints().isEmpty()){
+                    listDietaryConstraintsView.setAdapter(null);
                     Toast.makeText(UserProfileActivity.this, "You currently don't have any dietary constraints.", Toast.LENGTH_SHORT).show();
                 }
                 else {
