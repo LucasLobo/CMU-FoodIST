@@ -13,6 +13,7 @@ import android.widget.TextView;
 import pt.ulisboa.tecnico.cmov.g16.foodist.Data;
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodService;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.User;
 
 public class FoodServiceActivity extends AppCompatActivity {
 
@@ -64,20 +65,26 @@ public class FoodServiceActivity extends AppCompatActivity {
         campus.setText(foodService.getLocation().getCampus().id);
 
         TextView aproxPrice = findViewById(R.id.food_service_aprox_price_value);
-        aproxPrice.setText("5€");
+        aproxPrice.setText("5€ (ph)");
 
         TextView aproxWaiting = findViewById(R.id.food_service_aprox_waiting_value);
-        aproxWaiting.setText("5min");
+        aproxWaiting.setText("5min (ph)");
 
         TextView location = findViewById(R.id.food_service_location);
-        location.setText("Pavilhão de Civil");
+        location.setText("Pavilhão de Civil (ph)");
 
         TextView open = findViewById(R.id.food_service_open);
-        open.setText("Aberto agora");
-        open.setTextColor(Color.rgb(0,100,0));
 
-        TextView openTime = findViewById(R.id.food_service_open_time);
-        openTime.setText("Fecha em 30min");
+        User user = data.getUser();
+        Boolean isOpen = foodService.isOpen(user.getStatus());
+
+        if (isOpen) {
+            open.setText("Aberto agora");
+            open.setTextColor(Color.rgb(0,100,0));
+        } else {
+            open.setText("Fechado");
+            open.setTextColor(Color.rgb(200,0,0));
+        }
     }
 
 }

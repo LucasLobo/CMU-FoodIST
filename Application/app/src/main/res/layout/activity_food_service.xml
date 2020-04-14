@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -92,29 +90,19 @@
             tools:text="Aberto agora." />
 
         <TextView
-            android:id="@+id/food_service_open_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:layout_marginStart="@dimen/text_margin"
-            android:layout_marginLeft="@dimen/text_margin"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/food_service_open"
-            tools:text="Fecha em 30min" />
-
-        <TextView
             android:id="@+id/food_service_location_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_margin"
             android:layout_marginStart="@dimen/text_margin"
             android:layout_marginLeft="@dimen/text_margin"
-            android:layout_marginTop="@dimen/text_margin"
             android:text="localização"
             android:textAllCaps="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:typeface="monospace"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/food_service_open_time" />
+            app:layout_constraintTop_toBottomOf="@id/food_service_open"
+            tools:layout_editor_absoluteY="192dp" />
 
         <TextView
             android:id="@+id/food_service_location"

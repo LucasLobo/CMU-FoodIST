@@ -33,22 +33,22 @@ public class User {
         }
     }
 
-    private UserStatus statusId;
+    private UserStatus status;
     private CampusLocation location;
     private ArrayList<UserDietary> dietaryConstraints = new ArrayList<>();
 
     public User() {
         location = new CampusLocation();
+        status = UserStatus.GENERAL_PUBLIC;
     }
 
     public UserStatus getStatus() {
-        return statusId;
+        return status;
     }
 
-    public void setStatus(UserStatus statusId) {
-        this.statusId = statusId;
+    public void setStatus(UserStatus status) {
+        this.status = status;
     }
-
 
     public CampusLocation getLocation() {
         return location;

@@ -1,5 +1,7 @@
 package pt.ulisboa.tecnico.cmov.g16.foodist.model;
 
+import org.threeten.bp.LocalTime;
+
 import java.util.ArrayList;
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 
@@ -21,8 +23,8 @@ public class FoodService {
         }
     }
 
+    private OpeningTime openingTime;
     private CampusLocation location;
-    // OpeningHours openingHours;
     // FoodMenu foodMenu;
 
     private ArrayList<AccessRestriction> accessRestrictions = new ArrayList<>();
@@ -30,9 +32,11 @@ public class FoodService {
     private String name;
     private String foodType;
 
-    public FoodService(String name, CampusLocation location, String foodType) {
+
+    public FoodService(String name, CampusLocation location, OpeningTime openingTime, String foodType) {
         this.name = name;
         this.location = location;
+        this.openingTime = openingTime;
         this.foodType = foodType;
     }
 
@@ -46,6 +50,18 @@ public class FoodService {
 
     public void addAccessRestriction(AccessRestriction accessRestriction) {
         accessRestrictions.add(accessRestriction);
+    }
+
+    public OpeningTime getOpeningTime() {
+        return openingTime;
+    }
+
+    public Boolean isOpenAt(LocalTime time, User.UserStatus status) {
+        return openingTime.isOpenAt(time, status);
+    }
+
+    public Boolean isOpen(User.UserStatus status) {
+        return openingTime.isOpen(status);
     }
 
     public ArrayList<AccessRestriction> getAccessRestrictions() {

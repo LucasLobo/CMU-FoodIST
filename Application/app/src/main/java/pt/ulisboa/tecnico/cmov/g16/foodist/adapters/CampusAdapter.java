@@ -19,6 +19,7 @@ public class CampusAdapter extends ArrayAdapter<CampusLocation.Campus> {
         super.add(CampusLocation.Campus.TAGUS);
     }
 
+    @NonNull
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         CheckedTextView text = (CheckedTextView) convertView;

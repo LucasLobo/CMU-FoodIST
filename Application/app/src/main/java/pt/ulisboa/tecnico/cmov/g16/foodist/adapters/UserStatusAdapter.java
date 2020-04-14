@@ -17,6 +17,7 @@ public class UserStatusAdapter extends ArrayAdapter<User.UserStatus> {
         super(context, 0, User.UserStatus.values());
     }
 
+    @NonNull
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         CheckedTextView text = (CheckedTextView) convertView;

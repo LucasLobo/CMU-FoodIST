@@ -23,6 +23,7 @@ public class UserDietaryAdapter extends ArrayAdapter<User.UserDietary> {
         super(context, 0, list);
     }
 
+    @NonNull
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         CheckedTextView text = (CheckedTextView) convertView;
