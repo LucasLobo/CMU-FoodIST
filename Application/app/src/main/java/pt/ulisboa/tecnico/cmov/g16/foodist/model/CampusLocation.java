@@ -31,6 +31,13 @@ public class CampusLocation extends Location {
         this.campus = Campus.UNKNOWN;
     }
 
+    public CampusLocation(Campus campus) {
+        super("");
+        super.setLatitude(campus.latitude);
+        super.setLongitude(campus.longitude);
+        this.campus = campus;
+    }
+
     public void setLocation(Location location, Boolean calculateCampus) {
         super.set(location);
 

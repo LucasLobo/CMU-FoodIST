@@ -21,7 +21,7 @@ public class FoodService {
         }
     }
 
-    // Location location
+    private CampusLocation location;
     // OpeningHours openingHours;
     // FoodMenu foodMenu;
 
@@ -30,8 +30,9 @@ public class FoodService {
     private String name;
     private String foodType;
 
-    public FoodService(String name, String foodType) {
+    public FoodService(String name, CampusLocation location, String foodType) {
         this.name = name;
+        this.location = location;
         this.foodType = foodType;
     }
 
@@ -49,6 +50,10 @@ public class FoodService {
 
     public ArrayList<AccessRestriction> getAccessRestrictions() {
         return accessRestrictions;
+    }
+
+    public CampusLocation getLocation() {
+        return location;
     }
 
 

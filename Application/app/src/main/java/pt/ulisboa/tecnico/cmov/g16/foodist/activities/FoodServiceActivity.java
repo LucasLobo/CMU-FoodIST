@@ -61,7 +61,7 @@ public class FoodServiceActivity extends AppCompatActivity {
         description.setText(foodService.getFoodType());
 
         TextView campus = findViewById(R.id.food_service_campus);
-        campus.setText("Alameda");
+        campus.setText(foodService.getLocation().getCampus().id);
 
         TextView aproxPrice = findViewById(R.id.food_service_aprox_price_value);
         aproxPrice.setText("5€");
