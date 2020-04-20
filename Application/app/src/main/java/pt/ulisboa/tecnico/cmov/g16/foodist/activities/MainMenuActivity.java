@@ -16,9 +16,8 @@ import pt.ulisboa.tecnico.cmov.g16.foodist.model.Data;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.Menu;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.MenuItem;
 import pt.ulisboa.tecnico.cmov.g16.foodist.adapters.MenuItemAdapter;
-import pt.ulisboa.tecnico.cmov.g16.foodist.model.TypeOfFood;
 
-public class MainActivity extends AppCompatActivity {
+public class MainMenuActivity extends AppCompatActivity {
 
     private Menu menu;
     Data data;
@@ -42,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         buttonNewMenuItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, NewMenuItemActivity.class);
+                Intent intent = new Intent(MainMenuActivity.this, NewMenuItemActivity.class);
                 startActivity(intent);
                 adapter.getFilter().filter(" ");
             }
@@ -89,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 MenuItem item = adapter.getItem(i);
-                Intent intent = new Intent(MainActivity.this, MenuItemActivity.class);
+                Intent intent = new Intent(MainMenuActivity.this, MenuItemActivity.class);
                 intent.putExtra("index", menu.getMenuList().indexOf(item));
                 startActivity(intent);
 
