@@ -1,4 +1,4 @@
-package pt.ulisboa.tecnico.cmov.g16.foodist;
+package pt.ulisboa.tecnico.cmov.g16.foodist.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -15,14 +15,17 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
+import pt.ulisboa.tecnico.cmov.g16.foodist.R;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodService;
+
 public class FoodServiceListRecyclerAdapter extends RecyclerView.Adapter<FoodServiceListRecyclerAdapter.FoodServiceListItemViewHolder>   {
 
     private static final String TAG = "FoodServiceListRecycler";
 
     private Context context;
-    private ArrayList<String> foodServiceList;
+    private ArrayList<FoodService> foodServiceList;
 
-    FoodServiceListRecyclerAdapter(Context context, ArrayList<String> foodServiceList) {
+    public FoodServiceListRecyclerAdapter(Context context, ArrayList<FoodService> foodServiceList) {
         this.context = context;
         this.foodServiceList = foodServiceList;
     }
@@ -36,12 +39,25 @@ public class FoodServiceListRecyclerAdapter extends RecyclerView.Adapter<FoodSer
 
     @Override
     public void onBindViewHolder(@NonNull FoodServiceListItemViewHolder holder, final int position) {
-        holder.text.setText(foodServiceList.get(position));
+        holder.text.setText(foodServiceList.get(position).getName());
 
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar.make(v, "Should open: " + foodServiceList.get(position), Snackbar.LENGTH_LONG)
+
+                ArrayList<FoodService.AccessRestriction> accessRestrictions = foodServiceList.get(position).getAccessRestrictions();
+
+                StringBuilder restrictions = new StringBuilder();
+                restrictions.append(" Restrictions: ");
+
+                for (FoodService.AccessRestriction restriction : accessRestrictions) {
+                    restrictions.append(context.getString(restriction.resourceId));
+                    restrictions.append(",");
+                }
+
+                Snackbar.make(v,
+                        foodServiceList.get(position).getName() + restrictions.toString(),
+                        Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });

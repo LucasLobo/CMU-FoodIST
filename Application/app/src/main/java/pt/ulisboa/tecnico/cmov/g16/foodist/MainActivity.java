@@ -17,10 +17,13 @@ import java.util.ArrayList;
 
 import pt.ulisboa.tecnico.cmov.g16.foodist.activities.MainMenuActivity;
 
+import pt.ulisboa.tecnico.cmov.g16.foodist.adapters.FoodServiceListRecyclerAdapter;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodService;
+
 public class MainActivity extends AppCompatActivity {
 
     RecyclerView rv;
-    ArrayList<String> foodServiceList;
+    ArrayList<FoodService> foodServiceList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +63,17 @@ public class MainActivity extends AppCompatActivity {
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
 
-        for (int i = 0; i < 50; i++) {
-            foodServiceList.add("Food Service " + i);
+        FoodService foodService = new FoodService("Food Service " + 0);
+        foodService.addAccessRestriction(FoodService.AccessRestriction.ELEVATOR);
+        foodService.addAccessRestriction(FoodService.AccessRestriction.RAMP);
+        foodServiceList.add(foodService);
+
+        foodService = new FoodService("Food Service " + 1);
+        foodService.addAccessRestriction(FoodService.AccessRestriction.STAIRS);
+        foodServiceList.add(foodService);
+
+        for (int i = 2; i < 50; i++) {
+            foodServiceList.add(new FoodService("Food Service " + i));
         }
     }
 }
