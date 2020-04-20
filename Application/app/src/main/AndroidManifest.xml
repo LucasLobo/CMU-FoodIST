@@ -42,6 +42,10 @@
                 <category android:name="android.intent.category.ALTERNATIVE"/>
             </intent-filter>
         </activity>
+        <activity android:name=".activities.MainMenuActivity"/>
+        <activity android:name=".activities.MenuItemActivity"/>
+        <activity android:name=".activities.NewMenuItemActivity"/>
+        <activity android:name=".activities.FullscreenImageActivity"/>
       
       <service android:name="pt.inesc.termite.wifidirect.service.SimWifiP2pService" />
     </application>

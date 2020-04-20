@@ -7,6 +7,13 @@
     android:fitsSystemWindows="false"
     tools:context=".activities.MainActivity">
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="400dp"
+        android:onClick="openTermiteActivity"
+        android:text="Termite" />
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
@@ -31,16 +38,8 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
 
-
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Termite"
-        android:onClick="openTermiteActivity"
-        />
 
     <include layout="@layout/food_service_list" />
 
@@ -54,5 +53,14 @@
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end"
         app:srcCompat="@android:drawable/ic_dialog_email" />
+
+    <Button
+        android:id="@+id/menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="400dp"
+        android:text="Menu Button" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
