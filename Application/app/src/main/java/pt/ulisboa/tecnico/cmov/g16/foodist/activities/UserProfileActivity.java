@@ -1,6 +1,7 @@
 package pt.ulisboa.tecnico.cmov.g16.foodist.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 
 
 import pt.ulisboa.tecnico.cmov.g16.foodist.Data;
+import pt.ulisboa.tecnico.cmov.g16.foodist.GrpcTask;
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 import pt.ulisboa.tecnico.cmov.g16.foodist.adapters.CampusAdapter;
 import pt.ulisboa.tecnico.cmov.g16.foodist.adapters.UserDietaryAdapter;
@@ -40,7 +42,9 @@ public class UserProfileActivity extends Activity {
         final Button addConstraintsButton = findViewById(R.id.addContraints);
         final ListView listProfileView = findViewById(R.id.profileView);
         final ListView listConstraintsView = findViewById(R.id.constraintsView);
-
+        final Button loginButton = findViewById(R.id.log);
+        final TextView userNameView = findViewById(R.id.username);
+        userNameView.setText("User: " + user.getUsername());
 
         /*_____________________________________CAMPUS_____________________________________________*/
 
@@ -60,6 +64,9 @@ public class UserProfileActivity extends Activity {
                         Toast.makeText(UserProfileActivity.this, "New Campus Selected: " + getString(campus.id), Toast.LENGTH_SHORT).show();
                         listProfileView.setAdapter(null);
                         user.setCampus(campus);
+                        if(!user.getUsername().equals("NONE")){
+                            saveProfile();
+                        }
                         selectedCampus.setText("Campus: " + getString(campus.id));
                     }
                 });
@@ -81,6 +88,9 @@ public class UserProfileActivity extends Activity {
                         User.UserStatus status = adapterStatus.getItem(position);
                         Toast.makeText(UserProfileActivity.this, "New Status Selected: " + getString(status.id), Toast.LENGTH_SHORT).show();
                         user.setStatus(status);
+                        if(!user.getUsername().equals("NONE")){
+                            saveProfile();
+                        }
                         listProfileView.setAdapter(null);
                         selectedStatus.setText("Status: " + getString(status.id));
                     }
@@ -104,6 +114,9 @@ public class UserProfileActivity extends Activity {
 
                         if (!user.getDietaryConstraints().contains(dietary)) {
                             user.addDietaryConstraints(dietary);
+                            if(!user.getUsername().equals("NONE")){
+                                saveProfile();
+                            }
                             Toast.makeText(UserProfileActivity.this, "Added New Dietary Constraint: " + getString(dietary.id), Toast.LENGTH_SHORT).show();
                             listConstraintsView.setAdapter(adapterCurrentDietary);
                         }
@@ -122,10 +135,27 @@ public class UserProfileActivity extends Activity {
 
                 User.UserDietary dietary = adapterCurrentDietary.getItem(position);
                 user.removeDietaryConstraints(dietary);
+                if(!user.getUsername().equals("NONE")){
+                    saveProfile();
+                }
                 Toast.makeText(UserProfileActivity.this, "Removed Dietary Constraint: " + getString(dietary.id), Toast.LENGTH_SHORT).show();
                 listConstraintsView.setAdapter(adapterCurrentDietary);
             }
 
         });
+
+        /*_______________________________________LOGIN____________________________________________*/
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(UserProfileActivity.this, LoginActivity.class);
+                startActivity(intent);
+
+            }
+        });
+    }
+
+    public void saveProfile(){
+        new GrpcTask(UserProfileActivity.this).execute("saveProfile", user.getUsername(), user.getStatus().toString(), user.getDietaryConstraints().toString());
     }
 }

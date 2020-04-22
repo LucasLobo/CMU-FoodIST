@@ -1,0 +1,28 @@
+syntax = "proto3";
+package com.grpc;
+
+message RegisterRequest {
+    string username= 1;
+    string password= 2;
+}
+
+message RegisterResponse {
+    string result = 1;
+}
+
+message ProfileRequest {
+    string username= 1;
+    string status = 2;
+    string constraints = 3;
+
+}
+
+message ProfileResponse {
+    string result = 1;
+}
+
+
+service GrpcService {
+    rpc register (RegisterRequest) returns (RegisterResponse);
+    rpc saveProfile (ProfileRequest) returns (ProfileResponse);
+}

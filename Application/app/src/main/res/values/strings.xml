@@ -15,7 +15,7 @@
     <string name="dietary">Dietary Constraints:</string>
     <string name="addNewDietary">Add Constraint</string>
 
-    <string name="signIn">Sign In</string>
+    <string name="log">Login/Logout</string>
     <string name="username">Username unknown. Please sign in.</string>
 
     <string name="alameda">Alameda</string>
@@ -32,6 +32,11 @@
     <string name="fish">Fish</string>
     <string name="vegetarian">Vegetarian</string>
     <string name="vegan">Vegan</string>
+
+    <!--USER LOGIN ACTIVITY-->
+    <string name="usernameLogin">Username</string>
+    <string name="passwordLogin">Password</string>
+    <string name="signIn">Sign In</string>
 
     <!--TERMITE-->
     <string name="serviceButton">WiFi On</string>

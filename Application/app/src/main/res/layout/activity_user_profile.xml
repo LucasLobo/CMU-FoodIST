@@ -75,11 +75,11 @@
         app:layout_constraintVertical_bias="0.21" />
 
     <Button
-        android:id="@+id/signIn"
+        android:id="@+id/log"
         style="@android:style/Widget.Holo.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/signIn"
+        android:text="@string/log"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.952"

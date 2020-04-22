@@ -3,13 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="pt.ulisboa.tecnico.cmov.g16.foodist">
 
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
     <application
         android:name=".Data"
@@ -20,7 +20,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
+        <activity android:name=".activities.LoginActivity"></activity>
+
         <uses-library android:name="com.google.android.maps" />
+
         <activity android:name=".activities.PeerScannerActivity" />
         <activity android:name=".activities.FoodServiceActivity" />
         <activity
@@ -38,15 +41,17 @@
             android:label="UserProfile"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-                <action android:name="android.intent.action.PICK_ACTIVITY"/>
-                <category android:name="android.intent.category.ALTERNATIVE"/>
+                <action android:name="android.intent.action.PICK_ACTIVITY" />
+
+                <category android:name="android.intent.category.ALTERNATIVE" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.MainMenuActivity"/>
-        <activity android:name=".activities.MenuItemActivity"/>
-        <activity android:name=".activities.NewMenuItemActivity"/>
-        <activity android:name=".activities.FullscreenImageActivity"/>
-      
-      <service android:name="pt.inesc.termite.wifidirect.service.SimWifiP2pService" />
+        <activity android:name=".activities.MainMenuActivity" />
+        <activity android:name=".activities.MenuItemActivity" />
+        <activity android:name=".activities.NewMenuItemActivity" />
+        <activity android:name=".activities.FullscreenImageActivity" />
+
+        <service android:name="pt.inesc.termite.wifidirect.service.SimWifiP2pService" />
     </application>
+
 </manifest>

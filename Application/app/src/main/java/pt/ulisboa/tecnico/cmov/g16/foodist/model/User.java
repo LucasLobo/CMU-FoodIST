@@ -36,10 +36,12 @@ public class User {
     private UserStatus status;
     private CampusLocation location;
     private ArrayList<UserDietary> dietaryConstraints = new ArrayList<>();
+    private String username;
 
     public User() {
         location = new CampusLocation();
         status = UserStatus.GENERAL_PUBLIC;
+        username = "NONE";
     }
 
     public UserStatus getStatus() {
@@ -81,5 +83,13 @@ public class User {
 
     public ArrayList<UserDietary> getDietaryConstraints() {
         return dietaryConstraints;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }
