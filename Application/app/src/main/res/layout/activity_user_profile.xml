@@ -6,90 +6,73 @@
     android:layout_height="match_parent"
     tools:context=".activities.UserProfileActivity">
 
-    <ListView
-        android:id="@+id/campusView"
-        android:layout_width="123dp"
-        android:layout_height="119dp"
-        android:listSelector="@color/colorAccent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.463"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.347" />
-
     <Button
         android:id="@+id/selectStatus"
         style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="128dp"
-        android:layout_height="99dp"
+        android:layout_width="160dp"
+        android:layout_height="70dp"
         android:text="@string/status"
         android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/selectCampus"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.075"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.101" />
+        app:layout_constraintVertical_bias="0.142" />
 
     <Button
         android:id="@+id/selectCampus"
         style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="128dp"
-        android:layout_height="99dp"
+        android:layout_width="160dp"
+        android:layout_height="70dp"
         android:text="@string/campus"
         android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.452"
+        app:layout_constraintHorizontal_bias="0.075"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.101" />
+        app:layout_constraintVertical_bias="0.349" />
 
     <TextView
         android:id="@+id/statusSelected"
-        android:layout_width="300dp"
+        android:layout_width="205dp"
         android:layout_height="30dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginEnd="95dp"
-        android:layout_marginRight="95dp"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.126"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.823" />
+        app:layout_constraintVertical_bias="0.261" />
 
     <TextView
         android:id="@+id/campusSelected"
-        android:layout_width="350dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginEnd="45dp"
-        android:layout_marginRight="45dp"
+        android:layout_width="205dp"
+        android:layout_height="30dp"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.126"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.914" />
+        app:layout_constraintVertical_bias="0.453" />
 
     <ListView
-        android:id="@+id/statusView"
+        android:id="@+id/profileView"
         android:layout_width="164dp"
         android:layout_height="285dp"
         android:listSelector="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.008"
+        app:layout_constraintHorizontal_bias="0.935"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.478" />
+        app:layout_constraintVertical_bias="0.21" />
 
     <Button
         android:id="@+id/signIn"
@@ -99,7 +82,7 @@
         android:text="@string/signIn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.952"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.023" />
@@ -108,57 +91,54 @@
         android:id="@+id/username"
         android:layout_width="297dp"
         android:layout_height="32dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginEnd="98dp"
-        android:layout_marginRight="98dp"
         android:text="@string/username"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.166"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.761" />
-
-    <Button
-        android:id="@+id/dietary"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="155dp"
-        android:layout_height="99dp"
-        android:text="@string/dietary"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.101" />
-
-    <ListView
-        android:id="@+id/dietaryConstraints"
-        android:layout_width="152dp"
-        android:layout_height="238dp"
-        android:listSelector="@color/colorAccent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.988"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintVertical_bias="0.045" />
 
     <Button
         android:id="@+id/addContraints"
-        style="@android:style/Widget.Holo.Light.Button"
-        android:layout_width="155dp"
-        android:layout_height="47dp"
-        android:layout_marginStart="261dp"
-        android:layout_marginLeft="261dp"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="160dp"
+        android:layout_height="70dp"
         android:text="@string/addNewDietary"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.075"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.556" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="205dp"
+        android:layout_height="30dp"
+        android:text="@string/dietary"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.126"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.651" />
+
+    <ListView
+        android:id="@+id/constraintsView"
+        android:layout_width="168dp"
+        android:layout_height="261dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dietary"
-        app:layout_constraintVertical_bias="0.003" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

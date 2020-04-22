@@ -10,10 +10,10 @@
 
 
     <!--USER PROFILE ACTIVITY-->
-    <string name="status">Select Status</string>
-    <string name="campus">Select Campus</string>
-    <string name="dietary">My Dietary Constraints</string>
-    <string name="addNewDietary">Add Constraints</string>
+    <string name="status">Change Status</string>
+    <string name="campus">Change Campus</string>
+    <string name="dietary">Dietary Constraints:</string>
+    <string name="addNewDietary">Add Constraint</string>
 
     <string name="signIn">Sign In</string>
     <string name="username">Username unknown. Please sign in.</string>

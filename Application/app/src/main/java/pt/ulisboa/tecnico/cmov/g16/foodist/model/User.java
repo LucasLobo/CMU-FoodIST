@@ -46,6 +46,10 @@ public class User {
         return status;
     }
 
+    public int getStatusID() {
+        return status.id;
+    }
+
     public void setStatus(UserStatus status) {
         this.status = status;
     }
@@ -69,6 +73,10 @@ public class User {
 
     public void addDietaryConstraints(UserDietary dietaryConstraints) {
         getDietaryConstraints().add(dietaryConstraints);
+    }
+
+    public void removeDietaryConstraints(UserDietary dietaryConstraints) {
+        getDietaryConstraints().remove(dietaryConstraints);
     }
 
     public ArrayList<UserDietary> getDietaryConstraints() {

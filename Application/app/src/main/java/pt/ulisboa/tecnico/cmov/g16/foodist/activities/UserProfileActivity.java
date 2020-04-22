@@ -37,34 +37,30 @@ public class UserProfileActivity extends Activity {
 
         final Button statusButton = findViewById(R.id.selectStatus);
         final Button campusButton = findViewById(R.id.selectCampus);
-        final Button dietaryButton = findViewById(R.id.dietary);
         final Button addConstraintsButton = findViewById(R.id.addContraints);
-        final ListView listStatusView = findViewById(R.id.statusView);
-        final ListView listCampusView = findViewById(R.id.campusView);
-        final ListView listDietaryConstraintsView = findViewById(R.id.dietaryConstraints);
+        final ListView listProfileView = findViewById(R.id.profileView);
+        final ListView listConstraintsView = findViewById(R.id.constraintsView);
 
 
         /*_____________________________________CAMPUS_____________________________________________*/
 
         selectedCampus = findViewById(R.id.campusSelected);
-        selectedCampus.setText("Your Campus: " + getString(user.getCampusResourceId()));
+        selectedCampus.setText("Campus: " + getString(user.getCampusResourceId()));
 
         final CampusAdapter adapterCampus = new CampusAdapter(this);
 
         campusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listStatusView.setAdapter(null);
-                listDietaryConstraintsView.setAdapter(null);
-                listCampusView.setAdapter(adapterCampus);
-                listCampusView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                listProfileView.setAdapter(adapterCampus);
+                listProfileView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         CampusLocation.Campus campus = adapterCampus.getItem(position);
                         Toast.makeText(UserProfileActivity.this, "New Campus Selected: " + getString(campus.id), Toast.LENGTH_SHORT).show();
-                        listCampusView.setAdapter(null);
+                        listProfileView.setAdapter(null);
                         user.setCampus(campus);
-                        selectedCampus.setText("Your Campus: " + getString(campus.id));
+                        selectedCampus.setText("Campus: " + getString(campus.id));
                     }
                 });
             }
@@ -72,23 +68,21 @@ public class UserProfileActivity extends Activity {
 
         /*_____________________________________STATUS_____________________________________________*/
         selectedStatus = findViewById(R.id.statusSelected);
-        selectedStatus.setText("Please select a Status.");
+        selectedStatus.setText("Status: " + getString(user.getStatusID()));
         final UserStatusAdapter adapterStatus = new UserStatusAdapter(this);
 
         statusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listCampusView.setAdapter(null);
-                listDietaryConstraintsView.setAdapter(null);
-                listStatusView.setAdapter(adapterStatus);
-                listStatusView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                listProfileView.setAdapter(adapterStatus);
+                listProfileView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         User.UserStatus status = adapterStatus.getItem(position);
                         Toast.makeText(UserProfileActivity.this, "New Status Selected: " + getString(status.id), Toast.LENGTH_SHORT).show();
                         user.setStatus(status);
-                        listStatusView.setAdapter(null);
-                        selectedStatus.setText("Your Status: " + getString(status.id));
+                        listProfileView.setAdapter(null);
+                        selectedStatus.setText("Status: " + getString(status.id));
                     }
                 });
             }
@@ -96,14 +90,13 @@ public class UserProfileActivity extends Activity {
 
         /*_____________________________________DIETARY____________________________________________*/
         final UserDietaryAdapter adapterDietary = new UserDietaryAdapter(this);
+        final UserDietaryAdapter adapterCurrentDietary = new UserDietaryAdapter(this, user.getDietaryConstraints());
 
         addConstraintsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listStatusView.setAdapter(null);
-                listCampusView.setAdapter(null);
-                listDietaryConstraintsView.setAdapter(adapterDietary);
-                listDietaryConstraintsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                listProfileView.setAdapter(adapterDietary);
+                listProfileView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -112,37 +105,27 @@ public class UserProfileActivity extends Activity {
                         if (!user.getDietaryConstraints().contains(dietary)) {
                             user.addDietaryConstraints(dietary);
                             Toast.makeText(UserProfileActivity.this, "Added New Dietary Constraint: " + getString(dietary.id), Toast.LENGTH_SHORT).show();
+                            listConstraintsView.setAdapter(adapterCurrentDietary);
                         }
                         else {
                             Toast.makeText(UserProfileActivity.this, "You already have this constraint in your dietary.", Toast.LENGTH_SHORT).show();
                         }
-                        listDietaryConstraintsView.setAdapter(null);
+                        listProfileView.setAdapter(null);
                     }
                 });
             }
         });
 
-        final UserDietaryAdapter adapterCurrentDietary = new UserDietaryAdapter(this, user.getDietaryConstraints());
-
-        dietaryButton.setOnClickListener(new View.OnClickListener() {
+        listConstraintsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
-                listStatusView.setAdapter(null);
-                listCampusView.setAdapter(null);
-                if(user.getDietaryConstraints().isEmpty()){
-                    listDietaryConstraintsView.setAdapter(null);
-                    Toast.makeText(UserProfileActivity.this, "You currently don't have any dietary constraints.", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    listDietaryConstraintsView.setAdapter(adapterCurrentDietary);
-                    listDietaryConstraintsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            listDietaryConstraintsView.setAdapter(null);
-                        }
-                    });
-                }
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                User.UserDietary dietary = adapterCurrentDietary.getItem(position);
+                user.removeDietaryConstraints(dietary);
+                Toast.makeText(UserProfileActivity.this, "Removed Dietary Constraint: " + getString(dietary.id), Toast.LENGTH_SHORT).show();
+                listConstraintsView.setAdapter(adapterCurrentDietary);
             }
+
         });
     }
 }
