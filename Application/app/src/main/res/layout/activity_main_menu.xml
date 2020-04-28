@@ -30,9 +30,9 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:text="ToggleButton"
-        android:textOff="MEAT"
-        android:textOn="MEAT"
+        android:text="@string/meat"
+        android:textOff="@string/meat"
+        android:textOn="@string/meat"
         app:layout_constraintEnd_toStartOf="@+id/buttonFish"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -44,9 +44,9 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:text="ToggleButton"
-        android:textOff="Vegan"
-        android:textOn="Vegan"
+        android:text="@string/vegan"
+        android:textOff="@string/vegan"
+        android:textOn="@string/vegan"
         app:layout_constraintEnd_toStartOf="@+id/buttonVegatarian"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -57,9 +57,9 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:text="ToggleButton"
-        android:textOff="FISH"
-        android:textOn="FISH"
+        android:text="@string/fish"
+        android:textOff="@string/fish"
+        android:textOn="@string/fish"
         app:layout_constraintEnd_toStartOf="@+id/buttonVegan"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -70,9 +70,9 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:text="ToggleButton"
-        android:textOff="Vegatarian"
-        android:textOn="Vegatarian"
+        android:text="@string/vegetarian"
+        android:textOff="@string/vegetarian"
+        android:textOn="@string/vegetarian"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

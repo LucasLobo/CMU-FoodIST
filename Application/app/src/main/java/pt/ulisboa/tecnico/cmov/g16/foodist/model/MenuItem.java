@@ -16,13 +16,14 @@ public class MenuItem {
     private LinkedList<ImageView> images;
 
 
-    public MenuItem(String name, double price, TypeOfFood foodType, boolean availability, String description) {
+    public MenuItem(String name, double price, TypeOfFood foodType, boolean availability,  String description, int discount, LinkedList<ImageView> images) {
         this.name = name;
         this.foodType = foodType;
         this.availability = availability;
         this.price = price;
         this.description = description;
-        images = new LinkedList<>();
+        setDiscount(discount);
+        this.images = images;
     }
 
     // * GETTERS * //
@@ -71,7 +72,8 @@ public class MenuItem {
         if(discount >= 0 && discount < 100) {
             this.discount = discount;
             price = price * (1 - (discount*0.01));
-        }
+        }else
+            this.discount = 0;
     }
 
     public void setDescription(String description) {

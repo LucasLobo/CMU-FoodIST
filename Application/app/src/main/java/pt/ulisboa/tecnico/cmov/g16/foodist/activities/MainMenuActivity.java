@@ -23,17 +23,23 @@ public class MainMenuActivity extends AppCompatActivity {
     Data data;
     ListView listView;
     MenuItemAdapter adapter;
+    private int foodServiceIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
+        Intent intent = getIntent();
+        foodServiceIndex = intent.getIntExtra("index", -1);
+        if(foodServiceIndex == -1)
+            finish();
         data = (Data) getApplicationContext();
-        menu = data.getMenu();
+        menu = data.getFoodService(foodServiceIndex).getMenu();
 
         adapter = new MenuItemAdapter(this, menu.getMenuList());
         listView = findViewById(R.id.list);
         listView.setAdapter(adapter);
+
 
 
 
@@ -42,6 +48,7 @@ public class MainMenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainMenuActivity.this, NewMenuItemActivity.class);
+                intent.putExtra("foodServiceIndex", foodServiceIndex);
                 startActivity(intent);
                 adapter.getFilter().filter(" ");
             }
@@ -56,6 +63,7 @@ public class MainMenuActivity extends AppCompatActivity {
                 adapter.getFilter().filter(" ");
             }
         });
+        meatButton.setChecked(true);
 
         ToggleButton fishButton = findViewById(R.id.buttonFish);
         fishButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -65,6 +73,7 @@ public class MainMenuActivity extends AppCompatActivity {
                 adapter.getFilter().filter(" ");
             }
         });
+        fishButton.setChecked(true);
 
         ToggleButton veganButton = findViewById(R.id.buttonVegan);
         veganButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -74,6 +83,7 @@ public class MainMenuActivity extends AppCompatActivity {
                 adapter.getFilter().filter(" ");
             }
         });
+        veganButton.setChecked(true);
 
         ToggleButton vegetarianButton = findViewById(R.id.buttonVegatarian);
         vegetarianButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -83,13 +93,15 @@ public class MainMenuActivity extends AppCompatActivity {
                 adapter.getFilter().filter(" ");
             }
         });
+        vegetarianButton.setChecked(true);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 MenuItem item = adapter.getItem(i);
                 Intent intent = new Intent(MainMenuActivity.this, MenuItemActivity.class);
-                intent.putExtra("index", menu.getMenuList().indexOf(item));
+                intent.putExtra("foodServiceIndex", foodServiceIndex);
+                intent.putExtra("itemIndex", menu.getMenuList().indexOf(item));
                 startActivity(intent);
 
             }

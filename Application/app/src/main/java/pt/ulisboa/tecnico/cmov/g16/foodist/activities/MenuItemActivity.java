@@ -26,19 +26,22 @@ public class MenuItemActivity extends AppCompatActivity {
     private Data data;
     private MenuItem item;
     private LinearLayout imageLayout;
-    private boolean zoomOut = false;
+
+    private int foodServiceIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_item);
         data = (Data) getApplicationContext();
-        Menu menu = data.getMenu();
         imageLayout = findViewById(R.id.imageSlots);
         Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
+        intent.getIntExtra("itemIndex", -1);
+        foodServiceIndex = intent.getIntExtra("foodServiceIndex", -1);
 
-        item = menu.getMenuList().get(extras.getInt("index"));
+
+        Menu menu = data.getFoodService(foodServiceIndex).getMenu();
+        item = menu.getMenuList().get(intent.getIntExtra("itemIndex", -1));
         setupView(item);
 
     }
@@ -72,8 +75,9 @@ public class MenuItemActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MenuItemActivity.this, FullscreenImageActivity.class);
                 Bundle extras = new Bundle();
+                extras.putInt("foodServiceIndex", foodServiceIndex);
                 extras.putInt("imageIndex", item.getImages().indexOf(imageView));
-                extras.putInt("itemIndex", data.getMenu().getMenuList().indexOf(item));
+                extras.putInt("itemIndex", data.getFoodService(foodServiceIndex).getMenu().getMenuList().indexOf(item));
                 intent.putExtras(extras);
                 startActivity(intent);
             }

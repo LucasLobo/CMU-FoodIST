@@ -9,7 +9,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <EditText
             android:id="@+id/title"
@@ -23,6 +25,7 @@
             android:ems="10"
             android:inputType="textPersonName"
             android:text="Menu Title"
+            android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -33,21 +36,23 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
             android:layout_marginLeft="2dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="32dp"
             android:text="€"
+            android:textSize="18sp"
             app:layout_constraintStart_toEndOf="@+id/price"
             app:layout_constraintTop_toBottomOf="@+id/title" />
 
         <EditText
             android:id="@+id/price"
-            android:layout_width="61dp"
-            android:layout_height="19dp"
+            android:layout_width="52dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="26dp"
             android:ems="10"
+            android:hint="5"
             android:inputType="number"
-            android:textSize="8sp"
+            android:textSize="14sp"
             app:layout_constraintStart_toEndOf="@+id/textView"
             app:layout_constraintTop_toBottomOf="@+id/title" />
 
@@ -57,10 +62,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="32dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:text="Price:"
+            android:textSize="18sp"
             app:layout_constraintEnd_toStartOf="@+id/price"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title" />
@@ -73,15 +79,16 @@
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
             android:text="Type of food:"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            app:layout_constraintTop_toBottomOf="@+id/price" />
 
         <Spinner
             android:id="@+id/foodType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginLeft="12dp"
             android:layout_marginTop="16dp"
             app:layout_constraintStart_toEndOf="@+id/textView3"
             app:layout_constraintTop_toBottomOf="@+id/euroSign" />
@@ -98,6 +105,7 @@
             android:ems="10"
             android:focusable="auto"
             android:gravity="start|top"
+            android:hint="This food consists of ..."
             android:inputType="textMultiLine"
             android:longClickable="true"
             app:layout_constraintEnd_toEndOf="parent"
@@ -153,23 +161,25 @@
             android:id="@+id/textView21"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="34dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:text="Discount:"
+            android:textSize="18sp"
             app:layout_constraintEnd_toStartOf="@+id/discount"
             app:layout_constraintTop_toBottomOf="@+id/title" />
 
         <EditText
             android:id="@+id/discount"
-            android:layout_width="92dp"
-            android:layout_height="21dp"
-            android:layout_marginTop="16dp"
+            android:layout_width="54dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="26dp"
             android:layout_marginEnd="2dp"
             android:layout_marginRight="2dp"
             android:ems="10"
             android:inputType="number"
-            android:textSize="8sp"
+            android:text="0"
+            android:textSize="14sp"
             app:layout_constraintEnd_toStartOf="@+id/textView22"
             app:layout_constraintTop_toBottomOf="@+id/title" />
 
@@ -177,10 +187,11 @@
             android:id="@+id/textView22"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="32dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:text="%"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title" />
 

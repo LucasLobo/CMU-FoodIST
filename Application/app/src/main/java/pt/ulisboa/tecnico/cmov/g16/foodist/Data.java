@@ -19,27 +19,12 @@ public class Data extends Application {
 
     ArrayList<FoodService> foodServiceList;
     User user;
-    Menu menu;
 
     @Override
     public void onCreate() {
         super.onCreate();
         AndroidThreeTen.init(this);
         initData();
-        instantiateMenu();
-    }
-
-    private void instantiateMenu(){
-        this.menu = new Menu();
-        menu.addMenuItem("Menu A", 2, TypeOfFood.MEAT,true, "dkajsdkajdaksdjladkas");
-        menu.addMenuItem("Menu B", 2, TypeOfFood.FISH,true, "knmsokmdaosdjasdia");
-        menu.addMenuItem("Menu C", 2, TypeOfFood.VEGETARIAN,true, "abcd");
-        menu.addMenuItem("Menu D", 2, TypeOfFood.VEGAN,true, "qiwoehioqhe");
-
-    }
-
-    public Menu getMenu() {
-        return menu;
     }
 
     public ArrayList<FoodService> getFoodServiceList() {
@@ -71,11 +56,20 @@ public class Data extends Application {
         FoodService foodService = new FoodService("Bar 0", location, openingTime, "Sanduiches");
         foodService.addAccessRestriction(FoodService.AccessRestriction.ELEVATOR);
         foodService.addAccessRestriction(FoodService.AccessRestriction.RAMP);
+        foodService.getMenu().addMenuItem("Menu A", 2, TypeOfFood.MEAT,true, "This menu is consisted in fries and soup");
+        foodService.getMenu().addMenuItem("Menu B", 2, TypeOfFood.FISH,true, "This menu is consisted in a main fish course with fries or soup");
+        foodService.getMenu().addMenuItem("Menu C", 2, TypeOfFood.VEGAN,true, "This menu is consisted in a main vegan course with fries and fruit");
+        foodService.getMenu().addMenuItem("Menu D", 2, TypeOfFood.VEGETARIAN,true, "This menu is consisted in a vegetarian fish course with fries or soup");
         foodServiceList.add(foodService);
 
         location = new CampusLocation(CampusLocation.Campus.TAGUS);
         foodService = new FoodService("Refeitório 1", location, openingTime, "Comida variada");
         foodService.addAccessRestriction(FoodService.AccessRestriction.STAIRS);
+        foodService.getMenu().addMenuItem("Menu A", 2, TypeOfFood.MEAT,true, "This menu is consisted in fries and soup");
+        foodService.getMenu().addMenuItem("Menu B", 2, TypeOfFood.FISH,true, "This menu is consisted in a main fish course with fries or soup");
+        foodService.getMenu().addMenuItem("Menu C", 2, TypeOfFood.VEGAN,true, "This menu is consisted in a main vegan course with fries and fruit");
+        foodService.getMenu().addMenuItem("Menu D", 2, TypeOfFood.VEGETARIAN,true, "This menu is consisted in a vegetarian fish course with fries or soup");
+        foodService.getMenu().addMenuItem("Menu E", 2, TypeOfFood.MEAT,true, "This menu is consisted in fries");
         foodServiceList.add(foodService);
 
         location = new CampusLocation(CampusLocation.Campus.ALAMEDA);

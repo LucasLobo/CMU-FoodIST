@@ -31,6 +31,7 @@ public class FoodService {
 
     private String name;
     private String foodType;
+    private Menu menu;
 
 
     public FoodService(String name, CampusLocation location, OpeningTime openingTime, String foodType) {
@@ -38,6 +39,7 @@ public class FoodService {
         this.location = location;
         this.openingTime = openingTime;
         this.foodType = foodType;
+        menu = new Menu();
     }
 
     public String getName() {
@@ -72,5 +74,7 @@ public class FoodService {
         return location;
     }
 
-
+    public Menu getMenu(){
+        return menu;
+    }
 }

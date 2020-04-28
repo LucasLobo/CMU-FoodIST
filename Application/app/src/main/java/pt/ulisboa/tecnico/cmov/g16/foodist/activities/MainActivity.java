@@ -47,14 +47,6 @@ public class MainActivity extends AppCompatActivity {
         data = (Data) getApplicationContext();
         user = data.getUser();
 
-        Button menuButton = findViewById(R.id.menu);
-        menuButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, MainMenuActivity.class));
-            }
-        });
-
         initToolbar();
         initFoodServiceRecyclerView();
     }

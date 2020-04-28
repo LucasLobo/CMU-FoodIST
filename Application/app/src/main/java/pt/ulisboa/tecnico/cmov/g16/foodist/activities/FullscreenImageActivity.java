@@ -21,7 +21,7 @@ public class FullscreenImageActivity extends AppCompatActivity {
         data = (Data) getApplicationContext();
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
-        image= data.getMenu().getMenuList().get(extras.getInt("itemIndex")).getImages().get(extras.getInt("imageIndex"));
+        image= data.getFoodService(extras.getInt("foodServiceIndex")).getMenu().getMenuList().get(extras.getInt("itemIndex")).getImages().get(extras.getInt("imageIndex"));
         ImageView imageView = findViewById(R.id.imageView);
         imageView.setImageDrawable(image.getDrawable());
     }

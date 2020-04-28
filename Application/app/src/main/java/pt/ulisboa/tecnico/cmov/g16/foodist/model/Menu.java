@@ -1,5 +1,7 @@
 package pt.ulisboa.tecnico.cmov.g16.foodist.model;
 
+import android.widget.ImageView;
+
 import java.util.Date;
 import java.util.LinkedList;
 
@@ -19,7 +21,7 @@ public class Menu {
     }
 
     public void addMenuItem(String name, double price, TypeOfFood foodType, boolean availability, String description){
-        MenuItem item = new MenuItem(name, price, foodType, availability, description);
+        MenuItem item = new MenuItem(name, price, foodType, availability, description, 0, new LinkedList<ImageView>());
         menuList.add(item);
     }
 

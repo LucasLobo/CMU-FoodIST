@@ -7,6 +7,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
@@ -19,6 +21,7 @@ public class FoodServiceActivity extends AppCompatActivity {
 
     Data data;
     FoodService foodService;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +38,7 @@ public class FoodServiceActivity extends AppCompatActivity {
         }
 
         foodService = data.getFoodService(index);
-
-        populate();
+        populate(index);
     }
 
     @Override
@@ -55,7 +57,7 @@ public class FoodServiceActivity extends AppCompatActivity {
         return true;
     }
 
-    private void populate() {
+    private void populate(final int index) {
         setTitle(foodService.getName());
 
         TextView description = findViewById(R.id.food_service_description);
@@ -74,6 +76,16 @@ public class FoodServiceActivity extends AppCompatActivity {
         location.setText("Pavilhão de Civil (ph)");
 
         TextView open = findViewById(R.id.food_service_open);
+
+        LinearLayout menuList = findViewById(R.id.food_service_menu);
+        menuList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(FoodServiceActivity.this, MainMenuActivity.class);
+                intent.putExtra("index", index);
+                startActivity(intent);
+            }
+        });
 
         User user = data.getUser();
         Boolean isOpen = foodService.isOpen(user.getStatus());
