@@ -49,4 +49,6 @@
         <item>VEGETARIAN</item>
         <item>VEGAN</item>
     </string-array>
+
+    <string name="time_min">%1d min</string>
 </resources>

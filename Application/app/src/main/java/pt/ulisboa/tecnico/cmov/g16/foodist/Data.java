@@ -52,7 +52,7 @@ public class Data extends Application {
         openingTime.addScheduleStatus(User.UserStatus.RESEARCHER, schedule1);
         openingTime.addScheduleStatus(User.UserStatus.GENERAL_PUBLIC, schedule2);
 
-        CampusLocation location = new CampusLocation(CampusLocation.Campus.ALAMEDA);
+        CampusLocation location = new CampusLocation(CampusLocation.Campus.ALAMEDA, "Civil");
         FoodService foodService = new FoodService("Bar 0", location, openingTime, "Sanduiches");
         foodService.addAccessRestriction(FoodService.AccessRestriction.ELEVATOR);
         foodService.addAccessRestriction(FoodService.AccessRestriction.RAMP);
@@ -62,7 +62,7 @@ public class Data extends Application {
         foodService.getMenu().addMenuItem("Menu D", 2, TypeOfFood.VEGETARIAN,true, "This menu is consisted in a vegetarian fish course with fries or soup");
         foodServiceList.add(foodService);
 
-        location = new CampusLocation(CampusLocation.Campus.TAGUS);
+        location = new CampusLocation(CampusLocation.Campus.TAGUS, "Pavilhão A");
         foodService = new FoodService("Refeitório 1", location, openingTime, "Comida variada");
         foodService.addAccessRestriction(FoodService.AccessRestriction.STAIRS);
         foodService.getMenu().addMenuItem("Menu A", 2, TypeOfFood.MEAT,true, "This menu is consisted in fries and soup");
@@ -72,7 +72,7 @@ public class Data extends Application {
         foodService.getMenu().addMenuItem("Menu E", 2, TypeOfFood.MEAT,true, "This menu is consisted in fries");
         foodServiceList.add(foodService);
 
-        location = new CampusLocation(CampusLocation.Campus.ALAMEDA);
+        location = new CampusLocation(CampusLocation.Campus.ALAMEDA, "Central");
         for (int i = 2; i < 50; i++) {
             foodServiceList.add(new FoodService("Food Service " + i, location, openingTime, "Something"));
         }

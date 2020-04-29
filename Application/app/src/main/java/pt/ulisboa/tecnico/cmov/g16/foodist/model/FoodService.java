@@ -74,6 +74,10 @@ public class FoodService {
         return location;
     }
 
+    public String getLocatioName() {
+        return location.getName();
+    }
+
     public Menu getMenu(){
         return menu;
     }

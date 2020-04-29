@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -40,7 +41,10 @@ public class FoodServiceListRecyclerAdapter extends RecyclerView.Adapter<FoodSer
     @Override
     public void onBindViewHolder(@NonNull FoodServiceListItemViewHolder holder, final int position) {
         final FoodService foodService = foodServiceList.get(position);
-        holder.text.setText(foodService.getName());
+        holder.name.setText(foodService.getName());
+        holder.location.setText(foodService.getLocatioName());
+        holder.queueTime.setText(context.getResources().getString(R.string.time_min, 10));
+        holder.walkTime.setText(context.getResources().getString(R.string.time_min, 7));
 
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,12 +62,18 @@ public class FoodServiceListRecyclerAdapter extends RecyclerView.Adapter<FoodSer
     }
 
     static class FoodServiceListItemViewHolder extends RecyclerView.ViewHolder {
-        TextView text;
-        RelativeLayout parentLayout;
+        TextView name;
+        TextView location;
+        TextView queueTime;
+        TextView walkTime;
+        CardView parentLayout;
 
         FoodServiceListItemViewHolder(@NonNull View itemView) {
             super(itemView);
-            text = itemView.findViewById(R.id.food_service_list_item_text);
+            name = itemView.findViewById(R.id.food_service_list_item_name);
+            location = itemView.findViewById(R.id.food_service_list_item_location);
+            queueTime = itemView.findViewById(R.id.food_service_list_item_queue_time);
+            walkTime = itemView.findViewById(R.id.food_service_list_item_walking_time);
             parentLayout = itemView.findViewById(R.id.food_service_list_item_parent_layout);
         }
     }

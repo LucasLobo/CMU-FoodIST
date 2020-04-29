@@ -5,6 +5,11 @@
     android:id="@+id/food_service_list"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:layout_marginHorizontal="15dp"
+    android:paddingVertical="10dp"
+    android:clipToPadding="false"
+
+    >
 
 </androidx.recyclerview.widget.RecyclerView>

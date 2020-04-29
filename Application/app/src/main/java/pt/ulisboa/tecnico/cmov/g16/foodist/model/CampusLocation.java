@@ -25,17 +25,25 @@ public class CampusLocation extends Location {
     }
 
     private Campus campus;
+    private String name;
 
     public CampusLocation() {
         super("");
         this.campus = Campus.UNKNOWN;
     }
 
-    public CampusLocation(Campus campus) {
+    public CampusLocation(String name) {
+        super("");
+        this.campus = Campus.UNKNOWN;
+        this.name = name;
+    }
+
+    public CampusLocation(Campus campus, String name) {
         super("");
         super.setLatitude(campus.latitude);
         super.setLongitude(campus.longitude);
         this.campus = campus;
+        this.name = name;
     }
 
     public void setLocation(Location location, Boolean calculateCampus) {
@@ -64,6 +72,10 @@ public class CampusLocation extends Location {
 
     public Campus getCampus() {
         return campus;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void setCampus(Campus campus) {
