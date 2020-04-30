@@ -17,6 +17,7 @@
 
     <string name="log">Login/Logout</string>
     <string name="username">Username unknown. Please sign in.</string>
+    <string name="loc_aut">Automatic Location Finder</string>
 
     <string name="alameda">Alameda</string>
     <string name="tagus">Taguspark</string>

@@ -37,11 +37,13 @@ public class User {
     private CampusLocation location;
     private ArrayList<UserDietary> dietaryConstraints = new ArrayList<>();
     private String username;
+    private boolean loc_auto;
 
     public User() {
         location = new CampusLocation();
         status = UserStatus.GENERAL_PUBLIC;
         username = "NONE";
+        loc_auto = true; //automatic location finder is on
     }
 
     public UserStatus getStatus() {
@@ -95,5 +97,13 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public boolean isLoc_auto() {
+        return loc_auto;
+    }
+
+    public void setLoc_auto(boolean loc_auto) {
+        this.loc_auto = loc_auto;
     }
 }

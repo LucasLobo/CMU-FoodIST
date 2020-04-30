@@ -1,6 +1,7 @@
 package pt.ulisboa.tecnico.cmov.g16.foodist.activities;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
@@ -29,6 +31,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import pt.ulisboa.tecnico.cmov.g16.foodist.Data;
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 import pt.ulisboa.tecnico.cmov.g16.foodist.adapters.FoodServiceListRecyclerAdapter;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.CampusLocation;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.User;
 
 public class MainActivity extends AppCompatActivity {
@@ -57,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         initLocation();
         adapter.setUserStatus(user.getStatus());
+        adapter.setCampus(user.getCampus());
     }
 
     @Override
@@ -126,24 +130,45 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void proceedLocationLocationEnabled() {
-        FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        if(user.isLoc_auto()) {
+            FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        LocationRequest locationRequest = new LocationRequest();
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(0);
-        locationRequest.setFastestInterval(0);
-        locationRequest.setNumUpdates(1);
+            LocationRequest locationRequest = new LocationRequest();
+            locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+            locationRequest.setInterval(0);
+            locationRequest.setFastestInterval(0);
+            locationRequest.setNumUpdates(1);
 
-        fusedLocationClient.requestLocationUpdates(locationRequest, new LocationCallback() {
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                user.setLocation(locationResult.getLastLocation());
-                toolbar.setTitle(user.getCampusResourceId());
-                setSupportActionBar(toolbar);
-                adapter.setCampus(user.getCampus());
+            fusedLocationClient.requestLocationUpdates(locationRequest, new LocationCallback() {
+                @Override
+                public void onLocationResult(LocationResult locationResult) {
+                    user.setLocation(locationResult.getLastLocation());
+                    if (user.getLocation().getCampus().equals(CampusLocation.Campus.UNKNOWN)) {
+                        String[] options = {getString(CampusLocation.Campus.ALAMEDA.id), getString(CampusLocation.Campus.TAGUS.id)};
 
-            }
-        }, Looper.myLooper());
+                        AlertDialog.Builder campusAlert = new AlertDialog.Builder(MainActivity.this);
+                        campusAlert.setTitle("Could not find your Campus. Please select one:");
+                        campusAlert.setItems(options, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (which == 0) {
+                                    user.setCampus(CampusLocation.Campus.ALAMEDA);
+                                } else {
+                                    user.setCampus(CampusLocation.Campus.TAGUS);
+                                }
+                                adapter.setCampus(user.getCampus());
+                                user.setLoc_auto(false); //location finder set to manual
+                                Toast.makeText(MainActivity.this, "Location Finder is in Manual mode", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        campusAlert.show();
+                    } else {
+                      adapter.setCampus(user.getCampus());
+                    }
+
+                }
+            }, Looper.myLooper());
+        }
     }
 
     public void openTermiteActivity(View view) {

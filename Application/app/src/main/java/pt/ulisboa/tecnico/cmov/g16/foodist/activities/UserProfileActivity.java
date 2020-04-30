@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,10 +45,14 @@ public class UserProfileActivity extends Activity {
         final ListView listProfileView = findViewById(R.id.profileView);
         final ListView listConstraintsView = findViewById(R.id.constraintsView);
         final Button loginButton = findViewById(R.id.log);
+        final Switch loc_aut = findViewById(R.id.loc_aut);
         final TextView userNameView = findViewById(R.id.username);
         userNameView.setText("User: " + user.getUsername());
 
         /*_____________________________________CAMPUS_____________________________________________*/
+        if(user.isLoc_auto()){
+          loc_aut.setChecked(true);
+        }
 
         selectedCampus = findViewById(R.id.campusSelected);
         selectedCampus.setText("Campus: " + getString(user.getCampusResourceId()));
@@ -64,12 +70,31 @@ public class UserProfileActivity extends Activity {
                         Toast.makeText(UserProfileActivity.this, "New Campus Selected: " + getString(campus.id), Toast.LENGTH_SHORT).show();
                         listProfileView.setAdapter(null);
                         user.setCampus(campus);
+
+                        user.setLoc_auto(false);
+                        loc_aut.setChecked(false);
+
+                        Toast.makeText(UserProfileActivity.this, "Location Finder changed to Manual mode", Toast.LENGTH_SHORT).show();
                         if(!user.getUsername().equals("NONE")){
                             saveProfile();
                         }
                         selectedCampus.setText("Campus: " + getString(campus.id));
                     }
                 });
+            }
+        });
+
+        loc_aut.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    user.setLoc_auto(true);
+                    Toast.makeText(UserProfileActivity.this, "Location Finder changed to Automatic mode", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    user.setLoc_auto(false);
+                    Toast.makeText(UserProfileActivity.this, "Location Finder changed to Manual mode", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

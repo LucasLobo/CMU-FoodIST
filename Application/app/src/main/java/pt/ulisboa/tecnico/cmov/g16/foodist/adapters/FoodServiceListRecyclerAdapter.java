@@ -55,7 +55,7 @@ public class FoodServiceListRecyclerAdapter extends RecyclerView.Adapter<FoodSer
             if (!foodService.getCampus().equals(currentCampus)) {
                 continue;
             }
-            if (!foodService.isOpenAt(LocalTime.of(18,0),userStatus)) {
+            if (!foodService.isOpenAt(LocalTime.of(14,0),userStatus)) {
                 continue;
             }
             filteredList.add(foodService);
