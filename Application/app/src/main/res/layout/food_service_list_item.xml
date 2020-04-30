@@ -31,7 +31,7 @@
             android:textSize="15dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/food_service_list_item_name" />
+            app:layout_constraintTop_toBottomOf="@id/food_service_list_item_name" />
 
         <TextView
             android:id="@+id/food_service_list_item_queue_time"
@@ -41,7 +41,7 @@
             android:layout_marginRight="5dp"
             android:text="5 min"
             android:textSize="15dp"
-            app:layout_constraintEnd_toStartOf="@+id/food_service_list_item_queue_icon"
+            app:layout_constraintEnd_toStartOf="@id/food_service_list_item_queue_icon"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatImageView
@@ -64,7 +64,7 @@
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/food_service_list_item_walking_icon"
-            app:layout_constraintTop_toBottomOf="@+id/food_service_list_item_queue_time" />
+            app:layout_constraintTop_toBottomOf="@id/food_service_list_item_queue_time" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/food_service_list_item_walking_icon"
@@ -75,7 +75,7 @@
             android:tint="@color/textPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/food_service_list_item_queue_icon" />
+            app:layout_constraintTop_toBottomOf="@id/food_service_list_item_queue_icon" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

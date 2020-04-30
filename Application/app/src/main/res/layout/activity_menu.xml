@@ -33,7 +33,7 @@
         android:text="@string/meat"
         android:textOff="@string/meat"
         android:textOn="@string/meat"
-        app:layout_constraintEnd_toStartOf="@+id/buttonFish"
+        app:layout_constraintEnd_toStartOf="@id/buttonFish"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -47,7 +47,7 @@
         android:text="@string/vegan"
         android:textOff="@string/vegan"
         android:textOn="@string/vegan"
-        app:layout_constraintEnd_toStartOf="@+id/buttonVegatarian"
+        app:layout_constraintEnd_toStartOf="@id/buttonVegatarian"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ToggleButton
@@ -60,7 +60,7 @@
         android:text="@string/fish"
         android:textOff="@string/fish"
         android:textOn="@string/fish"
-        app:layout_constraintEnd_toStartOf="@+id/buttonVegan"
+        app:layout_constraintEnd_toStartOf="@id/buttonVegan"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ToggleButton
@@ -84,7 +84,7 @@
         android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonMeat" />
+        app:layout_constraintTop_toBottomOf="@id/buttonMeat" />
 
     <ListView
         android:id="@+id/list"
@@ -96,10 +96,10 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/buttonNewMenuItem"
+        app:layout_constraintBottom_toTopOf="@id/buttonNewMenuItem"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider2">
+        app:layout_constraintTop_toBottomOf="@id/divider2">
 
     </ListView>
 
