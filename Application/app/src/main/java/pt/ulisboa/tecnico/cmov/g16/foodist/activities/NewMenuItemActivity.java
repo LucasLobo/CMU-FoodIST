@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -36,6 +38,7 @@ public class NewMenuItemActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_menu_item);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Intent intent = getIntent();
         foodServiceIndex = intent.getIntExtra("foodServiceIndex", -1);
 
@@ -63,9 +66,10 @@ public class NewMenuItemActivity extends AppCompatActivity {
                 EditText discount = findViewById(R.id.discount);
 
                 try {
+
                     MenuItem item = new MenuItem(title.getText().toString(),
                             Double.parseDouble(price.getText().toString()),
-                            TypeOfFood.valueOf(typeOfFood.getSelectedItem().toString()),
+                            TypeOfFood.valueOf(typeOfFood.getSelectedItem().toString().toUpperCase()),
                             true, description.getText().toString(),
                             Integer.parseInt(discount.getText().toString()), images);
                     data.getFoodService(foodServiceIndex).getMenu().getMenuList().add(item);
@@ -86,8 +90,7 @@ public class NewMenuItemActivity extends AppCompatActivity {
     }
 
     private void setupSpinner() {
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.food_type_array, android.R.layout.simple_spinner_dropdown_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<TypeOfFood> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, TypeOfFood.values());
         typeOfFood.setAdapter(adapter);
     }
 
@@ -107,6 +110,21 @@ public class NewMenuItemActivity extends AppCompatActivity {
                 imageLayout.addView(imageView);
             }
         }
+    }
+    @Override
+    public boolean onOptionsItemSelected(android.view.MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return true;
     }
 
 }

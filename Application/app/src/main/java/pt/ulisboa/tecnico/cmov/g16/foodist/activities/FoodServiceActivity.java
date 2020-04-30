@@ -81,7 +81,7 @@ public class FoodServiceActivity extends AppCompatActivity {
         menuList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(FoodServiceActivity.this, MainMenuActivity.class);
+                Intent intent = new Intent(FoodServiceActivity.this, MenuActivity.class);
                 intent.putExtra("index", index);
                 startActivity(intent);
             }

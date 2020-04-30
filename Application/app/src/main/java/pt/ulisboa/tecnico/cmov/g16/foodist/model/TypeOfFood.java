@@ -1,5 +1,7 @@
 package pt.ulisboa.tecnico.cmov.g16.foodist.model;
 
+import androidx.annotation.NonNull;
+
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 
 public enum TypeOfFood {
@@ -10,5 +12,11 @@ public enum TypeOfFood {
 
     TypeOfFood(int id){
         resourceId = id;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return name().toLowerCase();
     }
 }

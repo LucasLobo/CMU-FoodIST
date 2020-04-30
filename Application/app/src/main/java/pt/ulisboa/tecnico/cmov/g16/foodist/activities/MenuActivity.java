@@ -17,7 +17,7 @@ import pt.ulisboa.tecnico.cmov.g16.foodist.model.Menu;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.MenuItem;
 import pt.ulisboa.tecnico.cmov.g16.foodist.adapters.MenuItemAdapter;
 
-public class MainMenuActivity extends AppCompatActivity {
+public class MenuActivity extends AppCompatActivity {
 
     private Menu menu;
     Data data;
@@ -28,7 +28,8 @@ public class MainMenuActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_menu);
+        setContentView(R.layout.activity_menu);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Intent intent = getIntent();
         foodServiceIndex = intent.getIntExtra("index", -1);
         if(foodServiceIndex == -1)
@@ -47,7 +48,7 @@ public class MainMenuActivity extends AppCompatActivity {
         buttonNewMenuItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainMenuActivity.this, NewMenuItemActivity.class);
+                Intent intent = new Intent(MenuActivity.this, NewMenuItemActivity.class);
                 intent.putExtra("foodServiceIndex", foodServiceIndex);
                 startActivity(intent);
                 adapter.getFilter().filter(" ");
@@ -99,7 +100,7 @@ public class MainMenuActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 MenuItem item = adapter.getItem(i);
-                Intent intent = new Intent(MainMenuActivity.this, MenuItemActivity.class);
+                Intent intent = new Intent(MenuActivity.this, MenuItemActivity.class);
                 intent.putExtra("foodServiceIndex", foodServiceIndex);
                 intent.putExtra("itemIndex", menu.getMenuList().indexOf(item));
                 startActivity(intent);
@@ -114,5 +115,20 @@ public class MainMenuActivity extends AppCompatActivity {
     protected void onRestart() {
         super.onRestart();
         adapter.getFilter().filter(" ");
+    }
+    @Override
+    public boolean onOptionsItemSelected(android.view.MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+        return true;
     }
 }

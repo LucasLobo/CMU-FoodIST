@@ -46,7 +46,7 @@
                 <category android:name="android.intent.category.ALTERNATIVE" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.MainMenuActivity" />
+        <activity android:name=".activities.MenuActivity" />
         <activity android:name=".activities.MenuItemActivity" />
         <activity android:name=".activities.NewMenuItemActivity" />
         <activity android:name=".activities.FullscreenImageActivity" />

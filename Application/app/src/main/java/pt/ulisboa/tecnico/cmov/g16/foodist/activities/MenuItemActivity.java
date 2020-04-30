@@ -33,6 +33,7 @@ public class MenuItemActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_item);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         data = (Data) getApplicationContext();
         imageLayout = findViewById(R.id.imageSlots);
         Intent intent = getIntent();
@@ -111,6 +112,21 @@ public class MenuItemActivity extends AppCompatActivity {
         imageView.setVisibility(View.VISIBLE);
         imageLayout.addView(imageView);
         setupImage(imageView);
+    }
+    @Override
+    public boolean onOptionsItemSelected(android.view.MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+        return true;
     }
 
 }
