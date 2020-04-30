@@ -76,7 +76,7 @@ public class FoodServiceActivity extends AppCompatActivity {
         aproxWaiting.setText("5min (ph)");
 
         TextView location = findViewById(R.id.food_service_location);
-        location.setText("Pavilhão de Civil (ph)");
+        location.setText(foodService.getLocationName() + " : " +foodService.getLocation().getLatitude() + "," + foodService.getLocation().getLongitude());
 
         TextView open = findViewById(R.id.food_service_open);
 

@@ -32,10 +32,10 @@ public class CampusLocation extends Location {
         this.campus = Campus.UNKNOWN;
     }
 
-    public CampusLocation(String name) {
+    public CampusLocation(String name, Double latitude, Double longitude) {
         super("");
-        this.campus = Campus.UNKNOWN;
         this.name = name;
+        setLocation(latitude, longitude, true);
     }
 
     public CampusLocation(Campus campus, String name) {
@@ -46,12 +46,13 @@ public class CampusLocation extends Location {
         this.name = name;
     }
 
-    public void setLocation(Location location, Boolean calculateCampus) {
-        super.set(location);
 
+    public void setLocation(Double latitude, Double longitude, Boolean calculateCampus) {
+        super.setLatitude(latitude);
+        super.setLongitude(longitude);
         if (calculateCampus) {
             float[] distance = {0};
-            Location.distanceBetween(location.getLatitude(), location.getLongitude(), Campus.ALAMEDA.latitude, Campus.ALAMEDA.longitude, distance);
+            Location.distanceBetween(latitude, longitude, Campus.ALAMEDA.latitude, Campus.ALAMEDA.longitude, distance);
 
             float CAMPUS_RADIUS_METERS = 750;
             if (distance[0] < CAMPUS_RADIUS_METERS) {
@@ -59,7 +60,7 @@ public class CampusLocation extends Location {
                 return;
             }
 
-            Location.distanceBetween(location.getLatitude(), location.getLongitude(), Campus.TAGUS.latitude, Campus.TAGUS.longitude, distance);
+            Location.distanceBetween(latitude, longitude, Campus.TAGUS.latitude, Campus.TAGUS.longitude, distance);
 
             if (distance[0] < CAMPUS_RADIUS_METERS) {
                 campus = Campus.TAGUS;
@@ -68,6 +69,10 @@ public class CampusLocation extends Location {
 
             campus = Campus.UNKNOWN;
         }
+    }
+
+    public void setLocation(Location location, Boolean calculateCampus) {
+        setLocation(location.getLatitude(), location.getLongitude(), calculateCampus);
     }
 
     public Campus getCampus() {
