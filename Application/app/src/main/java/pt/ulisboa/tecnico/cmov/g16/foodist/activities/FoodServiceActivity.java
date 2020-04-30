@@ -60,6 +60,9 @@ public class FoodServiceActivity extends AppCompatActivity {
     private void populate(final int index) {
         setTitle(foodService.getName());
 
+        TextView name = findViewById(R.id.food_service_name);
+        name.setText(foodService.getName());
+
         TextView description = findViewById(R.id.food_service_description);
         description.setText(foodService.getFoodType());
 

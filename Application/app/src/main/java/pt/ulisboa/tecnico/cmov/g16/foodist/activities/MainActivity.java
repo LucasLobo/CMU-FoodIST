@@ -18,7 +18,6 @@ import android.provider.Settings;
 import android.view.View;
 import android.widget.Toast;
 import android.util.Log;
-import android.widget.Button;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -37,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
 
     private int LOCATION_PERMISSION_ID = 44;
 
+    FoodServiceListRecyclerAdapter adapter;
+    Toolbar toolbar;
     Data data;
     User user;
 
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         initLocation();
+        adapter.setUserStatus(user.getStatus());
     }
 
     @Override
@@ -70,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initToolbar() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         FloatingActionButton userProfile = findViewById(R.id.userProfile);
@@ -85,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initFoodServiceRecyclerView() {
         RecyclerView rv = findViewById(R.id.food_service_list);
-        FoodServiceListRecyclerAdapter adapter = new FoodServiceListRecyclerAdapter(this, data.getFoodServiceList());
+        adapter = new FoodServiceListRecyclerAdapter(this, data.getFoodServiceList());
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -118,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
             proceedLocationLocationEnabled();
         }
     }
-
     private boolean isLocationEnabled() { //checks if user has location  turned on
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
@@ -137,6 +138,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onLocationResult(LocationResult locationResult) {
                 user.setLocation(locationResult.getLastLocation());
+                toolbar.setTitle(user.getCampusResourceId());
+                setSupportActionBar(toolbar);
+                adapter.setCampus(user.getCampus());
 
             }
         }, Looper.myLooper());

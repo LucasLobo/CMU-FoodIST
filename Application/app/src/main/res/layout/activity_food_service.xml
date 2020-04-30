@@ -34,22 +34,25 @@
                 android:layout_height="wrap_content">
 
                 <TextView
+                    android:id="@+id/food_service_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textStyle="bold"
+                    android:text="Bar 0"
+                    />
+
+                <TextView
                     android:id="@+id/food_service_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/food_service_name"
                     tools:text="Comidas rápidas, sandwiches" />
 
-                <TextView
-                    android:id="@+id/food_service_campus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/food_service_description"
-                    tools:text="Alameda" />
 
                 <TextView
                     android:id="@+id/food_service_aprox_price_tag"
@@ -58,7 +61,7 @@
                     android:text="Preço ~"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/food_service_campus"
+                    app:layout_constraintTop_toBottomOf="@id/food_service_description"
                     tools:text="Preço ~" />
 
                 <TextView
@@ -67,7 +70,7 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     app:layout_constraintStart_toEndOf="@id/food_service_aprox_price_tag"
-                    app:layout_constraintTop_toBottomOf="@id/food_service_campus"
+                    app:layout_constraintTop_toBottomOf="@id/food_service_description"
                     tools:text="5€" />
 
                 <TextView
@@ -107,7 +110,6 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/food_service_description_card"
-
             android:layout_marginVertical="15dp"
             app:cardElevation="1dp"
             app:cardCornerRadius="5dp"
@@ -129,12 +131,21 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/food_service_location"
+                    android:id="@+id/food_service_campus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/food_service_location_title"
+                    tools:text="Alameda" />
+
+                <TextView
+                    android:id="@+id/food_service_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/food_service_campus"
 
                     tools:text="Pavilhão de Civil" />
 
@@ -147,7 +158,7 @@
                     android:orientation="vertical"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/food_service_location" />
+                    app:layout_constraintTop_toBottomOf="@id/food_service_location" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -190,7 +201,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/food_service_menu_title" />
+                app:layout_constraintTop_toBottomOf="@id/food_service_menu_title" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

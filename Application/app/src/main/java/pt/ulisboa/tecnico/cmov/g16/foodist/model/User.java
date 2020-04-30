@@ -68,6 +68,10 @@ public class User {
         location.setCampus(campus);
     }
 
+    public CampusLocation.Campus getCampus() {
+        return location.getCampus();
+    }
+
     public int getCampusResourceId() {
         return location.getCampus().id;
     }

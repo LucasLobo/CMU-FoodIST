@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
+import android.widget.Filter;
 import android.widget.TextView;
 
 
@@ -13,11 +13,15 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.threeten.bp.LocalTime;
+
 import java.util.ArrayList;
 
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 import pt.ulisboa.tecnico.cmov.g16.foodist.activities.FoodServiceActivity;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.CampusLocation;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodService;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.User;
 
 public class FoodServiceListRecyclerAdapter extends RecyclerView.Adapter<FoodServiceListRecyclerAdapter.FoodServiceListItemViewHolder>   {
 
@@ -25,10 +29,39 @@ public class FoodServiceListRecyclerAdapter extends RecyclerView.Adapter<FoodSer
 
     private Context context;
     private ArrayList<FoodService> foodServiceList;
+    private ArrayList<FoodService> filteredFoodServiceList;
+    private CampusLocation.Campus currentCampus;
+    private User.UserStatus userStatus;
 
     public FoodServiceListRecyclerAdapter(Context context, ArrayList<FoodService> foodServiceList) {
         this.context = context;
         this.foodServiceList = foodServiceList;
+        this.filteredFoodServiceList = foodServiceList;
+    }
+
+    public void setCampus(CampusLocation.Campus campus) {
+        currentCampus = campus;
+        updateList();
+    }
+
+    public void setUserStatus(User.UserStatus status) {
+        userStatus = status;
+        updateList();
+    }
+
+    private void updateList() {
+        ArrayList<FoodService> filteredList = new ArrayList<>();
+        for (FoodService foodService : foodServiceList) {
+            if (!foodService.getCampus().equals(currentCampus)) {
+                continue;
+            }
+            if (!foodService.isOpenAt(LocalTime.of(18,0),userStatus)) {
+                continue;
+            }
+            filteredList.add(foodService);
+        }
+        filteredFoodServiceList = filteredList;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -40,9 +73,9 @@ public class FoodServiceListRecyclerAdapter extends RecyclerView.Adapter<FoodSer
 
     @Override
     public void onBindViewHolder(@NonNull FoodServiceListItemViewHolder holder, final int position) {
-        final FoodService foodService = foodServiceList.get(position);
+        final FoodService foodService = filteredFoodServiceList.get(position);
         holder.name.setText(foodService.getName());
-        holder.location.setText(foodService.getLocatioName());
+        holder.location.setText(foodService.getLocationName());
         holder.queueTime.setText(context.getResources().getString(R.string.time_min, 10));
         holder.walkTime.setText(context.getResources().getString(R.string.time_min, 7));
 
@@ -50,7 +83,7 @@ public class FoodServiceListRecyclerAdapter extends RecyclerView.Adapter<FoodSer
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, FoodServiceActivity.class);
-                intent.putExtra("index", position);
+                intent.putExtra("index", foodServiceList.indexOf(foodService));
                 context.startActivity(intent);
             }
         });
@@ -58,7 +91,7 @@ public class FoodServiceListRecyclerAdapter extends RecyclerView.Adapter<FoodSer
 
     @Override
     public int getItemCount() {
-        return foodServiceList.size();
+        return filteredFoodServiceList.size();
     }
 
     static class FoodServiceListItemViewHolder extends RecyclerView.ViewHolder {

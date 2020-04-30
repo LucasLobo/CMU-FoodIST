@@ -74,7 +74,11 @@ public class FoodService {
         return location;
     }
 
-    public String getLocatioName() {
+    public CampusLocation.Campus getCampus() {
+        return location.getCampus();
+    }
+
+    public String getLocationName() {
         return location.getName();
     }
 
