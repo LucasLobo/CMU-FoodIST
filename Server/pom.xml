@@ -8,7 +8,6 @@
     <name>${project.artifactId}</name>
 
     <modules>
-        <module>client</module>
     	<module>server</module>
         <module>contract</module>
     </modules>

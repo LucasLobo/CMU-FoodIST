@@ -2,17 +2,18 @@ package pt.ulisboa.tecnico.cmov.g16.foodist.model;
 
 import android.widget.ImageView;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
-public class MenuItem {
+public class MenuItem implements Serializable {
 
     private String name;
     private double price;
     private boolean availability;
     private int discount;
     private String description;
+    private transient LinkedList<ImageView> images;
     private FoodType foodType;
-    private LinkedList<ImageView> images;
 
 
     public MenuItem(String name, double price, FoodType foodType, boolean availability, String description, int discount, LinkedList<ImageView> images) {
@@ -41,7 +42,6 @@ public class MenuItem {
     public String getDescription() {
         return description;
     }
-
 
     public FoodType getFoodType() {
         return foodType;

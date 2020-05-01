@@ -33,7 +33,6 @@ public class User {
         status = UserStatus.GENERAL_PUBLIC;
         username = "NONE";
         loc_auto = true; //automatic location finder is on
-        addDietaryConstraints(FoodType.MEAT);
     }
 
     public UserStatus getStatus() {

@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.LinkedList;
 
 import pt.ulisboa.tecnico.cmov.g16.foodist.Data;
+import pt.ulisboa.tecnico.cmov.g16.foodist.GrpcTask;
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.Menu;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.MenuItem;
@@ -68,6 +69,7 @@ public class MenuItemActivity extends AppCompatActivity {
             ((ViewGroup)imageView.getParent()).removeView(imageView);
             showImage(imageView);
         }
+
     }
 
     private void setupImage(final ImageView imageView){
@@ -104,6 +106,8 @@ public class MenuItemActivity extends AppCompatActivity {
         ImageView imageView = new ImageView(this);
         imageView.setImageURI(contentURI);
         item.getImages().add(imageView);
+
+        saveMenu(item);
         return imageView;
 
     }
@@ -127,6 +131,10 @@ public class MenuItemActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(android.view.Menu menu) {
         return true;
+    }
+
+    public void saveMenu(Object item){
+        new GrpcTask(MenuItemActivity.this).execute("saveMenu", data.serialize(item));
     }
 
 }

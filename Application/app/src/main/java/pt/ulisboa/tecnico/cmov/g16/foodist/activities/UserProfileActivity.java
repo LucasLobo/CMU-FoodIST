@@ -1,6 +1,5 @@
 package pt.ulisboa.tecnico.cmov.g16.foodist.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -17,7 +16,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import pt.ulisboa.tecnico.cmov.g16.foodist.Data;
 import pt.ulisboa.tecnico.cmov.g16.foodist.GrpcTask;

@@ -3,14 +3,18 @@ package com.grpc.server;
 import com.grpc.Contract.*;
 import com.grpc.GrpcServiceGrpc;
 import io.grpc.stub.StreamObserver;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
 
     public static GrpcServiceImpl instance = null;
     private HashMap<String, User> usersMap = new HashMap<String, User>(); //username, User
+    private ArrayList<String> menuItems = new ArrayList<String>();
 
     public static GrpcServiceImpl getInstance() {
+
         if (instance == null) {
 
             instance = new GrpcServiceImpl();
@@ -58,6 +62,21 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
 
         ProfileResponse response = ProfileResponse.newBuilder()
                 .setResult("Saved " + username + "; Status: " + status + "; Constraints: " + constraints).build();
+
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public synchronized void saveMenuItem(ItemRequest request, StreamObserver<ItemResponse> responseObserver) {
+        System.out.println("Save Menu Request Received: " + request);
+
+        String item = request.getItem();
+
+        menuItems.add(item);
+
+        ItemResponse response = ItemResponse.newBuilder()
+                .setResult("Saved " + item).build();
 
         responseObserver.onNext(response);
         responseObserver.onCompleted();

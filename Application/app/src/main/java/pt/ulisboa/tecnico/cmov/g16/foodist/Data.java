@@ -4,6 +4,10 @@ import android.app.Application;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 
 import org.threeten.bp.LocalTime;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.CampusLocation;
@@ -76,5 +80,31 @@ public class Data extends Application {
         for (int i = 2; i < 50; i++) {
             foodServiceList.add(new FoodService("Food Service " + i, location, openingTime, "Something"));
         }
+    }
+
+    public String serialize(Object item){
+        try {
+            ByteArrayOutputStream bo = new ByteArrayOutputStream();
+            ObjectOutputStream so = new ObjectOutputStream(bo);
+            so.writeObject(item);
+            so.flush();
+            return bo.toString();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
+    public Object deserialize(String obj){
+        String serializedObject = "";
+        try {
+            byte objBytes[] = serializedObject.getBytes();
+            ByteArrayInputStream bi = new ByteArrayInputStream(objBytes);
+            ObjectInputStream si = new ObjectInputStream(bi);
+            return si.readObject();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return null;
     }
 }

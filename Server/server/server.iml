@@ -9,7 +9,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: com.dpas:contract:1.0.0-SNAPSHOT" level="project" />
+    <orderEntry type="module" module-name="contract" />
     <orderEntry type="library" name="Maven: io.grpc:grpc-protobuf:1.18.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.protobuf:protobuf-java:3.5.1" level="project" />
     <orderEntry type="library" name="Maven: org.checkerframework:checker-compat-qual:2.5.2" level="project" />

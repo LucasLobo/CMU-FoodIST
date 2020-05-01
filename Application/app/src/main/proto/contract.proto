@@ -21,8 +21,17 @@ message ProfileResponse {
     string result = 1;
 }
 
+message ItemRequest {
+	string item = 1;
+}
+
+message ItemResponse {
+	string result = 1;
+}
+
 
 service GrpcService {
     rpc register (RegisterRequest) returns (RegisterResponse);
     rpc saveProfile (ProfileRequest) returns (ProfileResponse);
+    rpc saveMenuItem (ItemRequest) returns (ItemResponse);
 }

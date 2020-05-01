@@ -15,9 +15,14 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.LinkedList;
 
 import pt.ulisboa.tecnico.cmov.g16.foodist.Data;
+import pt.ulisboa.tecnico.cmov.g16.foodist.GrpcTask;
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.MenuItem;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodType;
@@ -70,6 +75,7 @@ public class NewMenuItemActivity extends AppCompatActivity {
                             FoodType.valueOf(typeOfFood.getSelectedItem().toString().toUpperCase()),
                             true, description.getText().toString(),
                             Integer.parseInt(discount.getText().toString()), images);
+                    saveMenu(item);
                     data.getFoodService(foodServiceIndex).getMenu().getMenuList().add(item);
                     Toast.makeText(getApplicationContext(), title.getText().toString() + " created successfully!", Toast.LENGTH_LONG).show();
                     finish();
@@ -78,6 +84,7 @@ public class NewMenuItemActivity extends AppCompatActivity {
                 }
             }
         });
+
         Button cancelButton = findViewById(R.id.cancelButton);
                 cancelButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -123,6 +130,10 @@ public class NewMenuItemActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return true;
+    }
+
+    public void saveMenu(Object item){
+        new GrpcTask(NewMenuItemActivity.this).execute("saveMenu", data.serialize(item));
     }
 
 }
