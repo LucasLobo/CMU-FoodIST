@@ -12,9 +12,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
+import org.threeten.bp.LocalTime;
+
 import pt.ulisboa.tecnico.cmov.g16.foodist.Data;
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodService;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.OpeningTime;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.User;
 
 public class FoodServiceActivity extends AppCompatActivity {
@@ -66,19 +69,46 @@ public class FoodServiceActivity extends AppCompatActivity {
         TextView description = findViewById(R.id.food_service_description);
         description.setText(foodService.getFoodType());
 
+
+
+        TextView aproxPrice = findViewById(R.id.food_service_aprox_price);
+        aproxPrice.setText(getString(R.string.menu_price, 5));
+
+
+        TextView open = findViewById(R.id.food_service_open);
+
+        User user = data.getUser();
+        Boolean isOpen = foodService.isOpen(user.getStatus());
+
+        if (isOpen) {
+            open.setText(R.string.open);
+            open.setTextColor(Color.rgb(0,100,0));
+
+
+        } else {
+            open.setText(R.string.closed);
+            open.setTextColor(Color.rgb(200,0,0));
+        }
+
+        OpeningTime.Schedule schedule = foodService.getOpeningTime().getSchedule(user.getStatus());
+        LocalTime openTime = schedule.getOpenTime();
+        LocalTime closeTime = schedule.getCloseTime();
+
+        TextView openingTime = findViewById(R.id.food_service_opening_time);
+        openingTime.setText(getString(R.string.opening_time, openTime.getHour(), openTime.getMinute(), closeTime.getHour(), closeTime.getMinute()));
+        TextView aproxWaiting = findViewById(R.id.food_service_aprox_waiting);
+        aproxWaiting.setText(getString(R.string.waiting_time,5));
+
+
+
         TextView campus = findViewById(R.id.food_service_campus);
         campus.setText(foodService.getLocation().getCampus().id);
 
-        TextView aproxPrice = findViewById(R.id.food_service_aprox_price_value);
-        aproxPrice.setText("5€ (ph)");
-
-        TextView aproxWaiting = findViewById(R.id.food_service_aprox_waiting_value);
-        aproxWaiting.setText("5min (ph)");
-
         TextView location = findViewById(R.id.food_service_location);
-        location.setText("Pavilhão de Civil (ph)");
+        location.setText(foodService.getLocationName());
 
-        TextView open = findViewById(R.id.food_service_open);
+        TextView walkingTime = findViewById(R.id.food_service_walking_time);
+        walkingTime.setText(getString(R.string.walking_time, 5));
 
         LinearLayout menuList = findViewById(R.id.food_service_menu);
         menuList.setOnClickListener(new View.OnClickListener() {
@@ -90,16 +120,7 @@ public class FoodServiceActivity extends AppCompatActivity {
             }
         });
 
-        User user = data.getUser();
-        Boolean isOpen = foodService.isOpen(user.getStatus());
 
-        if (isOpen) {
-            open.setText("Aberto agora");
-            open.setTextColor(Color.rgb(0,100,0));
-        } else {
-            open.setText("Fechado");
-            open.setTextColor(Color.rgb(200,0,0));
-        }
     }
 
 }

@@ -53,7 +53,7 @@ public class Data extends Application {
         openingTime.addScheduleStatus(User.UserStatus.GENERAL_PUBLIC, schedule2);
 
         CampusLocation location = new CampusLocation(CampusLocation.Campus.ALAMEDA, "Civil");
-        FoodService foodService = new FoodService("Bar 0", location, openingTime, "Sanduiches");
+        FoodService foodService = new FoodService("Bar 0", location, openingTime, "Sandwiches");
         foodService.addAccessRestriction(FoodService.AccessRestriction.ELEVATOR);
         foodService.addAccessRestriction(FoodService.AccessRestriction.RAMP);
         foodService.getMenu().addMenuItem("Menu A", 2, TypeOfFood.MEAT,true, "This menu is consisted in fries and soup");
@@ -62,8 +62,8 @@ public class Data extends Application {
         foodService.getMenu().addMenuItem("Menu D", 2, TypeOfFood.VEGETARIAN,true, "This menu is consisted in a vegetarian fish course with fries or soup");
         foodServiceList.add(foodService);
 
-        location = new CampusLocation(CampusLocation.Campus.TAGUS, "Pavilhão A");
-        foodService = new FoodService("Refeitório 1", location, openingTime, "Comida variada");
+        location = new CampusLocation(CampusLocation.Campus.TAGUS, "Block A");
+        foodService = new FoodService("Canteen 1", location, openingTime, "Meals");
         foodService.addAccessRestriction(FoodService.AccessRestriction.STAIRS);
         foodService.getMenu().addMenuItem("Menu A", 2, TypeOfFood.MEAT,true, "This menu is consisted in fries and soup");
         foodService.getMenu().addMenuItem("Menu B", 2, TypeOfFood.FISH,true, "This menu is consisted in a main fish course with fries or soup");

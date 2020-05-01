@@ -41,4 +41,8 @@ public class OpeningTime {
     public Boolean isOpen(User.UserStatus status) {
         return isOpenAt(LocalTime.now(), status);
     }
+
+    public Schedule getSchedule(User.UserStatus status) {
+        return schedules.get(status);
+    }
 }
