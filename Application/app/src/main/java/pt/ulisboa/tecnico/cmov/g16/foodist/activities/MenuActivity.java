@@ -16,11 +16,13 @@ import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.Menu;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.MenuItem;
 import pt.ulisboa.tecnico.cmov.g16.foodist.adapters.MenuItemAdapter;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.User;
 
 public class MenuActivity extends AppCompatActivity {
 
     private Menu menu;
     Data data;
+    User user;
     ListView listView;
     MenuItemAdapter adapter;
     private int foodServiceIndex;
@@ -36,12 +38,11 @@ public class MenuActivity extends AppCompatActivity {
             finish();
         data = (Data) getApplicationContext();
         menu = data.getFoodService(foodServiceIndex).getMenu();
+        user = data.getUser();
 
         adapter = new MenuItemAdapter(this, menu.getMenuList());
         listView = findViewById(R.id.list);
         listView.setAdapter(adapter);
-
-
 
 
         Button buttonNewMenuItem = findViewById(R.id.buttonNewMenuItem);
@@ -51,50 +52,8 @@ public class MenuActivity extends AppCompatActivity {
                 Intent intent = new Intent(MenuActivity.this, NewMenuItemActivity.class);
                 intent.putExtra("foodServiceIndex", foodServiceIndex);
                 startActivity(intent);
-                adapter.getFilter().filter(" ");
             }
         });
-
-
-        ToggleButton meatButton = findViewById(R.id.buttonMeat);
-        meatButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                adapter.toggleMeat();
-                adapter.getFilter().filter(" ");
-            }
-        });
-        meatButton.setChecked(true);
-
-        ToggleButton fishButton = findViewById(R.id.buttonFish);
-        fishButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                adapter.toggleFish();
-                adapter.getFilter().filter(" ");
-            }
-        });
-        fishButton.setChecked(true);
-
-        ToggleButton veganButton = findViewById(R.id.buttonVegan);
-        veganButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                adapter.toggleVegan();
-                adapter.getFilter().filter(" ");
-            }
-        });
-        veganButton.setChecked(true);
-
-        ToggleButton vegetarianButton = findViewById(R.id.buttonVegatarian);
-        vegetarianButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                adapter.toggleVegetarian();
-                adapter.getFilter().filter(" ");
-            }
-        });
-        vegetarianButton.setChecked(true);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -107,14 +66,12 @@ public class MenuActivity extends AppCompatActivity {
 
             }
         });
-
-        adapter.getFilter().filter(" ");
     }
 
     @Override
-    protected void onRestart() {
-        super.onRestart();
-        adapter.getFilter().filter(" ");
+    protected void onResume() {
+        super.onResume();
+        adapter.setDietaryConstraints(user.getDietaryConstraints());
     }
     @Override
     public boolean onOptionsItemSelected(android.view.MenuItem item) {

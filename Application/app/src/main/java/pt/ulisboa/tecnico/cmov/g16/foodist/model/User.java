@@ -2,6 +2,8 @@ package pt.ulisboa.tecnico.cmov.g16.foodist.model;
 
 import android.location.Location;
 import java.util.ArrayList;
+import java.util.EnumSet;
+
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 
 public class User {
@@ -20,22 +22,9 @@ public class User {
         }
     }
 
-    public enum UserDietary {
-        MEAT(R.string.meat),
-        FISH(R.string.fish),
-        VEGETARIAN(R.string.vegetarian),
-        VEGAN(R.string.vegan);
-
-        public int id;
-
-        UserDietary(int id) {
-            this.id = id;
-        }
-    }
-
     private UserStatus status;
     private CampusLocation location;
-    private ArrayList<UserDietary> dietaryConstraints = new ArrayList<>();
+    private EnumSet<FoodType> dietaryConstraints = EnumSet.allOf(FoodType.class);
     private String username;
     private boolean loc_auto;
 
@@ -44,6 +33,7 @@ public class User {
         status = UserStatus.GENERAL_PUBLIC;
         username = "NONE";
         loc_auto = true; //automatic location finder is on
+        addDietaryConstraints(FoodType.MEAT);
     }
 
     public UserStatus getStatus() {
@@ -79,15 +69,15 @@ public class User {
     }
 
 
-    public void addDietaryConstraints(UserDietary dietaryConstraints) {
+    public void addDietaryConstraints(FoodType dietaryConstraints) {
         getDietaryConstraints().add(dietaryConstraints);
     }
 
-    public void removeDietaryConstraints(UserDietary dietaryConstraints) {
+    public void removeDietaryConstraints(FoodType dietaryConstraints) {
         getDietaryConstraints().remove(dietaryConstraints);
     }
 
-    public ArrayList<UserDietary> getDietaryConstraints() {
+    public EnumSet<FoodType> getDietaryConstraints() {
         return dietaryConstraints;
     }
 

@@ -3,6 +3,9 @@ package pt.ulisboa.tecnico.cmov.g16.foodist.model;
 import org.threeten.bp.LocalTime;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.LinkedList;
+
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 
 public class FoodService {
@@ -68,6 +71,15 @@ public class FoodService {
 
     public ArrayList<AccessRestriction> getAccessRestrictions() {
         return accessRestrictions;
+    }
+
+    public EnumSet<FoodType> getDietaryRestrictions() {
+        EnumSet<FoodType> set = EnumSet.noneOf(FoodType.class);
+        LinkedList<MenuItem> menuList = menu.getMenuList();
+        for (MenuItem item : menuList) {
+            set.add(item.getFoodType());
+        }
+        return set;
     }
 
     public CampusLocation getLocation() {

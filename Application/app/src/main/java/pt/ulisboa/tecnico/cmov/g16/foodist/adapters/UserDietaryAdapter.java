@@ -10,16 +10,19 @@ import android.widget.CheckedTextView;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
 
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodType;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.User;
 
-public class UserDietaryAdapter extends ArrayAdapter<User.UserDietary> {
+public class UserDietaryAdapter extends ArrayAdapter<FoodType> {
 
     public UserDietaryAdapter(Context context) {
-        super(context, 0, User.UserDietary.values());
+        super(context, 0, FoodType.values());
     }
 
-    public UserDietaryAdapter(Context context, ArrayList<User.UserDietary> list) {
+    public UserDietaryAdapter(Context context, List<FoodType> list) {
         super(context, 0, list);
     }
 
@@ -32,7 +35,7 @@ public class UserDietaryAdapter extends ArrayAdapter<User.UserDietary> {
             text = (CheckedTextView) LayoutInflater.from(getContext()).inflate(android.R.layout.simple_spinner_dropdown_item,  parent, false);
         }
 
-        text.setText(getItem(position).id);
+        text.setText(getItem(position).resourceId);
         return text;
     }
 
@@ -44,7 +47,7 @@ public class UserDietaryAdapter extends ArrayAdapter<User.UserDietary> {
             text = (CheckedTextView) LayoutInflater.from(getContext()).inflate(android.R.layout.simple_spinner_dropdown_item,  parent, false);
         }
 
-        text.setText(getItem(position).id);
+        text.setText(getItem(position).resourceId);
 
         return text;
     }

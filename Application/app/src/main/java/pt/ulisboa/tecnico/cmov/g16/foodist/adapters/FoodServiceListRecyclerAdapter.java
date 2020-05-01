@@ -16,11 +16,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.threeten.bp.LocalTime;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.EnumSet;
 
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 import pt.ulisboa.tecnico.cmov.g16.foodist.activities.FoodServiceActivity;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.CampusLocation;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodService;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodType;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.User;
 
 public class FoodServiceListRecyclerAdapter extends RecyclerView.Adapter<FoodServiceListRecyclerAdapter.FoodServiceListItemViewHolder>   {
@@ -32,6 +35,7 @@ public class FoodServiceListRecyclerAdapter extends RecyclerView.Adapter<FoodSer
     private ArrayList<FoodService> filteredFoodServiceList;
     private CampusLocation.Campus currentCampus;
     private User.UserStatus userStatus;
+    private EnumSet<FoodType> dietaryConstraints;
 
     public FoodServiceListRecyclerAdapter(Context context, ArrayList<FoodService> foodServiceList) {
         this.context = context;
@@ -41,23 +45,30 @@ public class FoodServiceListRecyclerAdapter extends RecyclerView.Adapter<FoodSer
 
     public void setCampus(CampusLocation.Campus campus) {
         currentCampus = campus;
-        updateList();
     }
 
     public void setUserStatus(User.UserStatus status) {
         userStatus = status;
-        updateList();
     }
 
-    private void updateList() {
+    public void setDietaryConstraints(EnumSet<FoodType> set) {
+        dietaryConstraints = set;
+    }
+
+    public void updateList() {
         ArrayList<FoodService> filteredList = new ArrayList<>();
         for (FoodService foodService : foodServiceList) {
             if (!foodService.getCampus().equals(currentCampus)) {
                 continue;
             }
-            if (!foodService.isOpenAt(LocalTime.of(14,0),userStatus)) {
+            if (!foodService.isOpen(userStatus)) {
                 continue;
             }
+
+            if (Collections.disjoint(foodService.getDietaryRestrictions(), dietaryConstraints)) {
+                continue;
+            }
+
             filteredList.add(foodService);
         }
         filteredFoodServiceList = filteredList;

@@ -16,6 +16,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import pt.ulisboa.tecnico.cmov.g16.foodist.Data;
 import pt.ulisboa.tecnico.cmov.g16.foodist.GrpcTask;
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
@@ -23,6 +26,7 @@ import pt.ulisboa.tecnico.cmov.g16.foodist.adapters.CampusAdapter;
 import pt.ulisboa.tecnico.cmov.g16.foodist.adapters.UserDietaryAdapter;
 import pt.ulisboa.tecnico.cmov.g16.foodist.adapters.UserStatusAdapter;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.CampusLocation;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodType;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.User;
 
 
@@ -129,7 +133,8 @@ public class UserProfileActivity extends AppCompatActivity {
 
         /*_____________________________________DIETARY____________________________________________*/
         final UserDietaryAdapter adapterDietary = new UserDietaryAdapter(this);
-        final UserDietaryAdapter adapterCurrentDietary = new UserDietaryAdapter(this, user.getDietaryConstraints());
+        final UserDietaryAdapter adapterCurrentDietary = new UserDietaryAdapter(this, new ArrayList<>(user.getDietaryConstraints()));
+        listConstraintsView.setAdapter(adapterCurrentDietary);
 
         addConstraintsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,15 +144,16 @@ public class UserProfileActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                        User.UserDietary dietary = adapterDietary.getItem(position);
+                        FoodType dietary = adapterDietary.getItem(position);
 
                         if (!user.getDietaryConstraints().contains(dietary)) {
                             user.addDietaryConstraints(dietary);
                             if(!user.getUsername().equals("NONE")){
                                 saveProfile();
                             }
-                            Toast.makeText(UserProfileActivity.this, "Added New Dietary Constraint: " + getString(dietary.id), Toast.LENGTH_SHORT).show();
-                            listConstraintsView.setAdapter(adapterCurrentDietary);
+                            Toast.makeText(UserProfileActivity.this, "Added New Dietary Constraint: " + getString(dietary.resourceId), Toast.LENGTH_SHORT).show();
+                            adapterCurrentDietary.add(dietary);
+                            adapterCurrentDietary.notifyDataSetChanged();
                         }
                         else {
                             Toast.makeText(UserProfileActivity.this, "You already have this constraint in your dietary.", Toast.LENGTH_SHORT).show();
@@ -162,13 +168,14 @@ public class UserProfileActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                User.UserDietary dietary = adapterCurrentDietary.getItem(position);
+                FoodType dietary = adapterCurrentDietary.getItem(position);
                 user.removeDietaryConstraints(dietary);
                 if(!user.getUsername().equals("NONE")){
                     saveProfile();
                 }
-                Toast.makeText(UserProfileActivity.this, "Removed Dietary Constraint: " + getString(dietary.id), Toast.LENGTH_SHORT).show();
-                listConstraintsView.setAdapter(adapterCurrentDietary);
+                Toast.makeText(UserProfileActivity.this, "Removed Dietary Constraint: " + getString(dietary.resourceId), Toast.LENGTH_SHORT).show();
+                adapterCurrentDietary.remove(dietary);
+                adapterCurrentDietary.notifyDataSetChanged();
             }
 
         });

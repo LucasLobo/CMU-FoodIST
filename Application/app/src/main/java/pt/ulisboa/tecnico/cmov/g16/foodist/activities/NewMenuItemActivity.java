@@ -1,10 +1,8 @@
 package pt.ulisboa.tecnico.cmov.g16.foodist.activities;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -22,7 +20,7 @@ import java.util.LinkedList;
 import pt.ulisboa.tecnico.cmov.g16.foodist.Data;
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.MenuItem;
-import pt.ulisboa.tecnico.cmov.g16.foodist.model.TypeOfFood;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodType;
 
 public class NewMenuItemActivity extends AppCompatActivity {
 
@@ -69,7 +67,7 @@ public class NewMenuItemActivity extends AppCompatActivity {
 
                     MenuItem item = new MenuItem(title.getText().toString(),
                             Double.parseDouble(price.getText().toString()),
-                            TypeOfFood.valueOf(typeOfFood.getSelectedItem().toString().toUpperCase()),
+                            FoodType.valueOf(typeOfFood.getSelectedItem().toString().toUpperCase()),
                             true, description.getText().toString(),
                             Integer.parseInt(discount.getText().toString()), images);
                     data.getFoodService(foodServiceIndex).getMenu().getMenuList().add(item);
@@ -90,7 +88,7 @@ public class NewMenuItemActivity extends AppCompatActivity {
     }
 
     private void setupSpinner() {
-        ArrayAdapter<TypeOfFood> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, TypeOfFood.values());
+        ArrayAdapter<FoodType> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, FoodType.values());
         typeOfFood.setAdapter(adapter);
     }
 

@@ -20,7 +20,7 @@ public class Menu {
         return lastUpdated.toString();
     }
 
-    public void addMenuItem(String name, double price, TypeOfFood foodType, boolean availability, String description){
+    public void addMenuItem(String name, double price, FoodType foodType, boolean availability, String description){
         MenuItem item = new MenuItem(name, price, foodType, availability, description, 0, new LinkedList<ImageView>());
         menuList.add(item);
     }

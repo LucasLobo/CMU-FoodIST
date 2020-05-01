@@ -61,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
         initLocation();
         adapter.setUserStatus(user.getStatus());
         adapter.setCampus(user.getCampus());
+        adapter.setDietaryConstraints(user.getDietaryConstraints());
+        adapter.updateList();
     }
 
     @Override
@@ -157,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
                                     user.setCampus(CampusLocation.Campus.TAGUS);
                                 }
                                 adapter.setCampus(user.getCampus());
+                                adapter.updateList();
                                 user.setLoc_auto(false); //location finder set to manual
                                 Toast.makeText(MainActivity.this, "Location Finder is in Manual mode", Toast.LENGTH_SHORT).show();
                             }
@@ -164,6 +167,7 @@ public class MainActivity extends AppCompatActivity {
                         campusAlert.show();
                     } else {
                       adapter.setCampus(user.getCampus());
+                      adapter.updateList();
                     }
 
                 }

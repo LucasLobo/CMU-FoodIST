@@ -10,25 +10,20 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.EnumSet;
 import java.util.LinkedList;
 
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.MenuItem;
-import pt.ulisboa.tecnico.cmov.g16.foodist.model.TypeOfFood;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodType;
 
 public class MenuItemAdapter extends ArrayAdapter<MenuItem> implements Filterable {
 
     private Context mContext;
     private LinkedList<MenuItem> originalList;
     private LinkedList<MenuItem> filteredList;
-    private MenuFilter mFilter = new MenuFilter();
 
-    // FILTER OPTIONS //
-    private boolean meat;
-    private boolean fish;
-    private boolean vegan;
-    private boolean vegetarian;
-
+    private EnumSet<FoodType> dietaryConstraints;
 
     public MenuItemAdapter(Context mContext, LinkedList<MenuItem> list){
         super(mContext, 0, list);
@@ -36,6 +31,23 @@ public class MenuItemAdapter extends ArrayAdapter<MenuItem> implements Filterabl
         this.originalList = list;
         this.filteredList = list;
     }
+
+    public void setDietaryConstraints(EnumSet<FoodType> set) {
+        dietaryConstraints = set;
+        updateList();
+    }
+
+    private void updateList() {
+        filteredList = new LinkedList<>();
+        for (MenuItem item : originalList) {
+            if (dietaryConstraints.contains(item.getFoodType())) {
+                filteredList.add(item);
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+
 
     public View getView(int position, View convertView, ViewGroup parent) {
         View listItem = convertView;
@@ -56,7 +68,6 @@ public class MenuItemAdapter extends ArrayAdapter<MenuItem> implements Filterabl
             image.setImageResource(android.R.drawable.ic_delete);
 
         return listItem;
-
     }
 
     public MenuItem getItem(int i ){
@@ -66,73 +77,4 @@ public class MenuItemAdapter extends ArrayAdapter<MenuItem> implements Filterabl
         return filteredList.size();
     }
 
-    private Boolean filterFoodType(MenuItem item){
-        if(meat && item.getFoodType().equals(TypeOfFood.MEAT))
-            return true;
-        else if(fish && item.getFoodType().equals(TypeOfFood.FISH))
-            return true;
-        else if(vegan && item.getFoodType().equals(TypeOfFood.VEGAN))
-            return true;
-        else if(vegetarian && item.getFoodType().equals(TypeOfFood.VEGETARIAN))
-            return true;
-        return false;
-    }
-
-    public void toggleMeat(){
-        meat = !meat;
-    }
-    public void toggleFish(){
-        fish = !fish;
-    }
-    public void toggleVegan(){
-        vegan = !vegan;
-    }
-    public void toggleVegetarian(){
-        vegetarian = !vegetarian;
-    }
-
-    public boolean isMeat() {
-        return meat;
-    }
-    public boolean isFish() {
-        return fish;
-    }
-    public boolean isVegan() {
-        return vegan;
-    }
-    public boolean isVegetarian() {
-        return vegetarian;
-    }
-
-    public Filter getFilter(){
-        return mFilter;
-    }
-
-    public class MenuFilter extends Filter {
-
-        @Override
-        protected FilterResults performFiltering(CharSequence charSequence) {
-
-            FilterResults results = new FilterResults();
-            final LinkedList<MenuItem> list = originalList;
-            int count = list.size();
-            final LinkedList<MenuItem> nList = new LinkedList<>();
-
-            for(int i = 0; i!=count; i++){
-                MenuItem item = list.get(i);
-                if(filterFoodType(item))
-                    nList.add(item);
-            }
-
-            results.values = nList;
-            results.count = nList.size();
-            return results;
-        }
-
-        @Override
-        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-            filteredList = (LinkedList<MenuItem>) filterResults.values;
-            notifyDataSetChanged();
-        }
-    }
 }
