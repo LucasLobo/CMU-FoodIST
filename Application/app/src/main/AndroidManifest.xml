@@ -20,12 +20,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
-        <activity android:name=".activities.LoginActivity"></activity>
 
         <uses-library android:name="com.google.android.maps" />
 
-        <activity android:name=".activities.PeerScannerActivity" />
-        <activity android:name=".activities.FoodServiceActivity" />
+
+
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/title_food_service_list"
@@ -36,17 +35,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activities.UserProfileActivity"
-            android:label="UserProfile"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.PICK_ACTIVITY" />
-
-                <category android:name="android.intent.category.ALTERNATIVE" />
-            </intent-filter>
+        <activity android:name=".activities.UserProfileActivity"
+            android:label="Profile">
         </activity>
-        <activity android:name=".activities.MenuActivity" />
+
+        <activity android:name=".activities.PeerScannerActivity" />
+        <activity android:name=".activities.FoodServiceActivity" />
+        <activity android:name=".activities.LoginActivity"
+            android:label="Login"/>
+        <activity android:name=".activities.MenuActivity"
+            android:label="Menu"/>
         <activity android:name=".activities.MenuItemActivity" />
         <activity android:name=".activities.NewMenuItemActivity" />
         <activity android:name=".activities.FullscreenImageActivity" />
