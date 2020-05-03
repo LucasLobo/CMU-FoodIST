@@ -24,7 +24,7 @@ public class User {
 
     private UserStatus status;
     private CampusLocation location;
-    private EnumSet<FoodType> dietaryConstraints = EnumSet.allOf(FoodType.class);
+    private EnumSet<FoodType> dietaryConstraints = EnumSet.noneOf(FoodType.class);
     private String username;
     private boolean loc_auto;
 

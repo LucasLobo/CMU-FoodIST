@@ -13,6 +13,7 @@
     <string name="status">Change Status</string>
     <string name="campus">Change Campus</string>
     <string name="dietary">Dietary Constraints:</string>
+    <string name="dietary_explain">What you don\'t eat</string>
     <string name="addNewDietary">Add Constraint</string>
 
     <string name="log">Login/Logout</string>
@@ -43,13 +44,6 @@
     <string name="serviceButton">WiFi On</string>
     <string name="cancelButton">WiFi Off</string>
     <string name="inRangeButton">In Range</string>
-
-    <string-array name="food_type_array">
-        <item>MEAT</item>
-        <item>FISH</item>
-        <item>VEGETARIAN</item>
-        <item>VEGAN</item>
-    </string-array>
 
     <string name="time_min">%1d min</string>
 

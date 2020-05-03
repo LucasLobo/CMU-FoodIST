@@ -5,15 +5,12 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
 import android.widget.TextView;
 
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
-
-import org.threeten.bp.LocalTime;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -65,8 +62,13 @@ public class FoodServiceListRecyclerAdapter extends RecyclerView.Adapter<FoodSer
                 continue;
             }
 
-            if (Collections.disjoint(foodService.getDietaryRestrictions(), dietaryConstraints)) {
-                continue;
+            EnumSet<FoodType> foodServiceFoodTypes = EnumSet.copyOf(foodService.getFoodTypes());
+
+            if (!foodServiceFoodTypes.isEmpty()) {
+                foodServiceFoodTypes.removeAll(dietaryConstraints);
+                if (foodServiceFoodTypes.isEmpty()) {
+                    continue;
+                }
             }
 
             filteredList.add(foodService);

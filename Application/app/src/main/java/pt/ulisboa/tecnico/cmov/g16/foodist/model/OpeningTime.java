@@ -31,14 +31,14 @@ public class OpeningTime {
         schedules.put(status, schedule);
     }
 
-    public Boolean isOpenAt(LocalTime time, User.UserStatus status) {
+    Boolean isOpenAt(LocalTime time, User.UserStatus status) {
         Schedule schedule = schedules.get(status);
         if (schedule == null) return false;
         return time.isAfter(schedule.openTime) && time.isBefore(schedule.closeTime);
 
     }
 
-    public Boolean isOpen(User.UserStatus status) {
+    Boolean isOpen(User.UserStatus status) {
         return isOpenAt(LocalTime.now(), status);
     }
 

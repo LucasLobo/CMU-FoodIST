@@ -142,6 +142,14 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.651" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        android:layout_marginLeft="26dp"
+        android:text="@string/dietary_explain"
+        app:layout_constraintStart_toStartOf="parent"/>
+
     <ListView
         android:id="@+id/constraintsView"
         android:layout_width="168dp"

@@ -73,7 +73,7 @@ public class FoodService {
         return accessRestrictions;
     }
 
-    public EnumSet<FoodType> getDietaryRestrictions() {
+    public EnumSet<FoodType> getFoodTypes() {
         EnumSet<FoodType> set = EnumSet.noneOf(FoodType.class);
         LinkedList<MenuItem> menuList = menu.getMenuList();
         for (MenuItem item : menuList) {

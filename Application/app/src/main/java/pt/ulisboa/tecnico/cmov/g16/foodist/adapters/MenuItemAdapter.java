@@ -40,7 +40,7 @@ public class MenuItemAdapter extends ArrayAdapter<MenuItem> implements Filterabl
     private void updateList() {
         filteredList = new LinkedList<>();
         for (MenuItem item : originalList) {
-            if (dietaryConstraints.contains(item.getFoodType())) {
+            if (!dietaryConstraints.contains(item.getFoodType())) {
                 filteredList.add(item);
             }
         }
