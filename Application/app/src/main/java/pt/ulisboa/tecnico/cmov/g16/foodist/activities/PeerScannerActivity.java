@@ -21,6 +21,7 @@ import pt.inesc.termite.wifidirect.SimWifiP2pDeviceList;
 import pt.inesc.termite.wifidirect.SimWifiP2pManager;
 import pt.inesc.termite.wifidirect.service.SimWifiP2pService;
 
+import pt.ulisboa.tecnico.cmov.g16.foodist.GrpcTask;
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 import pt.ulisboa.tecnico.cmov.g16.foodist.receivers.SimWifiP2pBroadcastReceiver;
 
@@ -92,6 +93,32 @@ public class PeerScannerActivity extends AppCompatActivity implements SimWifiP2p
         }
     };
 
+
+    private View.OnClickListener addToQueue = new View.OnClickListener() {
+        public void onClick(View v) {
+            new GrpcTask(PeerScannerActivity.this).execute("joinQueue", "3", "1");
+        }
+    };
+
+    private View.OnClickListener removeFromQueue = new View.OnClickListener() {
+        public void onClick(View v) {
+            new GrpcTask(PeerScannerActivity.this).execute("leaveQueue", "3", "1", "0")
+
+
+                    ;
+        }
+    };
+
+    private View.OnClickListener estimateQueue = new View.OnClickListener() {
+        public void onClick(View v) {
+            new GrpcTask(PeerScannerActivity.this).execute("estimateQueueTime", "1");
+        }
+    };
+
+
+
+
+
     private ServiceConnection mConnection = new ServiceConnection() {
         // callbacks for service binding, passed to bindService()
 
@@ -144,6 +171,11 @@ public class PeerScannerActivity extends AppCompatActivity implements SimWifiP2p
         findViewById(R.id.idWifiOnButton).setOnClickListener(listenerWifiOnButton);
         findViewById(R.id.idWifiOffButton).setOnClickListener(listenerWifiOffButton);
         findViewById(R.id.idInRangeButton).setOnClickListener(listenerInRangeButton);
+
+        findViewById(R.id.addToQueue).setOnClickListener(addToQueue);
+        findViewById(R.id.removeFromQueue).setOnClickListener(removeFromQueue);
+        findViewById(R.id.estimateQueue).setOnClickListener(estimateQueue);
+
     }
 
     private void guiUpdateInitState() {

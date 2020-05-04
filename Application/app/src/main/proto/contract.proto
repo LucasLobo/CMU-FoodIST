@@ -2,8 +2,8 @@ syntax = "proto3";
 package com.grpc;
 
 message RegisterRequest {
-    string username= 1;
-    string password= 2;
+    string username = 1;
+    string password = 2;
 }
 
 message RegisterResponse {
@@ -14,7 +14,6 @@ message ProfileRequest {
     string username= 1;
     string status = 2;
     string constraints = 3;
-
 }
 
 message ProfileResponse {
@@ -29,9 +28,38 @@ message ItemResponse {
 	string result = 1;
 }
 
+message JoinQueueRequest {
+    int32 userId = 1;
+    int32 foodServiceId = 2;
+}
+
+message JoinQueueResponse {
+    string result = 1;
+}
+
+message LeaveQueueRequest {
+    int32 userId = 1;
+    int32 foodServiceId = 2;
+    int32 duration = 3;
+}
+
+message LeaveQueueResponse {
+    string result = 1;
+}
+
+message EstimateQueueTimeRequest {
+    int32 foodServiceId = 1;
+}
+
+message EstimateQueueTimeResponse {
+    int32 time = 1;
+}
 
 service GrpcService {
     rpc register (RegisterRequest) returns (RegisterResponse);
     rpc saveProfile (ProfileRequest) returns (ProfileResponse);
     rpc saveMenuItem (ItemRequest) returns (ItemResponse);
+    rpc joinQueue (JoinQueueRequest) returns (JoinQueueResponse);
+    rpc leaveQueue (LeaveQueueRequest) returns (LeaveQueueResponse);
+    rpc estimateQueueTime (EstimateQueueTimeRequest) returns (EstimateQueueTimeResponse);
 }

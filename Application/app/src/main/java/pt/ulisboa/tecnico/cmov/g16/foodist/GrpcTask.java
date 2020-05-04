@@ -3,6 +3,7 @@ package pt.ulisboa.tecnico.cmov.g16.foodist;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.grpc.Contract.*;
 import com.grpc.GrpcServiceGrpc;
@@ -18,6 +19,7 @@ import io.grpc.ManagedChannelBuilder;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class GrpcTask extends AsyncTask<String, Void, String> {
+    private static final String TAG = "GrpcTask";
     private final WeakReference<AppCompatActivity> activityReference;
     private ManagedChannel channel;
     private String host = "10.0.2.2";
@@ -58,6 +60,36 @@ public class GrpcTask extends AsyncTask<String, Void, String> {
                     ItemRequest itemRequest = ItemRequest.newBuilder().setItem(item).build();
                     ItemResponse itemReply = stub.saveMenuItem(itemRequest);
                     return itemReply.getResult();
+
+                case "joinQueue":
+                    int userId = Integer.parseInt(params[1]);
+                    int foodServiceId = Integer.parseInt(params[2]);
+                    JoinQueueRequest joinQueueRequest = JoinQueueRequest.newBuilder()
+                            .setFoodServiceId(foodServiceId)
+                            .setUserId(userId)
+                            .build();
+                    JoinQueueResponse joinQueueResponse = stub.joinQueue(joinQueueRequest);
+                    return joinQueueResponse.getResult();
+
+                case "leaveQueue":
+                    userId = Integer.parseInt(params[1]);
+                    foodServiceId = Integer.parseInt(params[2]);
+                    int duration = Integer.parseInt(params[3]);
+                    LeaveQueueRequest leaveQueueRequest = LeaveQueueRequest.newBuilder()
+                            .setFoodServiceId(foodServiceId)
+                            .setUserId(userId)
+                            .setDuration(duration)
+                            .build();
+                    LeaveQueueResponse leaveQueueResponse = stub.leaveQueue(leaveQueueRequest);
+                    return leaveQueueResponse.getResult();
+
+                case "estimateQueueTime":
+                    foodServiceId = Integer.parseInt(params[1]);
+                    EstimateQueueTimeRequest estimateQueueTimeRequest = EstimateQueueTimeRequest.newBuilder()
+                            .setFoodServiceId(foodServiceId)
+                            .build();
+                    EstimateQueueTimeResponse estimateQueueTimeResponse = stub.estimateQueueTime(estimateQueueTimeRequest);
+                    return String.valueOf(estimateQueueTimeResponse.getTime());
 
                 default:
                     return "No such command in the contract";
