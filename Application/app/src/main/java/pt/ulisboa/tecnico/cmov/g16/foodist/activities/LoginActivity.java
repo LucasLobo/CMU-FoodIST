@@ -37,8 +37,7 @@ public class LoginActivity extends AppCompatActivity {
                 new GrpcTask(LoginActivity.this).execute("register", username.getText().toString(), password.getText().toString());
                 data.getUser().setUsername(username.getText().toString());
                 new GrpcTask(LoginActivity.this).execute("saveProfile", user.getUsername(), user.getStatus().toString(), user.getDietaryConstraints().toString());
-                Intent intent = new Intent(LoginActivity.this, UserProfileActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
 
