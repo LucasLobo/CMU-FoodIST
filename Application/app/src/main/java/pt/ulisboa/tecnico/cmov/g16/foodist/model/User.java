@@ -1,7 +1,7 @@
 package pt.ulisboa.tecnico.cmov.g16.foodist.model;
 
 import android.location.Location;
-import java.util.ArrayList;
+
 import java.util.EnumSet;
 
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
@@ -25,6 +25,7 @@ public class User {
     private UserStatus status;
     private CampusLocation location;
     private EnumSet<FoodType> dietaryConstraints = EnumSet.noneOf(FoodType.class);
+    private boolean shouldApplyConstraintsFilter = true;
     private String username;
     private boolean loc_auto;
 
@@ -67,13 +68,20 @@ public class User {
         return location.getCampus().id;
     }
 
-
     public void addDietaryConstraints(FoodType dietaryConstraints) {
         getDietaryConstraints().add(dietaryConstraints);
     }
 
     public void removeDietaryConstraints(FoodType dietaryConstraints) {
         getDietaryConstraints().remove(dietaryConstraints);
+    }
+
+    public void toggleConstraintsFilter() {
+        shouldApplyConstraintsFilter = !shouldApplyConstraintsFilter;
+    }
+
+    public boolean shouldApplyConstraintsFilter() {
+        return shouldApplyConstraintsFilter;
     }
 
     public EnumSet<FoodType> getDietaryConstraints() {

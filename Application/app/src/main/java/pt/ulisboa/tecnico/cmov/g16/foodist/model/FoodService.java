@@ -28,7 +28,6 @@ public class FoodService {
 
     private OpeningTime openingTime;
     private CampusLocation location;
-    // FoodMenu foodMenu;
 
     private ArrayList<AccessRestriction> accessRestrictions = new ArrayList<>();
 
@@ -80,6 +79,17 @@ public class FoodService {
             set.add(item.getFoodType());
         }
         return set;
+    }
+
+    public boolean meetsConstraints(EnumSet<FoodType> dietaryConstraints, boolean allowEmpty) {
+        if (dietaryConstraints.isEmpty()) return true;
+
+        EnumSet<FoodType> foodServiceFoodTypes = EnumSet.copyOf(getFoodTypes());
+        if (allowEmpty && foodServiceFoodTypes.isEmpty()) {
+            return true;
+        }
+        foodServiceFoodTypes.removeAll(dietaryConstraints);
+        return !foodServiceFoodTypes.isEmpty();
     }
 
     public CampusLocation getLocation() {

@@ -11,8 +11,11 @@ import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.EnumSet;
+
 import pt.ulisboa.tecnico.cmov.g16.foodist.Data;
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodType;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.Menu;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.MenuItem;
 import pt.ulisboa.tecnico.cmov.g16.foodist.adapters.MenuItemAdapter;
@@ -71,7 +74,11 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        adapter.setDietaryConstraints(user.getDietaryConstraints());
+        if (user.shouldApplyConstraintsFilter()) {
+            adapter.setDietaryConstraints(user.getDietaryConstraints());
+        } else {
+            adapter.setDietaryConstraints(EnumSet.noneOf(FoodType.class));
+        }
     }
     @Override
     public boolean onOptionsItemSelected(android.view.MenuItem item) {

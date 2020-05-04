@@ -9,7 +9,6 @@
     android:layout_marginHorizontal="15dp"
     android:paddingVertical="10dp"
     android:clipToPadding="false"
-
     >
 
 </androidx.recyclerview.widget.RecyclerView>

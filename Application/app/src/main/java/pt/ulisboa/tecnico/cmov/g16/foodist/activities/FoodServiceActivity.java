@@ -100,6 +100,12 @@ public class FoodServiceActivity extends AppCompatActivity {
         aproxWaiting.setText(getString(R.string.waiting_time,5));
 
 
+        TextView constraintsNotice = findViewById(R.id.food_service_food_constraints_notice);
+        if (!user.shouldApplyConstraintsFilter() || foodService.meetsConstraints(user.getDietaryConstraints(), false)) {
+            constraintsNotice.setVisibility(View.GONE);
+        }
+
+
 
         TextView campus = findViewById(R.id.food_service_campus);
         campus.setText(foodService.getLocation().getCampus().id);

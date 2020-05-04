@@ -9,6 +9,10 @@
     <string name="wheel_chair">Wheel Chair</string>
 
 
+    <!-- MAIN ACTIVITY -->
+    <string name="results_filtered">Some food services were filtered due to dietary constraints.</string>
+    <string name="no_dietary_constraints">Dietary constraints are not being applied.</string>
+
     <!--USER PROFILE ACTIVITY-->
     <string name="status">Change Status</string>
     <string name="campus">Change Campus</string>
@@ -54,4 +58,9 @@
     <string name="closed">Closed right now</string>
     <string name="open">Currently open</string>
     <string name="opening_time">%d:%02d - %d:%02d</string>
+    <string name="empty_menu_notice">This food service has an empty menu which might not meet your dietary constraints.</string>
+
+    <!-- MENU MAIN ACTIVITY -->
+    <string name="menu_user_profile">Profile</string>
+    <string name="menu_toggle">Toggle dietary constraints filter</string>
 </resources>
