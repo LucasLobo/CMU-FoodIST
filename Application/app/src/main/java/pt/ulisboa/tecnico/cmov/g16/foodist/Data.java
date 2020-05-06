@@ -1,18 +1,18 @@
 package pt.ulisboa.tecnico.cmov.g16.foodist;
 
 import android.app.Application;
+import android.util.Log;
+
 import com.jakewharton.threetenabp.AndroidThreeTen;
 
-import org.threeten.bp.LocalTime;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 
-import pt.ulisboa.tecnico.cmov.g16.foodist.model.CampusLocation;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodService;
-import pt.ulisboa.tecnico.cmov.g16.foodist.model.OpeningTime;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodType;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.User;
 
@@ -20,7 +20,7 @@ public class Data extends Application {
 
     private static final String TAG = "Data";
 
-    ArrayList<FoodService> foodServiceList;
+    HashMap<Integer, FoodService> foodServiceHashMap;
     User user;
 
     @Override
@@ -31,55 +31,15 @@ public class Data extends Application {
     }
 
     public ArrayList<FoodService> getFoodServiceList() {
-        return foodServiceList;
+        return new ArrayList<>(foodServiceHashMap.values());
     }
 
-    public FoodService getFoodService(Integer index) {
-        return foodServiceList.get(index);
+    public FoodService getFoodService(Integer id) {
+        return foodServiceHashMap.get(id);
     }
 
     public User getUser() {
         return user;
-    }
-
-    public void initData() {
-        this.user = new User();
-
-        this.foodServiceList = new ArrayList<>();
-
-        OpeningTime.Schedule schedule1 = new OpeningTime.Schedule(LocalTime.of(8,0), LocalTime.of(20,0));
-        OpeningTime.Schedule schedule2 = new OpeningTime.Schedule(LocalTime.of(10, 0), LocalTime.of(15, 0));
-
-        OpeningTime openingTime = new OpeningTime();
-        openingTime.addScheduleStatus(User.UserStatus.STUDENT, schedule1);
-        openingTime.addScheduleStatus(User.UserStatus.PROFESSOR, schedule1);
-        openingTime.addScheduleStatus(User.UserStatus.RESEARCHER, schedule2);
-        openingTime.addScheduleStatus(User.UserStatus.GENERAL_PUBLIC, schedule1);
-
-        CampusLocation location = new CampusLocation(CampusLocation.Campus.ALAMEDA, "Civil");
-        FoodService foodService = new FoodService("Bar 0", location, openingTime, "Sandwiches");
-        foodService.addAccessRestriction(FoodService.AccessRestriction.ELEVATOR);
-        foodService.addAccessRestriction(FoodService.AccessRestriction.RAMP);
-        foodService.getMenu().addMenuItem("Menu A", 2, FoodType.MEAT,true, "This menu is consisted in fries and soup");
-        foodService.getMenu().addMenuItem("Menu B", 2, FoodType.FISH,true, "This menu is consisted in a main fish course with fries or soup");
-        foodService.getMenu().addMenuItem("Menu C", 2, FoodType.VEGAN,true, "This menu is consisted in a main vegan course with fries and fruit");
-        foodService.getMenu().addMenuItem("Menu D", 2, FoodType.VEGETARIAN,true, "This menu is consisted in a vegetarian fish course with fries or soup");
-        foodServiceList.add(foodService);
-
-        location = new CampusLocation(CampusLocation.Campus.TAGUS, "Block A");
-        foodService = new FoodService("Canteen 1", location, openingTime, "Meals");
-        foodService.addAccessRestriction(FoodService.AccessRestriction.STAIRS);
-        foodService.getMenu().addMenuItem("Menu A", 2, FoodType.MEAT,true, "This menu is consisted in fries and soup");
-        foodService.getMenu().addMenuItem("Menu B", 2, FoodType.FISH,true, "This menu is consisted in a main fish course with fries or soup");
-        foodService.getMenu().addMenuItem("Menu C", 2, FoodType.VEGAN,true, "This menu is consisted in a main vegan course with fries and fruit");
-        foodService.getMenu().addMenuItem("Menu D", 2, FoodType.VEGETARIAN,true, "This menu is consisted in a vegetarian fish course with fries or soup");
-        foodService.getMenu().addMenuItem("Menu E", 2, FoodType.MEAT,true, "This menu is consisted in fries");
-        foodServiceList.add(foodService);
-
-        location = new CampusLocation(CampusLocation.Campus.ALAMEDA, "Central");
-        for (int i = 2; i < 50; i++) {
-            foodServiceList.add(new FoodService("Food Service " + i, location, openingTime, "Something"));
-        }
     }
 
     public String serialize(Object item){
@@ -106,5 +66,113 @@ public class Data extends Application {
             System.out.println(e);
         }
         return null;
+    }
+
+    private void initData() {
+        initUser();
+        initFoodServices();
+    }
+
+    private void initUser() {
+        this.user = new User();
+    }
+
+    private void initFoodServices() {
+        this.foodServiceHashMap = new HashMap<>();
+
+        int id = 0;
+
+        FoodService fakePlace = new FoodService(id++, "Fake Place", 38.7352722896, -9.13268566132);
+        fakePlace.addSchedule(0,0,23,59);
+        fakePlace.addAccessRestriction(FoodService.AccessRestriction.WHEEL_CHAIR);
+        fakePlace.addAccessRestriction(FoodService.AccessRestriction.STAIRS);
+        fakePlace.addAccessRestriction(FoodService.AccessRestriction.ELEVATOR);
+        fakePlace.addAccessRestriction(FoodService.AccessRestriction.RAMP);
+        fakePlace.addMenuItem("Meat menu", 5, FoodType.MEAT, true, "Menu with meat");
+        fakePlace.addMenuItem("Fish menu", 5, FoodType.FISH, true, "Menu with fish");
+        fakePlace.addMenuItem("Vegan menu", 5, FoodType.VEGAN, true, "Vegan menu");
+        fakePlace.addMenuItem("Vegetarian menu", 5, FoodType.VEGETARIAN, true, "Vegetarian menu");
+        foodServiceHashMap.put(fakePlace.getId(), fakePlace);
+
+        FoodService centralBar = new FoodService(id++, "Central Bar", 38.736606, -9.139532);
+        centralBar.addSchedule(9,0,17,0);
+        foodServiceHashMap.put(centralBar.getId(), centralBar);
+
+        FoodService civilBar = new FoodService(id++, "Civil Bar", 38.736988, -9.139955);
+        civilBar.addSchedule(9,0,17,0);
+        foodServiceHashMap.put(civilBar.getId(), civilBar);
+
+        FoodService civilCafeteria = new FoodService(id++, "Civil Cafeteria", 38.737650, -9.140384);
+        civilCafeteria.addSchedule(12,0,15,0);
+        foodServiceHashMap.put(civilCafeteria.getId(), civilCafeteria);
+
+        FoodService senaPastryShop = new FoodService(id++, "Sena Pastry Shop", 38.737677, -9.138672);
+        senaPastryShop.addSchedule(8,0,19,0);
+        foodServiceHashMap.put(senaPastryShop.getId(), senaPastryShop);
+
+        FoodService mechyBar = new FoodService(id++, "Mechy Bar", 38.737247, -9.137434);
+        mechyBar.addSchedule(9,0,17,0);
+        foodServiceHashMap.put(mechyBar.getId(), mechyBar);
+
+        FoodService aeistBar = new FoodService(id++, "AEIST Bar", 38.736542, -9.137226);
+        aeistBar.addSchedule(9,0,17,0);
+        foodServiceHashMap.put(aeistBar.getId(), aeistBar);
+
+        FoodService aeistEsplanade = new FoodService(id++, "AEIST Esplanade", 38.736318, -9.137820);
+        aeistEsplanade.addSchedule(9,0,17,0);
+        foodServiceHashMap.put(aeistEsplanade.getId(), aeistEsplanade);
+
+        FoodService chemyBar = new FoodService(id++, "Chemy Bar", 38.736240, -9.138302);
+        chemyBar.addSchedule(9,0,17,0);
+        foodServiceHashMap.put(chemyBar.getId(), chemyBar);
+
+        FoodService sasCafeteria = new FoodService(id++, "SAS Cafeteria", 38.736571, -9.137036);
+        sasCafeteria.addSchedule(9,0,21,0);
+        foodServiceHashMap.put(sasCafeteria.getId(), sasCafeteria);
+
+        FoodService mathCafeteria = new FoodService(id++, "Math Cafeteria", 38.735508, -9.139645);
+        mathCafeteria.addSchedule(User.UserStatus.STUDENT,13,30,15,0);
+        mathCafeteria.addSchedule(User.UserStatus.GENERAL_PUBLIC, 13,30,15,0);
+        mathCafeteria.addSchedule(User.UserStatus.PROFESSOR,12,0,15,0);
+        mathCafeteria.addSchedule(User.UserStatus.RESEARCHER,12,0,15,0);
+        mathCafeteria.addSchedule(User.UserStatus.STAFF,12,0,15,0);
+        foodServiceHashMap.put(mathCafeteria.getId(), mathCafeteria);
+
+        FoodService complexBar = new FoodService(id++, "Complex Bar", 38.736050, -9.140156);
+        complexBar.addSchedule(User.UserStatus.STUDENT,9,0,12,0);
+        complexBar.addSchedule(User.UserStatus.STUDENT,14,0,17,0);
+        complexBar.addSchedule(User.UserStatus.GENERAL_PUBLIC,9,0,12,0);
+        complexBar.addSchedule(User.UserStatus.GENERAL_PUBLIC,14,0,17,0);
+        complexBar.addSchedule(User.UserStatus.PROFESSOR,9,0,17,0);
+        complexBar.addSchedule(User.UserStatus.RESEARCHER,9,0,17,0);
+        complexBar.addSchedule(User.UserStatus.STAFF,9,0,17,0);
+        foodServiceHashMap.put(complexBar.getId(), complexBar);
+
+        FoodService tagusCafeteria = new FoodService(id++, "Tagus Cafeteria", 38.737802, -9.303223);
+        tagusCafeteria.addSchedule(12,0,15,0);
+        foodServiceHashMap.put(tagusCafeteria.getId(), tagusCafeteria);
+
+        FoodService redBar = new FoodService(id++, "Red Bar", 38.736546, -9.302207);
+        redBar.addSchedule(8,0,22,0);
+        foodServiceHashMap.put(redBar.getId(), redBar);
+
+        FoodService greenBar = new FoodService(id++, "Green Bar", 38.738004, -9.303058);
+        greenBar.addSchedule(7,0,19,0);
+        foodServiceHashMap.put(greenBar.getId(), greenBar);
+
+        FoodService ctnCafeteria = new FoodService(id++, "CTN Cafeteria", 38.812522, -9.093773);
+        ctnCafeteria.addSchedule(12,0,14,0);
+        foodServiceHashMap.put(ctnCafeteria.getId(), ctnCafeteria);
+
+        FoodService ctnBar = new FoodService(id++, "CTN Bar", 38.812522, -9.093773);
+        ctnBar.addSchedule(8,30,12,0);
+        ctnBar.addSchedule(15,30,16,30);
+        foodServiceHashMap.put(ctnBar.getId(), ctnBar);
+
+        initMenus();
+    }
+
+    private void initMenus() {
+
     }
 }

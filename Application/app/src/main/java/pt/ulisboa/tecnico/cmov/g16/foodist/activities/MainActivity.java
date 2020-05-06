@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.setUserStatus(user.getStatus());
         adapter.setCampus(user.getCampus());
         adapter.setDietaryConstraints(user.getDietaryConstraints());
-
+        adapter.updateList();
     }
 
     @Override
@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void proceedLocationLocationEnabled() {
-        if(user.isLoc_auto()) {
+        if(user.isLocAuto()) {
             FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
             LocationRequest locationRequest = new LocationRequest();
@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onLocationResult(LocationResult locationResult) {
                     user.setLocation(locationResult.getLastLocation());
                     if (user.getLocation().getCampus().equals(CampusLocation.Campus.UNKNOWN)) {
-                        String[] options = {getString(CampusLocation.Campus.ALAMEDA.id), getString(CampusLocation.Campus.TAGUS.id)};
+                        String[] options = {getString(CampusLocation.Campus.ALAMEDA.id), getString(CampusLocation.Campus.TAGUS.id), getString(CampusLocation.Campus.CTN.id)};
 
                         AlertDialog.Builder campusAlert = new AlertDialog.Builder(MainActivity.this);
                         campusAlert.setTitle("Could not find your Campus. Please select one:");
@@ -173,12 +173,15 @@ public class MainActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 if (which == 0) {
                                     user.setCampus(CampusLocation.Campus.ALAMEDA);
-                                } else {
+                                } else if (which == 1) {
                                     user.setCampus(CampusLocation.Campus.TAGUS);
+                                } else {
+                                    user.setCampus(CampusLocation.Campus.CTN);
                                 }
+
                                 adapter.setCampus(user.getCampus());
                                 adapter.updateList();
-                                user.setLoc_auto(false); //location finder set to manual
+                                user.setLocAuto(false); //location finder set to manual
                                 Toast.makeText(MainActivity.this, "Location Finder is in Manual mode", Toast.LENGTH_SHORT).show();
                             }
                         });

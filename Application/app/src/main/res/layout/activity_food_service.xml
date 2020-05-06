@@ -45,22 +45,22 @@
                     />
 
                 <TextView
-                    android:id="@+id/food_service_description"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/food_service_name"
-                    tools:text="Comidas rápidas, sandwiches" />
-
-                <TextView
                     android:id="@+id/food_service_aprox_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/food_service_description"
+                    app:layout_constraintTop_toBottomOf="@id/food_service_name"
                     tools:text="5€" />
+
+                <TextView
+                    android:id="@+id/food_service_aprox_waiting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/food_service_aprox_price"
+                    tools:text="5min" />
 
                 <TextView
                     android:id="@+id/food_service_open"
@@ -69,7 +69,7 @@
                     android:layout_marginTop="12dp"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/food_service_aprox_price"
+                    app:layout_constraintTop_toBottomOf="@id/food_service_aprox_waiting"
                     tools:text="Open now" />
 
                 <TextView
@@ -82,15 +82,6 @@
                     tools:text="10h00 - 18h00" />
 
                 <TextView
-                    android:id="@+id/food_service_aprox_waiting"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/food_service_opening_time"
-                    tools:text="5min" />
-
-                <TextView
                     android:id="@+id/food_service_food_constraints_notice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -98,8 +89,8 @@
                     android:text="@string/empty_menu_notice"
                     app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginTop="10dp"
-                    android:textColor="#ff0000"
-                    app:layout_constraintTop_toBottomOf="@id/food_service_aprox_waiting"
+                    android:textColor="#C80000"
+                    app:layout_constraintTop_toBottomOf="@id/food_service_opening_time"
                     />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -141,22 +132,12 @@
                     tools:text="Alameda" />
 
                 <TextView
-                    android:id="@+id/food_service_location"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/food_service_campus"
-
-                    tools:text="Pavilhão de Civil" />
-
-                <TextView
                     android:id="@+id/food_service_walking_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/food_service_location"
+                    app:layout_constraintTop_toBottomOf="@id/food_service_campus"
                     tools:text="Distancia ~7min"
                     />
 

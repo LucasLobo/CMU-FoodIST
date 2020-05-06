@@ -17,6 +17,7 @@ public class CampusAdapter extends ArrayAdapter<CampusLocation.Campus> {
         super(context, 0);
         super.add(CampusLocation.Campus.ALAMEDA);
         super.add(CampusLocation.Campus.TAGUS);
+        super.add(CampusLocation.Campus.CTN);
     }
 
     @NonNull

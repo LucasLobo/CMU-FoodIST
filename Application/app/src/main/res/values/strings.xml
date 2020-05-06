@@ -26,6 +26,7 @@
 
     <string name="alameda">Alameda</string>
     <string name="tagus">Taguspark</string>
+    <string name="CTN">CTN</string>
     <string name="unknown_campus">Unknown</string>
 
     <string name="student">Student</string>
@@ -57,7 +58,7 @@
     <string name="waiting_time">Waiting time: %1d min</string>
     <string name="closed">Closed right now</string>
     <string name="open">Currently open</string>
-    <string name="opening_time">%d:%02d - %d:%02d</string>
+    <string name="opening_time">%02d:%02d - %02d:%02d</string>
     <string name="empty_menu_notice">This food service has an empty menu which might not meet your dietary constraints.</string>
 
     <!-- MENU MAIN ACTIVITY -->

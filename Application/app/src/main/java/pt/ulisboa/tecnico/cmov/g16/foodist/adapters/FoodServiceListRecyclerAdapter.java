@@ -2,6 +2,7 @@ package pt.ulisboa.tecnico.cmov.g16.foodist.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -113,14 +114,13 @@ public class FoodServiceListRecyclerAdapter extends RecyclerView.Adapter<Recycle
             FoodServiceListItemViewHolder castHolder = (FoodServiceListItemViewHolder) holder;
             final FoodService foodService = filteredFoodServiceList.get(getPosition(position));
             castHolder.name.setText(foodService.getName());
-            castHolder.location.setText(foodService.getLocationName());
             castHolder.queueTime.setText(context.getResources().getString(R.string.time_min, 10));
             castHolder.walkTime.setText(context.getResources().getString(R.string.time_min, 7));
             castHolder.parentLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, FoodServiceActivity.class);
-                    intent.putExtra("index", foodServiceList.indexOf(foodService));
+                    intent.putExtra("id", foodService.getId());
                     context.startActivity(intent);
                 }
             });
@@ -155,7 +155,6 @@ public class FoodServiceListRecyclerAdapter extends RecyclerView.Adapter<Recycle
 
     static class FoodServiceListItemViewHolder extends RecyclerView.ViewHolder {
         TextView name;
-        TextView location;
         TextView queueTime;
         TextView walkTime;
         CardView parentLayout;
@@ -163,7 +162,6 @@ public class FoodServiceListRecyclerAdapter extends RecyclerView.Adapter<Recycle
         FoodServiceListItemViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.food_service_list_item_name);
-            location = itemView.findViewById(R.id.food_service_list_item_location);
             queueTime = itemView.findViewById(R.id.food_service_list_item_queue_time);
             walkTime = itemView.findViewById(R.id.food_service_list_item_walking_time);
             parentLayout = itemView.findViewById(R.id.food_service_list_item_parent_layout);

@@ -31,29 +31,43 @@ public class FoodService {
 
     private ArrayList<AccessRestriction> accessRestrictions = new ArrayList<>();
 
+    private Integer id;
     private String name;
-    private String foodType;
     private Menu menu;
 
 
-    public FoodService(String name, CampusLocation location, OpeningTime openingTime, String foodType) {
+    public FoodService(Integer id, String name, Double latitude, Double longitude) {
+        this.id = id;
         this.name = name;
-        this.location = location;
-        this.openingTime = openingTime;
-        this.foodType = foodType;
-        menu = new Menu();
+        this.location = new CampusLocation(latitude, longitude);
+        this.openingTime = new OpeningTime();
+        this.menu = new Menu();
+    }
+
+    public Integer getId() {
+        return id;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getFoodType() {
-        return foodType;
-    }
-
     public void addAccessRestriction(AccessRestriction accessRestriction) {
         accessRestrictions.add(accessRestriction);
+    }
+
+    public void addSchedule(User.UserStatus status, Integer openingHour, Integer openingMinute, Integer closingHour, Integer closingMinute) {
+        openingTime.addScheduleForStatus(status, openingHour, openingMinute, closingHour, closingMinute);
+    }
+
+    public void addSchedule(Integer openingHour, Integer openingMinute, Integer closingHour, Integer closingMinute) {
+        for (User.UserStatus status : User.UserStatus.values()) {
+            addSchedule(status, openingHour, openingMinute, closingHour, closingMinute);
+        }
+    }
+
+    public void addMenuItem(String name, double price, FoodType foodType, boolean availability, String description) {
+        menu.addMenuItem(name, price, foodType, availability, description);
     }
 
     public OpeningTime getOpeningTime() {
@@ -98,10 +112,6 @@ public class FoodService {
 
     public CampusLocation.Campus getCampus() {
         return location.getCampus();
-    }
-
-    public String getLocationName() {
-        return location.getName();
     }
 
     public Menu getMenu(){

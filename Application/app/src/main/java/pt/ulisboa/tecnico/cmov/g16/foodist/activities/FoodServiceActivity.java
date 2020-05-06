@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import org.threeten.bp.LocalTime;
 
+import java.util.ArrayList;
+
 import pt.ulisboa.tecnico.cmov.g16.foodist.Data;
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodService;
@@ -34,14 +36,14 @@ public class FoodServiceActivity extends AppCompatActivity {
 
         data = (Data) getApplicationContext();
         Intent intent = getIntent();
-        int index = intent.getIntExtra("index", -1);
+        int id = intent.getIntExtra("id", -1);
 
-        if (index == -1) {
+        if (id == -1) {
             finish();
         }
 
-        foodService = data.getFoodService(index);
-        populate(index);
+        foodService = data.getFoodService(id);
+        populate(id);
     }
 
     @Override
@@ -60,16 +62,11 @@ public class FoodServiceActivity extends AppCompatActivity {
         return true;
     }
 
-    private void populate(final int index) {
+    private void populate(final int id) {
         setTitle(foodService.getName());
 
         TextView name = findViewById(R.id.food_service_name);
         name.setText(foodService.getName());
-
-        TextView description = findViewById(R.id.food_service_description);
-        description.setText(foodService.getFoodType());
-
-
 
         TextView aproxPrice = findViewById(R.id.food_service_aprox_price);
         aproxPrice.setText(getString(R.string.menu_price, 5));
@@ -90,12 +87,18 @@ public class FoodServiceActivity extends AppCompatActivity {
             open.setTextColor(Color.rgb(200,0,0));
         }
 
-        OpeningTime.Schedule schedule = foodService.getOpeningTime().getSchedule(user.getStatus());
-        LocalTime openTime = schedule.getOpenTime();
-        LocalTime closeTime = schedule.getCloseTime();
-
+        ArrayList<OpeningTime.Schedule> scheduleList = foodService.getOpeningTime().getScheduleList(user.getStatus());
         TextView openingTime = findViewById(R.id.food_service_opening_time);
-        openingTime.setText(getString(R.string.opening_time, openTime.getHour(), openTime.getMinute(), closeTime.getHour(), closeTime.getMinute()));
+
+        StringBuilder scheduleString = new StringBuilder();
+        for (OpeningTime.Schedule schedule : scheduleList) {
+            LocalTime openTime = schedule.getOpenTime();
+            LocalTime closeTime = schedule.getCloseTime();
+            if (scheduleString.length() > 0) scheduleString.append('\n');
+            scheduleString.append(getString(R.string.opening_time, openTime.getHour(), openTime.getMinute(), closeTime.getHour(), closeTime.getMinute()));
+        }
+        openingTime.setText(scheduleString.toString());
+
         TextView aproxWaiting = findViewById(R.id.food_service_aprox_waiting);
         aproxWaiting.setText(getString(R.string.waiting_time,5));
 
@@ -105,13 +108,8 @@ public class FoodServiceActivity extends AppCompatActivity {
             constraintsNotice.setVisibility(View.GONE);
         }
 
-
-
         TextView campus = findViewById(R.id.food_service_campus);
         campus.setText(foodService.getLocation().getCampus().id);
-
-        TextView location = findViewById(R.id.food_service_location);
-        location.setText(foodService.getLocationName());
 
         TextView walkingTime = findViewById(R.id.food_service_walking_time);
         walkingTime.setText(getString(R.string.walking_time, 5));
@@ -121,7 +119,7 @@ public class FoodServiceActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(FoodServiceActivity.this, MenuActivity.class);
-                intent.putExtra("index", index);
+                intent.putExtra("index", id);
                 startActivity(intent);
             }
         });

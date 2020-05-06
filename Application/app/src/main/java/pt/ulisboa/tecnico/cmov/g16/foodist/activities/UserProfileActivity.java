@@ -56,7 +56,7 @@ public class UserProfileActivity extends AppCompatActivity {
         userNameView.setText("User: " + user.getUsername());
 
         /*_____________________________________CAMPUS_____________________________________________*/
-        if(user.isLoc_auto()){
+        if(user.isLocAuto()){
           loc_aut.setChecked(true);
         }
 
@@ -77,7 +77,7 @@ public class UserProfileActivity extends AppCompatActivity {
                         listProfileView.setAdapter(null);
                         user.setCampus(campus);
 
-                        user.setLoc_auto(false);
+                        user.setLocAuto(false);
                         loc_aut.setChecked(false);
 
                         Toast.makeText(UserProfileActivity.this, "Location Finder changed to Manual mode", Toast.LENGTH_SHORT).show();
@@ -94,11 +94,11 @@ public class UserProfileActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
-                    user.setLoc_auto(true);
+                    user.setLocAuto(true);
                     Toast.makeText(UserProfileActivity.this, "Location Finder changed to Automatic mode", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    user.setLoc_auto(false);
+                    user.setLocAuto(false);
                     Toast.makeText(UserProfileActivity.this, "Location Finder changed to Manual mode", Toast.LENGTH_SHORT).show();
                 }
             }

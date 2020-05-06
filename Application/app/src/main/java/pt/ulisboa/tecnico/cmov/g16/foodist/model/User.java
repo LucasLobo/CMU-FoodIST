@@ -21,19 +21,19 @@ public class User {
             this.id = id;
         }
     }
+    private String username;
 
     private UserStatus status;
     private CampusLocation location;
     private EnumSet<FoodType> dietaryConstraints = EnumSet.noneOf(FoodType.class);
     private boolean shouldApplyConstraintsFilter = true;
-    private String username;
-    private boolean loc_auto;
+    private boolean locAuto;
 
     public User() {
         location = new CampusLocation();
         status = UserStatus.GENERAL_PUBLIC;
         username = "NONE";
-        loc_auto = true; //automatic location finder is on
+        locAuto = true; //automatic location finder is on
     }
 
     public UserStatus getStatus() {
@@ -96,11 +96,11 @@ public class User {
         this.username = username;
     }
 
-    public boolean isLoc_auto() {
-        return loc_auto;
+    public boolean isLocAuto() {
+        return locAuto;
     }
 
-    public void setLoc_auto(boolean loc_auto) {
-        this.loc_auto = loc_auto;
+    public void setLocAuto(boolean locAuto) {
+        this.locAuto = locAuto;
     }
 }

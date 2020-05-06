@@ -9,6 +9,7 @@ public class CampusLocation extends Location {
     public enum Campus {
         ALAMEDA(R.string.alameda, 38.7352722896, -9.13268566132, true),
         TAGUS(R.string.tagus, 38.7370274, -9.3026572, true),
+        CTN(R.string.CTN, 38.8119, -9.0942, true),
         UNKNOWN(R.string.unknown_campus, null, null, false);
 
         public int id;
@@ -25,57 +26,45 @@ public class CampusLocation extends Location {
     }
 
     private Campus campus;
-    private String name;
 
     public CampusLocation() {
         super("");
         this.campus = Campus.UNKNOWN;
     }
 
-    public CampusLocation(String name) {
+    public CampusLocation(Double latitude, Double longitude) {
         super("");
-        this.campus = Campus.UNKNOWN;
-        this.name = name;
+        setLocation(latitude, longitude, true);
     }
 
-    public CampusLocation(Campus campus, String name) {
-        super("");
-        super.setLatitude(campus.latitude);
-        super.setLongitude(campus.longitude);
-        this.campus = campus;
-        this.name = name;
-    }
-
-    public void setLocation(Location location, Boolean calculateCampus) {
-        super.set(location);
+    public void setLocation(Double latitude, Double longitude, Boolean calculateCampus) {
+        super.setLatitude(latitude);
+        super.setLongitude(longitude);
 
         if (calculateCampus) {
             float[] distance = {0};
-            Location.distanceBetween(location.getLatitude(), location.getLongitude(), Campus.ALAMEDA.latitude, Campus.ALAMEDA.longitude, distance);
-
             float CAMPUS_RADIUS_METERS = 750;
-            if (distance[0] < CAMPUS_RADIUS_METERS) {
-                campus = Campus.ALAMEDA;
-                return;
+
+            for (Campus campus : Campus.values()) {
+                if (!campus.display) continue;
+
+                Location.distanceBetween(latitude, longitude, campus.latitude, campus.longitude, distance);
+
+                if (distance[0] < CAMPUS_RADIUS_METERS) {
+                    this.campus = campus;
+                    return;
+                }
             }
-
-            Location.distanceBetween(location.getLatitude(), location.getLongitude(), Campus.TAGUS.latitude, Campus.TAGUS.longitude, distance);
-
-            if (distance[0] < CAMPUS_RADIUS_METERS) {
-                campus = Campus.TAGUS;
-                return;
-            }
-
-            campus = Campus.UNKNOWN;
+            this.campus = Campus.UNKNOWN;
         }
+    }
+
+    public void setLocation(Location location, Boolean calculateCampus) {
+        setLocation(location.getLatitude(), location.getLongitude(), calculateCampus);
     }
 
     public Campus getCampus() {
         return campus;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public void setCampus(Campus campus) {
