@@ -38,7 +38,7 @@ public class MenuItemActivity extends AppCompatActivity {
         imageLayout = findViewById(R.id.imageSlots);
         Intent intent = getIntent();
         intent.getIntExtra("itemIndex", -1);
-        foodServiceIndex = intent.getIntExtra("foodServiceIndex", -1);
+        foodServiceIndex = intent.getIntExtra("foodServiceId", -1);
 
 
         Menu menu = data.getFoodService(foodServiceIndex).getMenu();
@@ -77,7 +77,7 @@ public class MenuItemActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MenuItemActivity.this, FullscreenImageActivity.class);
                 Bundle extras = new Bundle();
-                extras.putInt("foodServiceIndex", foodServiceIndex);
+                extras.putInt("foodServiceId", foodServiceIndex);
                 extras.putInt("imageIndex", item.getImages().indexOf(imageView));
                 extras.putInt("itemIndex", data.getFoodService(foodServiceIndex).getMenu().getMenuList().indexOf(item));
                 intent.putExtras(extras);

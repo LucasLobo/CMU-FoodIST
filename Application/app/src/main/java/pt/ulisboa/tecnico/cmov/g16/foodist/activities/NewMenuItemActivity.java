@@ -21,6 +21,8 @@ import pt.ulisboa.tecnico.cmov.g16.foodist.model.Data;
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.MenuItem;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodType;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.GrpcTask;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.Runnable.SaveMenuItemRunnable;
 
 public class NewMenuItemActivity extends AppCompatActivity {
 
@@ -30,7 +32,7 @@ public class NewMenuItemActivity extends AppCompatActivity {
     private LinkedList<ImageView> images = new LinkedList<>();
 
     private static final int PICK_IMAGE = 100;
-    private int foodServiceIndex;
+    private int foodServiceId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +40,7 @@ public class NewMenuItemActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_menu_item);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Intent intent = getIntent();
-        foodServiceIndex = intent.getIntExtra("foodServiceIndex", -1);
+        foodServiceId = intent.getIntExtra("foodServiceId", -1);
 
         data = (Data) getApplicationContext();
 
@@ -70,8 +72,9 @@ public class NewMenuItemActivity extends AppCompatActivity {
                             FoodType.valueOf(typeOfFood.getSelectedItem().toString().toUpperCase()),
                             true, description.getText().toString(),
                             Integer.parseInt(discount.getText().toString()), images);
-                    saveMenu(item);
-                    data.getFoodService(foodServiceIndex).getMenu().getMenuList().add(item);
+
+                    data.getFoodService(foodServiceId).getMenu().getMenuList().add(item);
+                    saveMenu(item, foodServiceId);
                     Toast.makeText(getApplicationContext(), title.getText().toString() + " created successfully!", Toast.LENGTH_LONG).show();
                     finish();
                 }catch (NumberFormatException e){
@@ -127,8 +130,14 @@ public class NewMenuItemActivity extends AppCompatActivity {
         return true;
     }
 
-    public void saveMenu(Object item){
-//        new GrpcTask(NewMenuItemActivity.this).execute("saveMenu", data.serialize(item));
+    public void saveMenu(MenuItem item, Integer foodServiceId){
+
+        new GrpcTask(new SaveMenuItemRunnable(item, foodServiceId) {
+            @Override
+            protected void callback(String result) {
+
+            }
+        }).execute();
     }
 
 }

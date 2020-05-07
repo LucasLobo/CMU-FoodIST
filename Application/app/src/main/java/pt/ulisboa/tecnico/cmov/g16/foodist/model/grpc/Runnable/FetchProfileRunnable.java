@@ -40,22 +40,22 @@ public abstract class FetchProfileRunnable extends GrpcRunnable<FetchProfileRunn
         FetchProfileRequest request = FetchProfileRequest.newBuilder().setAuth(auth).build();
         FetchProfileResponse response = blockingStub.fetchProfile(request);
 
-        List<String> constraints = response.getConstraintsList();
-        String status = response.getStatus();
-        String result = response.getResult();
+        List<String> constraints = response.getProfile().getConstraintsList();
+        String status = response.getProfile().getStatus();
+        String code = response.getCode();
 
         Signature signature = response.getSignature();
 
         User.UserStatus userStatus = ModelConverter.StringToUserStatus(status);
         EnumSet<FoodType> dietaryConstraints = ModelConverter.StringArrayToFoodTypeSet(constraints);
-        setResult(new FetchProfileResult(result, userStatus, dietaryConstraints));
+        setResult(new FetchProfileResult(code, userStatus, dietaryConstraints));
 
-        switch (result) {
+        switch (code) {
             case "OK":
                 appendLogs(
                         logs,
                         ">>> {0}: status=''{1}'' constraints=''{2}''",
-                        result,
+                        code,
                         status,
                         constraints
                 );
@@ -65,14 +65,14 @@ public abstract class FetchProfileRunnable extends GrpcRunnable<FetchProfileRunn
                 appendLogs(
                         logs,
                         ">>> {0}",
-                        result
+                        code
                 );
                 break;
             default:
                 appendLogs(
                         logs,
                         ">>> {0}: Unknown error code",
-                        result
+                        code
                 );
                 break;
         }

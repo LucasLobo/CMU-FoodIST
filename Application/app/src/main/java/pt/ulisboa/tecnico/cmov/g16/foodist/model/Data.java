@@ -11,6 +11,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.GrpcTask;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.Runnable.FetchMenusRunnable;
 
 
 public class Data extends Application {
@@ -170,6 +175,16 @@ public class Data extends Application {
     }
 
     private void initMenus() {
-
+        for (final Map.Entry<Integer, FoodService> entry : foodServiceHashMap.entrySet()) {
+            new GrpcTask(new FetchMenusRunnable(entry.getKey()) {
+                @Override
+                protected void callback(List<MenuItem> result) {
+                    if (result == null) return;
+                    for (MenuItem menuItem : result) {
+                        entry.getValue().addMenuItem(menuItem);
+                    }
+                }
+            }).execute();
+        }
     }
 }

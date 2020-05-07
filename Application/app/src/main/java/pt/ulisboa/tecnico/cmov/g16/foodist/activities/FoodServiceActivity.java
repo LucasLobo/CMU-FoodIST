@@ -119,7 +119,7 @@ public class FoodServiceActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(FoodServiceActivity.this, MenuActivity.class);
-                intent.putExtra("index", id);
+                intent.putExtra("foodServiceId", id);
                 startActivity(intent);
             }
         });

@@ -66,6 +66,10 @@ public class FoodService {
         }
     }
 
+    public void addMenuItem(MenuItem item) {
+        menu.addMenuItem(item);
+    }
+
     public void addMenuItem(String name, double price, FoodType foodType, boolean availability, String description) {
         menu.addMenuItem(name, price, foodType, availability, description);
     }

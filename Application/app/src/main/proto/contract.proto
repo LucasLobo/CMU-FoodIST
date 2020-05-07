@@ -10,24 +10,35 @@ message Signature {
     bytes signature = 1;
 }
 
+message Profile {
+    string status = 1;
+    repeated string constraints = 2;
+}
+
+message MenuItem {
+    string name = 1;
+    double price = 2;
+    string description = 3;
+    string foodType = 4;
+}
+
 message RegisterRequest {
     Auth auth = 1;
 }
 
 message RegisterResponse {
     Signature signature = 1;
-    string result = 2;
+    string code = 2;
 }
 
 message SaveProfileRequest {
     Auth auth = 1;
-    string status = 2;
-    repeated string constraints = 3;
+    Profile profile = 2;
 }
 
 message SaveProfileResponse {
     Signature signature = 1;
-    string result = 2;
+    string code = 2;
 }
 
 message FetchProfileRequest {
@@ -36,18 +47,27 @@ message FetchProfileRequest {
 
 message FetchProfileResponse {
     Signature signature = 1;
-    string result = 2;
-    string status = 3;
-    repeated string constraints = 4;
+    string code = 2;
+    Profile profile = 3;
 }
 
-message ItemRequest {
-	string item = 1;
+message SaveMenuItemRequest {
+    int32 foodServiceId = 1;
+    MenuItem menuItem = 2;
 }
 
-message ItemResponse {
+message SaveMenuItemResponse {
     Signature signature = 1;
-	string result = 2;
+    string code = 2;
+}
+
+message FetchMenusRequest {
+    int32 foodServiceId = 1;
+}
+
+message FetchMenusResponse {
+    Signature signature = 1;
+    repeated MenuItem menuItems = 2;
 }
 
 message JoinQueueRequest {
@@ -82,8 +102,9 @@ message EstimateQueueTimeResponse {
 service GrpcService {
     rpc register (RegisterRequest) returns (RegisterResponse);
     rpc saveProfile (SaveProfileRequest) returns (SaveProfileResponse);
-    rpc fetchProfile(FetchProfileRequest) returns (FetchProfileResponse);
-    rpc saveMenuItem (ItemRequest) returns (ItemResponse);
+    rpc fetchProfile (FetchProfileRequest) returns (FetchProfileResponse);
+    rpc saveMenuItem (SaveMenuItemRequest) returns (SaveMenuItemResponse);
+    rpc fetchMenus (FetchMenusRequest) returns (FetchMenusResponse);
     rpc joinQueue (JoinQueueRequest) returns (JoinQueueResponse);
     rpc leaveQueue (LeaveQueueRequest) returns (LeaveQueueResponse);
     rpc estimateQueueTime (EstimateQueueTimeRequest) returns (EstimateQueueTimeResponse);

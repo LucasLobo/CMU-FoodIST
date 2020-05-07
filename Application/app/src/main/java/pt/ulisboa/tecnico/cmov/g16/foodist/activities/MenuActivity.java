@@ -34,7 +34,7 @@ public class MenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_menu);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Intent intent = getIntent();
-        foodServiceIndex = intent.getIntExtra("index", -1);
+        foodServiceIndex = intent.getIntExtra("foodServiceId", -1);
         if(foodServiceIndex == -1)
             finish();
         data = (Data) getApplicationContext();
@@ -51,7 +51,7 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MenuActivity.this, NewMenuItemActivity.class);
-                intent.putExtra("foodServiceIndex", foodServiceIndex);
+                intent.putExtra("foodServiceId", foodServiceIndex);
                 startActivity(intent);
             }
         });
@@ -61,7 +61,7 @@ public class MenuActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 MenuItem item = adapter.getItem(i);
                 Intent intent = new Intent(MenuActivity.this, MenuItemActivity.class);
-                intent.putExtra("foodServiceIndex", foodServiceIndex);
+                intent.putExtra("foodServiceId", foodServiceIndex);
                 intent.putExtra("itemIndex", menu.getMenuList().indexOf(item));
                 startActivity(intent);
 

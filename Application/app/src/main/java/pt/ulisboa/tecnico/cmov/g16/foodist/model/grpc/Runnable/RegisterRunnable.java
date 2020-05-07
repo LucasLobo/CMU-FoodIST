@@ -39,22 +39,22 @@ public abstract class RegisterRunnable extends GrpcRunnable<String> {
 
         Signature signature = response.getSignature();
 
-        String result = response.getResult();
-        setResult(result);
-        switch (result) {
+        String code = response.getCode();
+        setResult(code);
+        switch (code) {
             case "OK":
             case "USERNAME_TAKEN":
                 appendLogs(
                         logs,
                         ">>> {0}",
-                        result
+                        code
                 );
                 break;
             default:
                 appendLogs(
                         logs,
                         ">>> {0}: Unknown error code",
-                        result
+                        code
                 );
                 break;
         }

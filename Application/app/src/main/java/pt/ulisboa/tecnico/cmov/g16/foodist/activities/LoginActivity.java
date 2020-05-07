@@ -138,7 +138,6 @@ public class LoginActivity extends AppCompatActivity {
         if (usernameString.isEmpty() || passwordString.isEmpty()) {
             error.setText(R.string.username_password_missing);
             error.setVisibility(View.VISIBLE);
-            return;
         }
     }
 }

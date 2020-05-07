@@ -1,5 +1,6 @@
 package pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.Runnable;
 
+import com.grpc.Contract.Profile;
 import com.grpc.Contract.Auth;
 import com.grpc.Contract.Signature;
 import com.grpc.Contract.SaveProfileRequest;
@@ -40,31 +41,32 @@ public abstract class SaveProfileRunnable extends GrpcRunnable<String> {
         appendLogs(logs, "*** SaveProfile: username=''{0}'' password=''{1}'' status=''{2}'' constraints=''{3}''", username, password, status, constraints);
 
         Auth auth = Auth.newBuilder().setUsername(username).setPassword(password).build();
-        SaveProfileRequest request = SaveProfileRequest.newBuilder().setAuth(auth).
-                setStatus(status.name()).
-                addAllConstraints(ModelConverter.FoodTypeSetToList(constraints)).build();
+
+        Profile profile = Profile.newBuilder().setStatus(status.name()).addAllConstraints(ModelConverter.FoodTypeSetToList(constraints)).build();
+
+        SaveProfileRequest request = SaveProfileRequest.newBuilder().setAuth(auth).setProfile(profile).build();
 
         SaveProfileResponse response = blockingStub.saveProfile(request);
 
         Signature signature = response.getSignature();
 
-        String result = response.getResult();
-        setResult(result);
-        switch (result) {
+        String code = response.getCode();
+        setResult(code);
+        switch (code) {
             case "OK":
             case "USERNAME_DOES_NOT_EXIST":
             case "INCORRECT_PASSWORD":
                 appendLogs(
                         logs,
                         ">>> {0}",
-                        result
+                        code
                 );
                 break;
             default:
                 appendLogs(
                         logs,
                         ">>> {0}: Unknown error code",
-                        result
+                        code
                 );
                 break;
         }

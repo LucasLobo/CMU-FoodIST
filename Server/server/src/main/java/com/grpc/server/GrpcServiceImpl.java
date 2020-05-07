@@ -1,8 +1,10 @@
 package com.grpc.server;
 
-import com.google.protobuf.ByteString;
+import com.grpc.Contract;
 import com.grpc.Contract.*;
 import com.grpc.GrpcServiceGrpc;
+
+import com.grpc.server.model.MenuItem;
 import com.grpc.server.model.FoodService;
 import com.grpc.server.model.User;
 import com.grpc.server.model.UserNotInQueueException;
@@ -16,14 +18,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
 
 	private enum AuthMessage {
-		OK, USERNAME_DOES_NOT_EXIST, INCORRECT_PASSWORD
+		OK, USERNAME_TAKEN, USERNAME_DOES_NOT_EXIST, INCORRECT_PASSWORD
 	}
 
 
     public static GrpcServiceImpl instance = null;
-    private final HashMap<String, User> usersMap = new HashMap<>(); //username, User
-    private final HashMap<Integer, FoodService> foodServicesMap = new HashMap<>();
-    private final ArrayList<String> menuItems = new ArrayList<>();
+    private final HashMap<String, User> users = new HashMap<>(); //username, User
+    private final HashMap<Integer, FoodService> foodServices = new HashMap<>();
     private final AtomicInteger userQueueId = new AtomicInteger(0);
 
     public static GrpcServiceImpl getInstance() {
@@ -35,7 +36,7 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
 
     private GrpcServiceImpl() {
         for (int id = 0; id < 17; id++) {
-            foodServicesMap.put(id, new FoodService(id));
+            foodServices.put(id, new FoodService(id));
         }
     }
 
@@ -53,12 +54,14 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
             User user = new User();
             user.setUsername(username);
             user.setPassword(password);
-            usersMap.put(username, user);
+            users.put(username, user);
             code = AuthMessage.OK.name();
+        } else {
+            code = AuthMessage.USERNAME_TAKEN.name();
         }
 
         Signature signature = createSignature();
-        RegisterResponse response = RegisterResponse.newBuilder().setResult(code).setSignature(signature).build();
+        RegisterResponse response = RegisterResponse.newBuilder().setCode(code).setSignature(signature).build();
         System.out.println(code);
         responseObserver.onNext(response);
         responseObserver.onCompleted();
@@ -71,10 +74,10 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
         AuthMessage authMessage = auth(request.getAuth());
 
 		String username = request.getAuth().getUsername().toLowerCase();
-        User user = usersMap.get(username);
+        User user = users.get(username);
 
-        String status = request.getStatus();
-        List<String> constraints = request.getConstraintsList();
+        String status = request.getProfile().getStatus();
+        List<String> constraints = request.getProfile().getConstraintsList();
 
         String code = authMessage.name();
         if (authMessage.equals(AuthMessage.OK)) {
@@ -83,7 +86,7 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
         }
 
         Signature signature = createSignature();
-        SaveProfileResponse response = SaveProfileResponse.newBuilder().setResult(code).setSignature(signature).build();
+        SaveProfileResponse response = SaveProfileResponse.newBuilder().setCode(code).setSignature(signature).build();
         System.out.println(code);
         responseObserver.onNext(response);
         responseObserver.onCompleted();
@@ -96,15 +99,15 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
         AuthMessage authMessage = auth(request.getAuth());
 
 		String username = request.getAuth().getUsername().toLowerCase();
-        User user = usersMap.get(username);
+        User user = users.get(username);
 
-        FetchProfileResponse.Builder builder = FetchProfileResponse.newBuilder();
+        Profile.Builder profileBuilder = Profile.newBuilder();
 
         String code = authMessage.name();
         if (authMessage.equals(AuthMessage.OK)) {
             List<String> constraints = user.getConstraints();
-            builder.addAllConstraints(constraints);
-            builder.setStatus(user.getStatus());
+            profileBuilder.addAllConstraints(constraints);
+            profileBuilder.setStatus(user.getStatus());
 
             System.out.println(user.getStatus());
             System.out.println(user.getConstraints());
@@ -113,25 +116,68 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
         Signature signature = createSignature();
 
         System.out.println(code);
-        builder.setResult(code).setSignature(signature);
-        FetchProfileResponse response = builder.build();
+
+        FetchProfileResponse response = FetchProfileResponse.newBuilder()
+                .setCode(code)
+                .setSignature(signature)
+                .setProfile(profileBuilder.build())
+                .build();
         responseObserver.onNext(response);
         responseObserver.onCompleted();
     }
 
     @Override
-    public synchronized void saveMenuItem(ItemRequest request, StreamObserver<ItemResponse> responseObserver) {
+    public synchronized void saveMenuItem(SaveMenuItemRequest request, StreamObserver<SaveMenuItemResponse> responseObserver) {
         System.out.println("Save Menu Request Received:\n" + request);
 
-        String item = request.getItem();
+        Integer foodServiceId = request.getFoodServiceId();
+        Contract.MenuItem item = request.getMenuItem();
 
-        menuItems.add(item);
+        FoodService foodService;
+        String code;
+        try {
+            foodService = foodServices.get(foodServiceId);
+            MenuItem menuItem = new MenuItem(item.getName(), item.getPrice(), item.getDescription(), item.getFoodType());
+            foodService.addToMenu(menuItem);
+            code = "OK";
+        } catch (NullPointerException e) {
+            code = "FOOD_SERVICE_NOT_FOUND";
+        }
 
         Signature signature = createSignature();
-        ItemResponse response = ItemResponse.newBuilder()
-                .setResult("Saved " + item).setSignature(signature).build();
+        SaveMenuItemResponse response = SaveMenuItemResponse.newBuilder()
+                .setCode(code).setSignature(signature).build();
 
         responseObserver.onNext(response);
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void fetchMenus(FetchMenusRequest request, StreamObserver<FetchMenusResponse> responseObserver) {
+        System.out.println("Fetch Menu Request Received:\n" + request);
+
+        int foodServiceId = request.getFoodServiceId();
+
+        FetchMenusResponse.Builder responseBuilder = FetchMenusResponse.newBuilder();
+        try {
+            FoodService foodService = foodServices.get(foodServiceId);
+            List<MenuItem> menuItems = foodService.getMenuItems();
+            for (MenuItem menuItem : menuItems) {
+                Contract.MenuItem item = Contract.MenuItem.newBuilder()
+                        .setName(menuItem.getName())
+                        .setDescription(menuItem.getDescription())
+                        .setFoodType(menuItem.getFoodType())
+                        .setPrice(menuItem.getPrice())
+                        .build();
+                responseBuilder.addMenuItems(item);
+            }
+
+        } catch (NullPointerException ignored) {
+        }
+
+        Signature signature = createSignature();
+        responseBuilder.setSignature(signature);
+        responseObserver.onNext(responseBuilder.build());
         responseObserver.onCompleted();
     }
 
@@ -140,7 +186,7 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
         System.out.println("Join Queue Request Received:\n" + request);
 
         int foodServiceId = request.getFoodServiceId();
-        FoodService foodService = foodServicesMap.get(foodServiceId);
+        FoodService foodService = foodServices.get(foodServiceId);
 
         int userQueueId;
         if (foodService == null) {
@@ -167,7 +213,7 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
         int userQueueId = request.getUserQueueId();
 
         String code;
-        FoodService foodService = foodServicesMap.get(foodServiceId);
+        FoodService foodService = foodServices.get(foodServiceId);
         LeaveQueueResponse response;
         try {
             foodService.removeFromQueue(userQueueId, duration);
@@ -192,7 +238,7 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
 
         int foodServiceId = request.getFoodServiceId();
 
-        FoodService foodService = foodServicesMap.get(foodServiceId);
+        FoodService foodService = foodServices.get(foodServiceId);
         int queueTime;
         try {
             queueTime = (int) Math.round(foodService.estimateQueueTime());
@@ -211,7 +257,7 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
         String username = auth.getUsername().toLowerCase();
         String password = auth.getPassword();
 
-        User user = usersMap.get(username);
+        User user = users.get(username);
         if (user == null) {
             return AuthMessage.USERNAME_DOES_NOT_EXIST;
         } else if (!user.passwordMatch(password)) {

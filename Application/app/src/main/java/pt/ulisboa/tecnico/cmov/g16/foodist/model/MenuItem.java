@@ -5,7 +5,7 @@ import android.widget.ImageView;
 import java.io.Serializable;
 import java.util.LinkedList;
 
-public class MenuItem implements Serializable {
+public class MenuItem implements Serializable { //fixme not necessary with current approach
 
     private String name;
     private double price;
