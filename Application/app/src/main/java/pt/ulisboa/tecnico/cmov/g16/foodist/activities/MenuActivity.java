@@ -5,15 +5,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.ListView;
-import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.EnumSet;
 
-import pt.ulisboa.tecnico.cmov.g16.foodist.Data;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.Data;
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodType;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.Menu;

@@ -2,6 +2,7 @@ package pt.ulisboa.tecnico.cmov.g16.foodist.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,8 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
-import pt.ulisboa.tecnico.cmov.g16.foodist.Data;
-import pt.ulisboa.tecnico.cmov.g16.foodist.GrpcTask;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.Data;
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 import pt.ulisboa.tecnico.cmov.g16.foodist.adapters.CampusAdapter;
 import pt.ulisboa.tecnico.cmov.g16.foodist.adapters.UserDietaryAdapter;
@@ -26,15 +26,28 @@ import pt.ulisboa.tecnico.cmov.g16.foodist.adapters.UserStatusAdapter;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.CampusLocation;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodType;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.User;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.GrpcTask;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.Runnable.SaveProfileRunnable;
 
 
 public class UserProfileActivity extends AppCompatActivity {
 
+    private static final String TAG = "UserProfileActivity";
+
     Data data;
     User user;
 
+    ListView listProfileView;
+    ListView listConstraintsView;
+
     TextView selectedCampus;
     TextView selectedStatus;
+    TextView userNameView;
+    Button loginButton;
+    Button statusButton;
+    Button addConstraintsButton;
+
+
 
     //----------------------------------------OnCreate----------------------------------------------
     @Override
@@ -45,15 +58,15 @@ public class UserProfileActivity extends AppCompatActivity {
         data = (Data) getApplicationContext();
         user = data.getUser();
 
-        final Button statusButton = findViewById(R.id.selectStatus);
         final Button campusButton = findViewById(R.id.selectCampus);
-        final Button addConstraintsButton = findViewById(R.id.addContraints);
-        final ListView listProfileView = findViewById(R.id.profileView);
-        final ListView listConstraintsView = findViewById(R.id.constraintsView);
-        final Button loginButton = findViewById(R.id.log);
         final Switch loc_aut = findViewById(R.id.loc_aut);
-        final TextView userNameView = findViewById(R.id.username);
-        userNameView.setText("User: " + user.getUsername());
+
+        statusButton = findViewById(R.id.selectStatus);
+        addConstraintsButton = findViewById(R.id.addConstraints);
+        listProfileView = findViewById(R.id.profileView);
+        listConstraintsView = findViewById(R.id.constraintsView);
+        loginButton = findViewById(R.id.login);
+        userNameView = findViewById(R.id.username);
 
         /*_____________________________________CAMPUS_____________________________________________*/
         if(user.isLocAuto()){
@@ -81,7 +94,7 @@ public class UserProfileActivity extends AppCompatActivity {
                         loc_aut.setChecked(false);
 
                         Toast.makeText(UserProfileActivity.this, "Location Finder changed to Manual mode", Toast.LENGTH_SHORT).show();
-                        if(!user.getUsername().equals("NONE")){
+                        if (user.isLoggedIn()) {
                             saveProfile();
                         }
                         selectedCampus.setText("Campus: " + getString(campus.id));
@@ -104,31 +117,56 @@ public class UserProfileActivity extends AppCompatActivity {
             }
         });
 
-        /*_____________________________________STATUS_____________________________________________*/
-        selectedStatus = findViewById(R.id.statusSelected);
-        selectedStatus.setText("Status: " + getString(user.getStatusID()));
-        final UserStatusAdapter adapterStatus = new UserStatusAdapter(this);
+    }
 
-        statusButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listProfileView.setAdapter(adapterStatus);
-                listProfileView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        User.UserStatus status = adapterStatus.getItem(position);
-                        Toast.makeText(UserProfileActivity.this, "New Status Selected: " + getString(status.id), Toast.LENGTH_SHORT).show();
-                        user.setStatus(status);
-                        if(!user.getUsername().equals("NONE")){
-                            saveProfile();
-                        }
-                        listProfileView.setAdapter(null);
-                        selectedStatus.setText("Status: " + getString(status.id));
-                    }
-                });
-            }
-        });
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
 
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setUpLogin();
+        setUpStatus();
+        setUpConstraints();
+    }
+
+    private void setUpLogin() {
+        String username = user.getUsername();
+        Log.i(TAG, "setUpLogin: " + username);
+        if (username == null) {
+            userNameView.setText(R.string.please_sign_in);
+            loginButton.setText(R.string.login_signup);
+            /*_______________________________________LOGIN____________________________________________*/
+            loginButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(UserProfileActivity.this, LoginActivity.class);
+                    startActivity(intent);
+
+                }
+            });
+        } else {
+            loginButton.setText(R.string.logout);
+            userNameView.setText(username);
+            loginButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    user.logout();
+                    setUpLogin();
+                }
+            });
+        }
+    }
+
+    private void setUpConstraints() {
         /*_____________________________________DIETARY____________________________________________*/
         final UserDietaryAdapter adapterDietary = new UserDietaryAdapter(this);
         final UserDietaryAdapter adapterCurrentDietary = new UserDietaryAdapter(this, new ArrayList<>(user.getDietaryConstraints()));
@@ -146,8 +184,10 @@ public class UserProfileActivity extends AppCompatActivity {
 
                         if (!user.getDietaryConstraints().contains(dietary)) {
                             user.addDietaryConstraints(dietary);
-                            if(!user.getUsername().equals("NONE")){
+                            Log.i(TAG, "constraint: added");
+                            if (user.isLoggedIn()) {
                                 saveProfile();
+                                Log.i(TAG, "constraint: profile updated");
                             }
                             Toast.makeText(UserProfileActivity.this, "Added New Dietary Constraint: " + getString(dietary.resourceId), Toast.LENGTH_SHORT).show();
                             adapterCurrentDietary.add(dietary);
@@ -168,8 +208,11 @@ public class UserProfileActivity extends AppCompatActivity {
 
                 FoodType dietary = adapterCurrentDietary.getItem(position);
                 user.removeDietaryConstraints(dietary);
-                if(!user.getUsername().equals("NONE")){
+                Log.i(TAG, "constraint: removed");
+                if (user.isLoggedIn()) {
                     saveProfile();
+                    Log.i(TAG, "constraint: profile updated");
+
                 }
                 Toast.makeText(UserProfileActivity.this, "Removed Dietary Constraint: " + getString(dietary.resourceId), Toast.LENGTH_SHORT).show();
                 adapterCurrentDietary.remove(dietary);
@@ -177,30 +220,52 @@ public class UserProfileActivity extends AppCompatActivity {
             }
 
         });
+    }
 
-        /*_______________________________________LOGIN____________________________________________*/
-        loginButton.setOnClickListener(new View.OnClickListener() {
+    private void setUpStatus() {
+        /*_____________________________________STATUS_____________________________________________*/
+        selectedStatus = findViewById(R.id.statusSelected);
+        selectedStatus.setText("Status: " + getString(user.getStatusID()));
+        final UserStatusAdapter adapterStatus = new UserStatusAdapter(this);
+
+        statusButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(UserProfileActivity.this, LoginActivity.class);
-                startActivity(intent);
+            public void onClick(View v) {
+                listProfileView.setAdapter(adapterStatus);
+                listProfileView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        User.UserStatus status = adapterStatus.getItem(position);
+                        Toast.makeText(UserProfileActivity.this, "New Status Selected: " + getString(status.id), Toast.LENGTH_SHORT).show();
+                        user.setStatus(status);
 
+                        Log.i(TAG, "status: changed");
+                        if (user.isLoggedIn()) {
+                            saveProfile();
+                            Log.i(TAG, "status: profile update");
+                        }
+                        listProfileView.setAdapter(null);
+                        selectedStatus.setText("Status: " + getString(status.id));
+                    }
+                });
             }
         });
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     public void saveProfile(){
-        new GrpcTask(UserProfileActivity.this).execute("saveProfile", user.getUsername(), user.getStatus().toString(), user.getDietaryConstraints().toString());
+        new GrpcTask(new SaveProfileRunnable(user.getUsername(), user.getPassword(), user.getStatus(), user.getDietaryConstraints()) {
+            @Override
+            protected void callback(String result) {
+                if (result == null) {
+                    Log.i(TAG, "callback: unknown error");
+                } else if (result.equals("OK")) {
+                    Log.i(TAG, "callback: user saved");
+                } else if (result.equals("INCORRECT_PASSWORD") ||
+                        result.equals("USERNAME_DOES_NOT_EXIST")) {
+                    user.logout();
+                    setUpLogin();
+                }
+            }
+        }).execute();
     }
 }

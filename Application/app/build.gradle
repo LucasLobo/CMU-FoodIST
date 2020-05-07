@@ -38,7 +38,8 @@ protobuf {
             }
             task.plugins {
                 grpc { // Options added to --grpc_out
-                    option 'lite' }
+                    option 'lite'
+                }
             }
         }
     }

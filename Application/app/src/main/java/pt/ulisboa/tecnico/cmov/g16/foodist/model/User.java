@@ -3,6 +3,7 @@ package pt.ulisboa.tecnico.cmov.g16.foodist.model;
 import android.location.Location;
 
 import java.util.EnumSet;
+import java.util.HashMap;
 
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 
@@ -21,7 +22,16 @@ public class User {
             this.id = id;
         }
     }
-    private String username;
+
+    private String username = null;
+
+    private String password = null;
+
+    // FoodServiceId, UserQueueId
+    // The server returns a userQueueId when the user joins a queue.
+    // User should send a leave Queue request to about these queues after not hearing from a beacon
+    // for  a given amount of time
+    private HashMap<Integer, Integer> activeQueues;
 
     private UserStatus status;
     private CampusLocation location;
@@ -32,7 +42,6 @@ public class User {
     public User() {
         location = new CampusLocation();
         status = UserStatus.GENERAL_PUBLIC;
-        username = "NONE";
         locAuto = true; //automatic location finder is on
     }
 
@@ -84,6 +93,10 @@ public class User {
         return shouldApplyConstraintsFilter;
     }
 
+    public void setDietaryConstraints(EnumSet<FoodType> constraints) {
+        this.dietaryConstraints = constraints;
+    }
+
     public EnumSet<FoodType> getDietaryConstraints() {
         return dietaryConstraints;
     }
@@ -92,8 +105,8 @@ public class User {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public String getPassword() {
+        return password;
     }
 
     public boolean isLocAuto() {
@@ -102,5 +115,19 @@ public class User {
 
     public void setLocAuto(boolean locAuto) {
         this.locAuto = locAuto;
+    }
+
+    public void login(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+    public void logout() {
+        this.username = null;
+        this.password = null;
+    }
+
+    public boolean isLoggedIn() {
+        return username != null && password != null;
     }
 }

@@ -16,7 +16,7 @@ import org.threeten.bp.LocalTime;
 
 import java.util.ArrayList;
 
-import pt.ulisboa.tecnico.cmov.g16.foodist.Data;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.Data;
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodService;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.OpeningTime;

@@ -8,6 +8,9 @@
     <string name="ramp">Ramp</string>
     <string name="wheel_chair">Wheel Chair</string>
 
+    <string name="unknown_error">An unknown error occurred</string>
+    <string name="unknown_error_code">An unknown error (%s) occurred</string>
+
 
     <!-- MAIN ACTIVITY -->
     <string name="results_filtered">Some food services were filtered due to dietary constraints.</string>
@@ -20,8 +23,9 @@
     <string name="dietary_explain">What you don\'t eat</string>
     <string name="addNewDietary">Add Constraint</string>
 
-    <string name="log">Login/Logout</string>
-    <string name="username">Username unknown. Please sign in.</string>
+    <string name="login_signup">Sign up or Log in</string>
+    <string name="logout">Log out</string>
+    <string name="please_sign_in">Please sign in.</string>
     <string name="loc_aut">Automatic Location Finder</string>
 
     <string name="alameda">Alameda</string>
@@ -43,7 +47,11 @@
     <!--USER LOGIN ACTIVITY-->
     <string name="usernameLogin">Username</string>
     <string name="passwordLogin">Password</string>
-    <string name="signIn">Sign In</string>
+    <string name="signUp">Create account</string>
+    <string name="signIn">Login</string>
+    <string name="username_password_missing">Username and/or password cannot be empty</string>
+    <string name="username_already_taken">Username is already in use</string>
+    <string name="incorrect_credentials">Incorrect username or password</string>
 
     <!--TERMITE-->
     <string name="serviceButton">WiFi On</string>

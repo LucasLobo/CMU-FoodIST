@@ -15,8 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.LinkedList;
 
-import pt.ulisboa.tecnico.cmov.g16.foodist.Data;
-import pt.ulisboa.tecnico.cmov.g16.foodist.GrpcTask;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.Data;
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.Menu;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.MenuItem;
@@ -134,7 +133,7 @@ public class MenuItemActivity extends AppCompatActivity {
     }
 
     public void saveMenu(Object item){
-        new GrpcTask(MenuItemActivity.this).execute("saveMenu", data.serialize(item));
+//        new GrpcTask(MenuItemActivity.this).execute("saveMenu", data.serialize(item));
     }
 
 }

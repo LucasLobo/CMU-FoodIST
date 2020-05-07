@@ -1,23 +1,44 @@
 syntax = "proto3";
 package com.grpc;
 
-message RegisterRequest {
+message Auth {
     string username = 1;
     string password = 2;
 }
 
+message Signature {
+    bytes signature = 1;
+}
+
+message RegisterRequest {
+    Auth auth = 1;
+}
+
 message RegisterResponse {
-    string result = 1;
+    Signature signature = 1;
+    string result = 2;
 }
 
-message ProfileRequest {
-    string username= 1;
+message SaveProfileRequest {
+    Auth auth = 1;
     string status = 2;
-    string constraints = 3;
+    repeated string constraints = 3;
 }
 
-message ProfileResponse {
-    string result = 1;
+message SaveProfileResponse {
+    Signature signature = 1;
+    string result = 2;
+}
+
+message FetchProfileRequest {
+    Auth auth = 1;
+}
+
+message FetchProfileResponse {
+    Signature signature = 1;
+    string result = 2;
+    string status = 3;
+    repeated string constraints = 4;
 }
 
 message ItemRequest {
@@ -25,26 +46,28 @@ message ItemRequest {
 }
 
 message ItemResponse {
-	string result = 1;
+    Signature signature = 1;
+	string result = 2;
 }
 
 message JoinQueueRequest {
-    int32 userId = 1;
-    int32 foodServiceId = 2;
+    int32 foodServiceId = 1;
 }
 
 message JoinQueueResponse {
-    string result = 1;
+    Signature signature = 1;
+    int32 userQueueId = 2;
 }
 
 message LeaveQueueRequest {
-    int32 userId = 1;
+    int32 userQueueId = 1;
     int32 foodServiceId = 2;
     int32 duration = 3;
 }
 
 message LeaveQueueResponse {
-    string result = 1;
+    Signature signature = 1;
+    string result = 2;
 }
 
 message EstimateQueueTimeRequest {
@@ -52,12 +75,14 @@ message EstimateQueueTimeRequest {
 }
 
 message EstimateQueueTimeResponse {
-    int32 time = 1;
+    Signature signature = 1;
+    int32 time = 2;
 }
 
 service GrpcService {
     rpc register (RegisterRequest) returns (RegisterResponse);
-    rpc saveProfile (ProfileRequest) returns (ProfileResponse);
+    rpc saveProfile (SaveProfileRequest) returns (SaveProfileResponse);
+    rpc fetchProfile(FetchProfileRequest) returns (FetchProfileResponse);
     rpc saveMenuItem (ItemRequest) returns (ItemResponse);
     rpc joinQueue (JoinQueueRequest) returns (JoinQueueResponse);
     rpc leaveQueue (LeaveQueueRequest) returns (LeaveQueueResponse);

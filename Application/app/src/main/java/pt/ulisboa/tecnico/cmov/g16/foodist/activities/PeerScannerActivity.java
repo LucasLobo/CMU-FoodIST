@@ -12,6 +12,7 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Messenger;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -21,8 +22,11 @@ import pt.inesc.termite.wifidirect.SimWifiP2pDeviceList;
 import pt.inesc.termite.wifidirect.SimWifiP2pManager;
 import pt.inesc.termite.wifidirect.service.SimWifiP2pService;
 
-import pt.ulisboa.tecnico.cmov.g16.foodist.GrpcTask;
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.Runnable.EstimateQueueRunnable;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.GrpcTask;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.Runnable.JoinQueueRunnable;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.Runnable.LeaveQueueRunnable;
 import pt.ulisboa.tecnico.cmov.g16.foodist.receivers.SimWifiP2pBroadcastReceiver;
 
 public class PeerScannerActivity extends AppCompatActivity implements SimWifiP2pManager.PeerListListener {
@@ -96,27 +100,41 @@ public class PeerScannerActivity extends AppCompatActivity implements SimWifiP2p
 
     private View.OnClickListener addToQueue = new View.OnClickListener() {
         public void onClick(View v) {
-            new GrpcTask(PeerScannerActivity.this).execute("joinQueue", "3", "1");
+
+            new GrpcTask(new JoinQueueRunnable(1) {
+                @Override
+                protected void callback(Integer result) {
+                    Log.i(TAG, "callback: " + result);
+                }
+            }).execute();
+
         }
     };
 
-    private View.OnClickListener removeFromQueue = new View.OnClickListener() {
+    private View.OnClickListener leaveQueue = new View.OnClickListener() {
         public void onClick(View v) {
-            new GrpcTask(PeerScannerActivity.this).execute("leaveQueue", "3", "1", "0")
 
-
-                    ;
+            new GrpcTask(new LeaveQueueRunnable(0,33,10) {
+                @Override
+                protected void callback(String result) {
+                    Log.i(TAG, "callback: " + result);
+                }
+            }).execute();
         }
     };
 
     private View.OnClickListener estimateQueue = new View.OnClickListener() {
         public void onClick(View v) {
-            new GrpcTask(PeerScannerActivity.this).execute("estimateQueueTime", "1");
+
+            new GrpcTask(new EstimateQueueRunnable(1) {
+                @Override
+                protected void callback(Integer result) {
+                    Log.i(TAG, "callback: " + result);
+                }
+            }).execute();
+
         }
     };
-
-
-
 
 
     private ServiceConnection mConnection = new ServiceConnection() {
@@ -173,7 +191,7 @@ public class PeerScannerActivity extends AppCompatActivity implements SimWifiP2p
         findViewById(R.id.idInRangeButton).setOnClickListener(listenerInRangeButton);
 
         findViewById(R.id.addToQueue).setOnClickListener(addToQueue);
-        findViewById(R.id.removeFromQueue).setOnClickListener(removeFromQueue);
+        findViewById(R.id.removeFromQueue).setOnClickListener(leaveQueue);
         findViewById(R.id.estimateQueue).setOnClickListener(estimateQueue);
 
     }

@@ -30,7 +30,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
-import pt.ulisboa.tecnico.cmov.g16.foodist.Data;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.Data;
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 import pt.ulisboa.tecnico.cmov.g16.foodist.adapters.FoodServiceListRecyclerAdapter;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.CampusLocation;
@@ -197,7 +197,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openTermiteActivity(View view) {
-        Log.i(TAG, "hello");
         Intent intent = new Intent(this, PeerScannerActivity.class);
         startActivity(intent);
     }
