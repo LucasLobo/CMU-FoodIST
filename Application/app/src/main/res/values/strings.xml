@@ -51,4 +51,5 @@
     </string-array>
 
     <string name="time_min">%1d min</string>
+    <string name="title_activity_map">Map</string>
 </resources>

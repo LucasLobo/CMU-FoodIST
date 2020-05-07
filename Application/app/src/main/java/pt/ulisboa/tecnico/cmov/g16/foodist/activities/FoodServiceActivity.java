@@ -5,12 +5,23 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import pt.ulisboa.tecnico.cmov.g16.foodist.Data;
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
@@ -21,6 +32,7 @@ public class FoodServiceActivity extends AppCompatActivity {
 
     Data data;
     FoodService foodService;
+    GoogleMap mMap;
 
 
     @Override
@@ -39,6 +51,30 @@ public class FoodServiceActivity extends AppCompatActivity {
 
         foodService = data.getFoodService(index);
         populate(index);
+
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapFragment);
+        mapFragment.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                mMap = googleMap;
+                LatLng destination = new LatLng(foodService.getLocation().getLatitude(), foodService.getLocation().getLongitude());
+                mMap.addMarker(new MarkerOptions().position(destination).title(foodService.getLocationName()));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(destination));
+                mMap.setMyLocationEnabled(true);
+                mMap.setMinZoomPreference(15);
+                mMap.setMaxZoomPreference(25);
+                mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                    @Override
+                    public void onMapClick(LatLng latLng) {
+                        Intent intent = new Intent(FoodServiceActivity.this, MapActivity.class);
+                        intent.putExtra("Latitude", foodService.getLocation().getLatitude());
+                        intent.putExtra("Longitude", foodService.getLocation().getLongitude());
+                        startActivity(intent);
+                    }
+                });
+            }
+        });
+
     }
 
     @Override
