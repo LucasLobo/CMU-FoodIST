@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,12 +19,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.CampusLocation;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.Data;
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 import pt.ulisboa.tecnico.cmov.g16.foodist.adapters.CampusAdapter;
-import pt.ulisboa.tecnico.cmov.g16.foodist.adapters.UserDietaryAdapter;
+import pt.ulisboa.tecnico.cmov.g16.foodist.adapters.FoodTypeAdapter;
 import pt.ulisboa.tecnico.cmov.g16.foodist.adapters.UserStatusAdapter;
-import pt.ulisboa.tecnico.cmov.g16.foodist.model.CampusLocation;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodType;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.User;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.GrpcTask;
@@ -40,11 +41,11 @@ public class UserProfileActivity extends AppCompatActivity {
     ListView listProfileView;
     ListView listConstraintsView;
 
-    TextView selectedCampus;
-    TextView selectedStatus;
     TextView userNameView;
     Button loginButton;
-    Button statusButton;
+    Spinner campusSpinner;
+    Switch locAut;
+    Spinner statusSpinner;
     Button addConstraintsButton;
 
 
@@ -58,65 +59,15 @@ public class UserProfileActivity extends AppCompatActivity {
         data = (Data) getApplicationContext();
         user = data.getUser();
 
-        final Button campusButton = findViewById(R.id.selectCampus);
-        final Switch loc_aut = findViewById(R.id.loc_aut);
+        campusSpinner = findViewById(R.id.selectCampus);
+        locAut = findViewById(R.id.loc_aut);
 
-        statusButton = findViewById(R.id.selectStatus);
+        statusSpinner = findViewById(R.id.selectStatus);
         addConstraintsButton = findViewById(R.id.addConstraints);
         listProfileView = findViewById(R.id.profileView);
         listConstraintsView = findViewById(R.id.constraintsView);
         loginButton = findViewById(R.id.login);
         userNameView = findViewById(R.id.username);
-
-        /*_____________________________________CAMPUS_____________________________________________*/
-        if(user.isLocAuto()){
-          loc_aut.setChecked(true);
-        }
-
-        selectedCampus = findViewById(R.id.campusSelected);
-        selectedCampus.setText("Campus: " + getString(user.getCampusResourceId()));
-
-        final CampusAdapter adapterCampus = new CampusAdapter(this);
-
-        campusButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listProfileView.setAdapter(adapterCampus);
-                listProfileView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        CampusLocation.Campus campus = adapterCampus.getItem(position);
-                        Toast.makeText(UserProfileActivity.this, "New Campus Selected: " + getString(campus.id), Toast.LENGTH_SHORT).show();
-                        listProfileView.setAdapter(null);
-                        user.setCampus(campus);
-
-                        user.setLocAuto(false);
-                        loc_aut.setChecked(false);
-
-                        Toast.makeText(UserProfileActivity.this, "Location Finder changed to Manual mode", Toast.LENGTH_SHORT).show();
-                        if (user.isLoggedIn()) {
-                            saveProfile();
-                        }
-                        selectedCampus.setText("Campus: " + getString(campus.id));
-                    }
-                });
-            }
-        });
-
-        loc_aut.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    user.setLocAuto(true);
-                    Toast.makeText(UserProfileActivity.this, "Location Finder changed to Automatic mode", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    user.setLocAuto(false);
-                    Toast.makeText(UserProfileActivity.this, "Location Finder changed to Manual mode", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
     }
 
     @Override
@@ -136,11 +87,11 @@ public class UserProfileActivity extends AppCompatActivity {
         setUpLogin();
         setUpStatus();
         setUpConstraints();
+        setUpCampus();
     }
 
     private void setUpLogin() {
         String username = user.getUsername();
-        Log.i(TAG, "setUpLogin: " + username);
         if (username == null) {
             userNameView.setText(R.string.please_sign_in);
             loginButton.setText(R.string.login_signup);
@@ -168,8 +119,8 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private void setUpConstraints() {
         /*_____________________________________DIETARY____________________________________________*/
-        final UserDietaryAdapter adapterDietary = new UserDietaryAdapter(this);
-        final UserDietaryAdapter adapterCurrentDietary = new UserDietaryAdapter(this, new ArrayList<>(user.getDietaryConstraints()));
+        final FoodTypeAdapter adapterDietary = new FoodTypeAdapter(this);
+        final FoodTypeAdapter adapterCurrentDietary = new FoodTypeAdapter(this, new ArrayList<>(user.getDietaryConstraints()));
         listConstraintsView.setAdapter(adapterCurrentDietary);
 
         addConstraintsButton.setOnClickListener(new View.OnClickListener() {
@@ -184,12 +135,9 @@ public class UserProfileActivity extends AppCompatActivity {
 
                         if (!user.getDietaryConstraints().contains(dietary)) {
                             user.addDietaryConstraints(dietary);
-                            Log.i(TAG, "constraint: added");
                             if (user.isLoggedIn()) {
                                 saveProfile();
-                                Log.i(TAG, "constraint: profile updated");
                             }
-                            Toast.makeText(UserProfileActivity.this, "Added New Dietary Constraint: " + getString(dietary.resourceId), Toast.LENGTH_SHORT).show();
                             adapterCurrentDietary.add(dietary);
                             adapterCurrentDietary.notifyDataSetChanged();
                         }
@@ -208,13 +156,9 @@ public class UserProfileActivity extends AppCompatActivity {
 
                 FoodType dietary = adapterCurrentDietary.getItem(position);
                 user.removeDietaryConstraints(dietary);
-                Log.i(TAG, "constraint: removed");
                 if (user.isLoggedIn()) {
                     saveProfile();
-                    Log.i(TAG, "constraint: profile updated");
-
                 }
-                Toast.makeText(UserProfileActivity.this, "Removed Dietary Constraint: " + getString(dietary.resourceId), Toast.LENGTH_SHORT).show();
                 adapterCurrentDietary.remove(dietary);
                 adapterCurrentDietary.notifyDataSetChanged();
             }
@@ -223,43 +167,66 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     private void setUpStatus() {
-        /*_____________________________________STATUS_____________________________________________*/
-        selectedStatus = findViewById(R.id.statusSelected);
-        selectedStatus.setText("Status: " + getString(user.getStatusID()));
-        final UserStatusAdapter adapterStatus = new UserStatusAdapter(this);
+        final UserStatusAdapter adapter = new UserStatusAdapter(this);
+        statusSpinner.setAdapter(adapter);
+        statusSpinner.setSelection(adapter.getPosition(user.getStatus()));
 
-        statusButton.setOnClickListener(new View.OnClickListener() {
+        statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                listProfileView.setAdapter(adapterStatus);
-                listProfileView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        User.UserStatus status = adapterStatus.getItem(position);
-                        Toast.makeText(UserProfileActivity.this, "New Status Selected: " + getString(status.id), Toast.LENGTH_SHORT).show();
-                        user.setStatus(status);
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                User.UserStatus status = adapter.getItem(position);
+                user.setStatus(status);
+                if (user.isLoggedIn()) {
+                    saveProfile();
+                }
+            }
 
-                        Log.i(TAG, "status: changed");
-                        if (user.isLoggedIn()) {
-                            saveProfile();
-                            Log.i(TAG, "status: profile update");
-                        }
-                        listProfileView.setAdapter(null);
-                        selectedStatus.setText("Status: " + getString(status.id));
-                    }
-                });
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Nothing changes
             }
         });
     }
 
-    public void saveProfile(){
+    private void setUpCampus() {
+        final CampusAdapter adapter = new CampusAdapter(this);
+        campusSpinner.setAdapter(adapter);
+        campusSpinner.setSelection(adapter.getPosition(user.getCampus()));
+
+        if(user.isLocAuto()){
+            locAut.setChecked(true);
+        }
+
+        campusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                CampusLocation.Campus campus = adapter.getItem(position);
+                user.setCampus(campus);
+                user.setLocAuto(false);
+                locAut.setChecked(false);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // nothing changes
+            }
+        });
+
+
+        locAut.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                user.setLocAuto(isChecked);
+            }
+        });
+    }
+
+    private void saveProfile(){
         new GrpcTask(new SaveProfileRunnable(user.getUsername(), user.getPassword(), user.getStatus(), user.getDietaryConstraints()) {
             @Override
             protected void callback(String result) {
                 if (result == null) {
                     Log.i(TAG, "callback: unknown error");
-                } else if (result.equals("OK")) {
-                    Log.i(TAG, "callback: user saved");
                 } else if (result.equals("INCORRECT_PASSWORD") ||
                         result.equals("USERNAME_DOES_NOT_EXIST")) {
                     user.logout();

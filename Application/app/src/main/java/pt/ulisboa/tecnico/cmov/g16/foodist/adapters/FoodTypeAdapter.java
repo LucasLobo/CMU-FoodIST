@@ -16,13 +16,13 @@ import java.util.List;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodType;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.User;
 
-public class UserDietaryAdapter extends ArrayAdapter<FoodType> {
+public class FoodTypeAdapter extends ArrayAdapter<FoodType> {
 
-    public UserDietaryAdapter(Context context) {
+    public FoodTypeAdapter(Context context) {
         super(context, 0, FoodType.values());
     }
 
-    public UserDietaryAdapter(Context context, List<FoodType> list) {
+    public FoodTypeAdapter(Context context, List<FoodType> list) {
         super(context, 0, list);
     }
 

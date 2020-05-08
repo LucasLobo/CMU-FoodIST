@@ -35,17 +35,20 @@
         </activity>
         <activity
             android:name=".activities.UserProfileActivity"
-            android:label="Profile" />
+            android:label="@string/profile" />
         <activity android:name=".activities.PeerScannerActivity" />
         <activity android:name=".activities.FoodServiceActivity" />
         <activity
             android:name=".activities.LoginActivity"
-            android:label="Sign up or Log in" />
+            android:label="@string/login_signup" />
         <activity
             android:name=".activities.MenuActivity"
-            android:label="Menu" />
+            android:label="@string/menu" />
         <activity android:name=".activities.MenuItemActivity" />
-        <activity android:name=".activities.NewMenuItemActivity" />
+        <activity
+            android:name=".activities.NewMenuItemActivity"
+            android:label="@string/create_menu"
+            />
         <activity android:name=".activities.FullscreenImageActivity" />
 
         <service android:name="pt.inesc.termite.wifidirect.service.SimWifiP2pService" />

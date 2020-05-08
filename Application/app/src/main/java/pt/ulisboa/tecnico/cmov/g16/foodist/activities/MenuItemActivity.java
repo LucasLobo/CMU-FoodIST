@@ -27,7 +27,7 @@ public class MenuItemActivity extends AppCompatActivity {
     private MenuItem item;
     private LinearLayout imageLayout;
 
-    private int foodServiceIndex;
+    private int foodServiceId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +38,10 @@ public class MenuItemActivity extends AppCompatActivity {
         imageLayout = findViewById(R.id.imageSlots);
         Intent intent = getIntent();
         intent.getIntExtra("itemIndex", -1);
-        foodServiceIndex = intent.getIntExtra("foodServiceId", -1);
+        foodServiceId = intent.getIntExtra("foodServiceId", -1);
 
 
-        Menu menu = data.getFoodService(foodServiceIndex).getMenu();
+        Menu menu = data.getFoodService(foodServiceId).getMenu();
         item = menu.getMenuList().get(intent.getIntExtra("itemIndex", -1));
         setupView(item);
 
@@ -49,9 +49,9 @@ public class MenuItemActivity extends AppCompatActivity {
 
     private void setupView(MenuItem item){
         ((TextView) findViewById(R.id.title)).setText(item.getName());
-        ((TextView) findViewById(R.id.price)).setText(item.getPrice()+ "");
-        ((TextView) findViewById(R.id.discount)).setText(item.getDiscount() + "");
-        ((TextView) findViewById(R.id.foodType)).setText(item.getFoodType().toString());
+        ((TextView) findViewById(R.id.price)).setText(String.valueOf(item.getPrice()));
+        ((TextView) findViewById(R.id.discount)).setText(String.valueOf(item.getDiscount()));
+        ((TextView) findViewById(R.id.foodType)).setText(item.getFoodType().resourceId);
         ((TextView) findViewById(R.id.description)).setText(item.getDescription());
 
         Button importImageButton = findViewById(R.id.importImageButton);
@@ -77,9 +77,9 @@ public class MenuItemActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MenuItemActivity.this, FullscreenImageActivity.class);
                 Bundle extras = new Bundle();
-                extras.putInt("foodServiceId", foodServiceIndex);
+                extras.putInt("foodServiceId", foodServiceId);
                 extras.putInt("imageIndex", item.getImages().indexOf(imageView));
-                extras.putInt("itemIndex", data.getFoodService(foodServiceIndex).getMenu().getMenuList().indexOf(item));
+                extras.putInt("itemIndex", data.getFoodService(foodServiceId).getMenu().getMenuList().indexOf(item));
                 intent.putExtras(extras);
                 startActivity(intent);
             }

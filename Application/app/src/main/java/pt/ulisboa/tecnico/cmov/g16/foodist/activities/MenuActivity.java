@@ -26,7 +26,7 @@ public class MenuActivity extends AppCompatActivity {
     User user;
     ListView listView;
     MenuItemAdapter adapter;
-    private int foodServiceIndex;
+    private int foodServiceId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,11 +34,11 @@ public class MenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_menu);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Intent intent = getIntent();
-        foodServiceIndex = intent.getIntExtra("foodServiceId", -1);
-        if(foodServiceIndex == -1)
+        foodServiceId = intent.getIntExtra("foodServiceId", -1);
+        if(foodServiceId == -1)
             finish();
         data = (Data) getApplicationContext();
-        menu = data.getFoodService(foodServiceIndex).getMenu();
+        menu = data.getFoodService(foodServiceId).getMenu();
         user = data.getUser();
 
         adapter = new MenuItemAdapter(this, menu.getMenuList());
@@ -51,7 +51,7 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MenuActivity.this, NewMenuItemActivity.class);
-                intent.putExtra("foodServiceId", foodServiceIndex);
+                intent.putExtra("foodServiceId", foodServiceId);
                 startActivity(intent);
             }
         });
@@ -61,7 +61,7 @@ public class MenuActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 MenuItem item = adapter.getItem(i);
                 Intent intent = new Intent(MenuActivity.this, MenuItemActivity.class);
-                intent.putExtra("foodServiceId", foodServiceIndex);
+                intent.putExtra("foodServiceId", foodServiceId);
                 intent.putExtra("itemIndex", menu.getMenuList().indexOf(item));
                 startActivity(intent);
 

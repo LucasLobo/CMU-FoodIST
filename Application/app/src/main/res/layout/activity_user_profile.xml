@@ -6,87 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".activities.UserProfileActivity">
 
-    <Switch
-        android:id="@+id/loc_aut"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="@string/loc_aut"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/selectStatus"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="160dp"
-        android:layout_height="70dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="32dp"
-        android:text="@string/status"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/username" />
-
-    <Button
-        android:id="@+id/selectCampus"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="160dp"
-        android:layout_height="70dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="32dp"
-        android:text="@string/campus"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/statusSelected" />
-
-    <TextView
-        android:id="@+id/statusSelected"
-        android:layout_width="205dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/selectStatus" />
-
-    <TextView
-        android:id="@+id/campusSelected"
-        android:layout_width="205dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/selectCampus" />
-
-    <ListView
-        android:id="@+id/profileView"
-        android:layout_width="164dp"
-        android:layout_height="285dp"
-        android:layout_marginTop="32dp"
-        android:listSelector="@color/colorAccent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/username" />
-
-    <Button
-        android:id="@+id/login"
-        style="@android:style/Widget.Holo.Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
 
     <TextView
         android:id="@+id/username"
@@ -101,6 +20,65 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
+        android:id="@+id/login"
+        style="@android:style/Widget.Holo.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="@string/status"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/username" />
+
+
+    <Spinner
+        android:id="@+id/selectStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/username"
+        app:layout_constraintStart_toEndOf="@id/status"
+        android:layout_marginStart="12dp"
+        android:layout_marginLeft="12dp"
+        />
+
+    <TextView
+        android:id="@+id/campus"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="26dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="@string/campus"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/status" />
+
+    <Spinner
+        android:id="@+id/selectCampus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginLeft="12dp"
+        app:layout_constraintStart_toEndOf="@id/campus"
+        app:layout_constraintTop_toBottomOf="@id/status" />
+
+    <Button
         android:id="@+id/addConstraints"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="160dp"
@@ -112,7 +90,7 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/campusSelected" />
+        app:layout_constraintTop_toBottomOf="@id/campus" />
 
     <TextView
         android:id="@+id/textView2"
@@ -136,11 +114,31 @@
         app:layout_constraintTop_toBottomOf="@id/textView2" />
 
     <ListView
+        android:id="@+id/profileView"
+        android:layout_width="164dp"
+        android:layout_height="285dp"
+        android:layout_marginTop="32dp"
+        android:listSelector="@color/colorAccent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/username" />
+
+
+    <ListView
         android:id="@+id/constraintsView"
         android:layout_width="168dp"
         android:layout_height="261dp"
-        android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/campusSelected" />
+        app:layout_constraintTop_toBottomOf="@id/profileView" />
+
+    <Switch
+        android:id="@+id/loc_aut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/loc_aut"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.LinkedList;
 
+import pt.ulisboa.tecnico.cmov.g16.foodist.adapters.FoodTypeAdapter;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.Data;
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.MenuItem;
@@ -93,8 +94,8 @@ public class NewMenuItemActivity extends AppCompatActivity {
     }
 
     private void setupSpinner() {
-        ArrayAdapter<FoodType> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, FoodType.values());
-        typeOfFood.setAdapter(adapter);
+        final FoodTypeAdapter adapterDietary = new FoodTypeAdapter(this);
+        typeOfFood.setAdapter(adapterDietary);
     }
 
     private void chooseImageFromGallery(){
