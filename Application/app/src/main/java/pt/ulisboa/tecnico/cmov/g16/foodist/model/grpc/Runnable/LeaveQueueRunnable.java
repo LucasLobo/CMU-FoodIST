@@ -1,6 +1,5 @@
 package pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.Runnable;
 
-import com.grpc.Contract.Signature;
 import com.grpc.GrpcServiceGrpc;
 import com.grpc.Contract.LeaveQueueRequest;
 import com.grpc.Contract.LeaveQueueResponse;
@@ -34,7 +33,6 @@ public abstract class LeaveQueueRunnable extends GrpcRunnable<String> {
         LeaveQueueRequest request = LeaveQueueRequest.newBuilder().setUserQueueId(userQueueId).setFoodServiceId(foodServiceId).setDuration(duration).build();
         LeaveQueueResponse response = blockingStub.leaveQueue(request);
 
-        Signature signature = response.getSignature();
         String result = response.getResult();
         setResult(result);
 

@@ -2,7 +2,6 @@ package pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.Runnable;
 
 import com.grpc.Contract.EstimateQueueTimeRequest;
 import com.grpc.Contract.EstimateQueueTimeResponse;
-import com.grpc.Contract.Signature;
 import com.grpc.GrpcServiceGrpc;
 
 import io.grpc.StatusRuntimeException;
@@ -28,8 +27,6 @@ public abstract class EstimateQueueRunnable extends GrpcRunnable<Integer> {
         appendLogs(logs, "*** EstimateQueueTime: foodSeviceId:''{0}''", foodServiceId);
         EstimateQueueTimeRequest request = EstimateQueueTimeRequest.newBuilder().setFoodServiceId(foodServiceId).build();
         EstimateQueueTimeResponse response = blockingStub.estimateQueueTime(request);
-
-        Signature signature = response.getSignature();
 
         int time = response.getTime();
         setResult(time);

@@ -2,7 +2,6 @@ package pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.Runnable;
 
 import com.grpc.Contract.Profile;
 import com.grpc.Contract.Auth;
-import com.grpc.Contract.Signature;
 import com.grpc.Contract.SaveProfileRequest;
 import com.grpc.Contract.SaveProfileResponse;
 import com.grpc.GrpcServiceGrpc;
@@ -47,8 +46,6 @@ public abstract class SaveProfileRunnable extends GrpcRunnable<String> {
         SaveProfileRequest request = SaveProfileRequest.newBuilder().setAuth(auth).setProfile(profile).build();
 
         SaveProfileResponse response = blockingStub.saveProfile(request);
-
-        Signature signature = response.getSignature();
 
         String code = response.getCode();
         setResult(code);

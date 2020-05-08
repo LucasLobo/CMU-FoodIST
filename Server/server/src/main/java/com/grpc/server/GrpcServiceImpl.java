@@ -60,8 +60,7 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
             code = AuthMessage.USERNAME_TAKEN.name();
         }
 
-        Signature signature = createSignature();
-        RegisterResponse response = RegisterResponse.newBuilder().setCode(code).setSignature(signature).build();
+        RegisterResponse response = RegisterResponse.newBuilder().setCode(code).build();
         System.out.println(code);
         responseObserver.onNext(response);
         responseObserver.onCompleted();
@@ -85,8 +84,7 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
             user.setConstraints(constraints);
         }
 
-        Signature signature = createSignature();
-        SaveProfileResponse response = SaveProfileResponse.newBuilder().setCode(code).setSignature(signature).build();
+        SaveProfileResponse response = SaveProfileResponse.newBuilder().setCode(code).build();
         System.out.println(code);
         responseObserver.onNext(response);
         responseObserver.onCompleted();
@@ -113,13 +111,11 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
             System.out.println(user.getConstraints());
         }
 
-        Signature signature = createSignature();
 
         System.out.println(code);
 
         FetchProfileResponse response = FetchProfileResponse.newBuilder()
                 .setCode(code)
-                .setSignature(signature)
                 .setProfile(profileBuilder.build())
                 .build();
         responseObserver.onNext(response);
@@ -144,9 +140,8 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
             code = "FOOD_SERVICE_NOT_FOUND";
         }
 
-        Signature signature = createSignature();
         SaveMenuItemResponse response = SaveMenuItemResponse.newBuilder()
-                .setCode(code).setSignature(signature).build();
+                .setCode(code).build();
 
         responseObserver.onNext(response);
         responseObserver.onCompleted();
@@ -175,8 +170,6 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
         } catch (NullPointerException ignored) {
         }
 
-        Signature signature = createSignature();
-        responseBuilder.setSignature(signature);
         responseObserver.onNext(responseBuilder.build());
         responseObserver.onCompleted();
     }
@@ -196,8 +189,7 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
             foodService.addToQueue(userQueueId);
         }
 
-        Signature signature = createSignature();
-        JoinQueueResponse response = JoinQueueResponse.newBuilder().setUserQueueId(userQueueId).setSignature(signature).build();
+        JoinQueueResponse response = JoinQueueResponse.newBuilder().setUserQueueId(userQueueId).build();
         System.out.println("User queue id: " + userQueueId);
         responseObserver.onNext(response);
         responseObserver.onCompleted();
@@ -225,8 +217,7 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
             code = "FOOD_SERVICE_NOT_FOUND";
         }
 
-        Signature signature = createSignature();
-        response = LeaveQueueResponse.newBuilder().setResult(code).setSignature(signature).build();
+        response = LeaveQueueResponse.newBuilder().setResult(code).build();
         System.out.println(code);
         responseObserver.onNext(response);
         responseObserver.onCompleted();
@@ -247,8 +238,7 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
             queueTime = -1;
         }
 
-        Signature signature = createSignature();
-        EstimateQueueTimeResponse response = EstimateQueueTimeResponse.newBuilder().setTime(queueTime).setSignature(signature).build();
+        EstimateQueueTimeResponse response = EstimateQueueTimeResponse.newBuilder().setTime(queueTime).build();
         responseObserver.onNext(response);
         responseObserver.onCompleted();
     }
@@ -266,15 +256,5 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
             return AuthMessage.OK;
         }
 	}
-
-	private Signature createSignature() {
-//        byte[] hash = DigitalSign.getHashFromObject(result);
-//        byte[] sigServer = DigitalSign.getSignature(hash, "server");
-//        ByteString signature = ByteString.copyFrom(sigServer);
-
-        return Signature.newBuilder()/*.setSignature()*/.build();
-    }
-
-
 
 }

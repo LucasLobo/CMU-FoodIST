@@ -1,6 +1,5 @@
 package pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.Runnable;
 
-import com.grpc.Contract.Signature;
 import com.grpc.Contract.FetchMenusResponse;
 import com.grpc.Contract.FetchMenusRequest;
 import com.grpc.GrpcServiceGrpc;
@@ -35,8 +34,6 @@ public abstract class FetchMenusRunnable extends GrpcRunnable<List<MenuItem>> {
 
         List<MenuItem> menuItemsList = ModelConverter.ContractMenuItemsToMenuItems(response.getMenuItemsList());
         setResult(menuItemsList);
-
-        Signature signature = response.getSignature();
 
         appendLogs(
                 logs,

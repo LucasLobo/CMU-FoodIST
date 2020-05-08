@@ -3,7 +3,6 @@ package pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.Runnable;
 import com.grpc.Contract;
 import com.grpc.Contract.SaveMenuItemResponse;
 import com.grpc.Contract.SaveMenuItemRequest;
-import com.grpc.Contract.Signature;
 import com.grpc.GrpcServiceGrpc;
 
 
@@ -44,7 +43,6 @@ public abstract class SaveMenuItemRunnable extends GrpcRunnable<String> {
 
         SaveMenuItemResponse response = blockingStub.saveMenuItem(request);
 
-        Signature signature = response.getSignature();
         String code = response.getCode();
         setResult(code);
         switch (code) {
