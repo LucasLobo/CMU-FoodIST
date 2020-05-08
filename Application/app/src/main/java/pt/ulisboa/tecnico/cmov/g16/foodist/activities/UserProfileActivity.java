@@ -169,7 +169,7 @@ public class UserProfileActivity extends AppCompatActivity {
     private void setUpStatus() {
         final UserStatusAdapter adapter = new UserStatusAdapter(this);
         statusSpinner.setAdapter(adapter);
-        statusSpinner.setSelection(adapter.getPosition(user.getStatus()));
+        statusSpinner.setSelection(adapter.getPosition(user.getStatus()), false);
 
         statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -189,14 +189,10 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     private void setUpCampus() {
+        locAut.setChecked(user.isLocAuto());
         final CampusAdapter adapter = new CampusAdapter(this);
         campusSpinner.setAdapter(adapter);
-        campusSpinner.setSelection(adapter.getPosition(user.getCampus()));
-
-        if(user.isLocAuto()){
-            locAut.setChecked(true);
-        }
-
+        campusSpinner.setSelection(adapter.getPosition(user.getCampus()), false);
         campusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
