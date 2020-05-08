@@ -77,4 +77,5 @@
     <!-- CONTEXT MENU MAIN ACTIVITY -->
     <string name="menu_user_profile">Profile</string>
     <string name="menu_toggle">Toggle dietary constraints filter</string>
+    <string name="title_activity_map">Map</string>
 </resources>
