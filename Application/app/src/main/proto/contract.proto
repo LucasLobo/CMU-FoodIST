@@ -6,9 +6,6 @@ message Auth {
     string password = 2;
 }
 
-message Signature {
-    bytes signature = 1;
-}
 
 message Profile {
     string status = 1;
@@ -27,8 +24,7 @@ message RegisterRequest {
 }
 
 message RegisterResponse {
-    Signature signature = 1;
-    string code = 2;
+    string code = 1;
 }
 
 message SaveProfileRequest {
@@ -37,8 +33,7 @@ message SaveProfileRequest {
 }
 
 message SaveProfileResponse {
-    Signature signature = 1;
-    string code = 2;
+    string code = 1;
 }
 
 message FetchProfileRequest {
@@ -46,9 +41,8 @@ message FetchProfileRequest {
 }
 
 message FetchProfileResponse {
-    Signature signature = 1;
-    string code = 2;
-    Profile profile = 3;
+    string code = 1;
+    Profile profile = 2;
 }
 
 message SaveMenuItemRequest {
@@ -57,8 +51,7 @@ message SaveMenuItemRequest {
 }
 
 message SaveMenuItemResponse {
-    Signature signature = 1;
-    string code = 2;
+    string code = 1;
 }
 
 message FetchMenusRequest {
@@ -66,8 +59,7 @@ message FetchMenusRequest {
 }
 
 message FetchMenusResponse {
-    Signature signature = 1;
-    repeated MenuItem menuItems = 2;
+    repeated MenuItem menuItems = 1;
 }
 
 message JoinQueueRequest {
@@ -75,8 +67,7 @@ message JoinQueueRequest {
 }
 
 message JoinQueueResponse {
-    Signature signature = 1;
-    int32 userQueueId = 2;
+    int32 userQueueId = 1;
 }
 
 message LeaveQueueRequest {
@@ -86,8 +77,7 @@ message LeaveQueueRequest {
 }
 
 message LeaveQueueResponse {
-    Signature signature = 1;
-    string result = 2;
+    string result = 1;
 }
 
 message EstimateQueueTimeRequest {
@@ -95,8 +85,7 @@ message EstimateQueueTimeRequest {
 }
 
 message EstimateQueueTimeResponse {
-    Signature signature = 1;
-    int32 time = 2;
+    int32 time = 1;
 }
 
 service GrpcService {

@@ -1,7 +1,6 @@
 package pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.Runnable;
 
 
-import com.grpc.Contract.Signature;
 import com.grpc.Contract.Auth;
 import com.grpc.Contract.RegisterRequest;
 import com.grpc.Contract.RegisterResponse;
@@ -36,8 +35,6 @@ public abstract class RegisterRunnable extends GrpcRunnable<String> {
         Auth auth = Auth.newBuilder().setUsername(username).setPassword(password).build();
         RegisterRequest request = RegisterRequest.newBuilder().setAuth(auth).build();
         RegisterResponse response = blockingStub.register(request);
-
-        Signature signature = response.getSignature();
 
         String code = response.getCode();
         setResult(code);

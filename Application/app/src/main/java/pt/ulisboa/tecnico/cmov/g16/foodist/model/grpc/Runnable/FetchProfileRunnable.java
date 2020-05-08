@@ -1,7 +1,6 @@
 package pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.Runnable;
 
 import  com.grpc.Contract.Auth;
-import com.grpc.Contract.Signature;
 import com.grpc.Contract.FetchProfileRequest;
 import com.grpc.Contract.FetchProfileResponse;
 import com.grpc.GrpcServiceGrpc;
@@ -43,8 +42,6 @@ public abstract class FetchProfileRunnable extends GrpcRunnable<FetchProfileRunn
         List<String> constraints = response.getProfile().getConstraintsList();
         String status = response.getProfile().getStatus();
         String code = response.getCode();
-
-        Signature signature = response.getSignature();
 
         User.UserStatus userStatus = ModelConverter.StringToUserStatus(status);
         EnumSet<FoodType> dietaryConstraints = ModelConverter.StringArrayToFoodTypeSet(constraints);
