@@ -37,7 +37,7 @@ public class FetchURL extends AsyncTask<String, Void, String> {
         super.onPostExecute(s);
         PointsParser parserTask = new PointsParser(mContext, directionMode);
         // Invokes the thread for parsing the JSON data
-        parserTask.execute(s);
+        parserTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, s);
     }
 
     private String downloadUrl(String strUrl) throws IOException {

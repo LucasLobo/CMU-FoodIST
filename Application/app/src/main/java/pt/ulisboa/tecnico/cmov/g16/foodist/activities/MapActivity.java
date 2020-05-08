@@ -53,13 +53,14 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         Intent intent = getIntent();
-        double destLat = intent.getDoubleExtra("Latitude", CampusLocation.Campus.TAGUS.latitude); // Change to UNKNOWN - after changing null UNKNOWN's value
-        double destLog = intent.getDoubleExtra("Longitude", CampusLocation.Campus.TAGUS.longitude); // Change to UNKNOWN - after changing null UNKNOWN's value
+        double destLat = intent.getDoubleExtra("Latitude", CampusLocation.Campus.ALAMEDA.latitude); // Change to UNKNOWN - after changing null UNKNOWN's value
+        double destLog = intent.getDoubleExtra("Longitude", CampusLocation.Campus.ALAMEDA.longitude); // Change to UNKNOWN - after changing null UNKNOWN's value
         destination = new LatLng(destLat, destLog);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mapFragment);
         mapFragment.getMapAsync(this);
+        onPause();
 
     }
 
@@ -81,15 +82,14 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         @SuppressLint("MissingPermission") Location myLocation = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, true));
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(destination));
-        mMap.setMinZoomPreference(17);
+        mMap.setMinZoomPreference(15);
         mMap.setMaxZoomPreference(25);
         drawRoute(new LatLng(myLocation.getLatitude(), myLocation.getLongitude()), destination);
     }
 
     private void drawRoute(LatLng origin, LatLng destination) {
         String url = getDirectionsUrl(origin, destination);
-        Log.d("abcd", url);
-        new FetchURL(MapActivity.this).execute(url, "walking");
+        new FetchURL(MapActivity.this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR ,url, "walking");
     }
 
     private String getDirectionsUrl(LatLng origin, LatLng destination) {
