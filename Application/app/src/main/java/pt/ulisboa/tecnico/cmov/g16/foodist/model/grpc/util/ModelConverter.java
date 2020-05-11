@@ -55,7 +55,7 @@ public class ModelConverter {
     }
 
     public static MenuItem ContractMenuItemToMenuItem(Contract.MenuItem menuItem) {
-        return new MenuItem(menuItem.getName(),menuItem.getPrice(), StringToFoodType(menuItem.getFoodType()), true, menuItem.getDescription(), 0, new LinkedList<ImageView>());
+        return new MenuItem(menuItem.getName(),menuItem.getPrice(), StringToFoodType(menuItem.getFoodType()), menuItem.getDescription(), new LinkedList<ImageView>());
     }
 
     public static List<MenuItem> ContractMenuItemsToMenuItems(List<Contract.MenuItem> contractMenuItems) {

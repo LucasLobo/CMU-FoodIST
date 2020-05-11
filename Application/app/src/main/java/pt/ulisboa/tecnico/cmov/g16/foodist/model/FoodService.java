@@ -12,24 +12,8 @@ public class FoodService {
 
     private static final String TAG = "FoodService";
 
-    /* Constants for accessibility restrictions */
-    public enum AccessRestriction {
-        STAIRS(R.string.stairs),
-        ELEVATOR(R.string.elevator),
-        RAMP(R.string.ramp),
-        WHEEL_CHAIR(R.string.wheel_chair);
-
-        public int resourceId;
-
-        AccessRestriction(int id) {
-            resourceId = id;
-        }
-    }
-
     private OpeningTime openingTime;
     private CampusLocation location;
-
-    private ArrayList<AccessRestriction> accessRestrictions = new ArrayList<>();
 
     private Integer id;
     private String name;
@@ -52,10 +36,6 @@ public class FoodService {
         return name;
     }
 
-    public void addAccessRestriction(AccessRestriction accessRestriction) {
-        accessRestrictions.add(accessRestriction);
-    }
-
     public void addSchedule(User.UserStatus status, Integer openingHour, Integer openingMinute, Integer closingHour, Integer closingMinute) {
         openingTime.addScheduleForStatus(status, openingHour, openingMinute, closingHour, closingMinute);
     }
@@ -70,8 +50,8 @@ public class FoodService {
         menu.addMenuItem(item);
     }
 
-    public void addMenuItem(String name, double price, FoodType foodType, boolean availability, String description) {
-        menu.addMenuItem(name, price, foodType, availability, description);
+    public void addMenuItem(String name, double price, FoodType foodType, String description) {
+        menu.addMenuItem(name, price, foodType, description);
     }
 
     public OpeningTime getOpeningTime() {
@@ -84,10 +64,6 @@ public class FoodService {
 
     public Boolean isOpen(User.UserStatus status) {
         return openingTime.isOpen(status);
-    }
-
-    public ArrayList<AccessRestriction> getAccessRestrictions() {
-        return accessRestrictions;
     }
 
     public EnumSet<FoodType> getFoodTypes() {

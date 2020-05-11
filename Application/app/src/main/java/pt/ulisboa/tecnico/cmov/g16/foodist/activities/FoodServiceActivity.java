@@ -104,10 +104,6 @@ public class FoodServiceActivity extends AppCompatActivity {
         TextView name = findViewById(R.id.food_service_name);
         name.setText(foodService.getName());
 
-        TextView aproxPrice = findViewById(R.id.food_service_aprox_price);
-        aproxPrice.setText(getString(R.string.menu_price, 5));
-
-
         TextView open = findViewById(R.id.food_service_open);
 
         User user = data.getUser();

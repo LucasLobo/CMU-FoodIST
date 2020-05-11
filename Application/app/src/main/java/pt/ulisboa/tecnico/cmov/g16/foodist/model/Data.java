@@ -86,14 +86,10 @@ public class Data extends Application {
 
         FoodService alwaysOpen = new FoodService(id++, "Always Open", 38.7352722896, -9.13268566132);
         alwaysOpen.addSchedule(0,0,23,59);
-        alwaysOpen.addAccessRestriction(FoodService.AccessRestriction.WHEEL_CHAIR);
-        alwaysOpen.addAccessRestriction(FoodService.AccessRestriction.STAIRS);
-        alwaysOpen.addAccessRestriction(FoodService.AccessRestriction.ELEVATOR);
-        alwaysOpen.addAccessRestriction(FoodService.AccessRestriction.RAMP);
-        alwaysOpen.addMenuItem("Meat menu", 5, FoodType.MEAT, true, "Menu with meat");
-        alwaysOpen.addMenuItem("Fish menu", 5, FoodType.FISH, true, "Menu with fish");
-        alwaysOpen.addMenuItem("Vegan menu", 5, FoodType.VEGAN, true, "Vegan menu");
-        alwaysOpen.addMenuItem("Vegetarian menu", 5, FoodType.VEGETARIAN, true, "Vegetarian menu");
+        alwaysOpen.addMenuItem("Meat menu", 5, FoodType.MEAT,"Menu with meat");
+        alwaysOpen.addMenuItem("Fish menu", 5, FoodType.FISH, "Menu with fish");
+        alwaysOpen.addMenuItem("Vegan menu", 5, FoodType.VEGAN, "Vegan menu");
+        alwaysOpen.addMenuItem("Vegetarian menu", 5, FoodType.VEGETARIAN, "Vegetarian menu");
         foodServiceHashMap.put(alwaysOpen.getId(), alwaysOpen);
 
         FoodService centralBar = new FoodService(id++, "Central Bar", 38.736606, -9.139532);

@@ -64,15 +64,14 @@ public class NewMenuItemActivity extends AppCompatActivity {
                 EditText title = findViewById(R.id.title);
                 EditText price = findViewById(R.id.price);
                 EditText description = findViewById(R.id.description);
-                EditText discount = findViewById(R.id.discount);
 
                 try {
 
                     MenuItem item = new MenuItem(title.getText().toString(),
                             Double.parseDouble(price.getText().toString()),
                             FoodType.valueOf(typeOfFood.getSelectedItem().toString().toUpperCase()),
-                            true, description.getText().toString(),
-                            Integer.parseInt(discount.getText().toString()), images);
+                            description.getText().toString(),
+                            images);
 
                     data.getFoodService(foodServiceId).getMenu().getMenuList().add(item);
                     saveMenu(item, foodServiceId);

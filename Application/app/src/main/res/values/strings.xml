@@ -3,11 +3,6 @@
     <string name="title_food_service_list">Food services</string>
     <string name="action_settings">Settings</string>
 
-    <string name="stairs">Stairs</string>
-    <string name="elevator">Elevator</string>
-    <string name="ramp">Ramp</string>
-    <string name="wheel_chair">Wheel Chair</string>
-
     <string name="unknown_error">An unknown error occurred</string>
     <string name="unknown_error_code">An unknown error (%s) occurred</string>
 
@@ -62,8 +57,7 @@
     <string name="time_min">%1d min</string>
 
     <!-- FOOD SERVICE ACTIVITY -->
-    <string name="menu_price">Aprox. price: %1d€</string>
-    <string name="walking_time">%1d min away ph</string>
+    <string name="walking_time">%1d min away</string>
     <string name="waiting_time">Waiting time: %1d min</string>
     <string name="closed">Closed right now</string>
     <string name="open">Currently open</string>

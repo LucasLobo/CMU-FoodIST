@@ -50,7 +50,6 @@ public class MenuItemActivity extends AppCompatActivity {
     private void setupView(MenuItem item){
         ((TextView) findViewById(R.id.title)).setText(item.getName());
         ((TextView) findViewById(R.id.price)).setText(String.valueOf(item.getPrice()));
-        ((TextView) findViewById(R.id.discount)).setText(String.valueOf(item.getDiscount()));
         ((TextView) findViewById(R.id.foodType)).setText(item.getFoodType().resourceId);
         ((TextView) findViewById(R.id.description)).setText(item.getDescription());
 
