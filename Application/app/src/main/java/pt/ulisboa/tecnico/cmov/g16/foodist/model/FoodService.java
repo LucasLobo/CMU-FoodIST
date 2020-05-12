@@ -5,8 +5,10 @@ import org.threeten.bp.LocalTime;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.LinkedList;
+import java.util.List;
 
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.exceptions.MenuItemMissingId;
 
 public class FoodService {
 
@@ -46,12 +48,12 @@ public class FoodService {
         }
     }
 
-    public void addMenuItem(MenuItem item) {
+    public void addMenuItem(MenuItem item) throws MenuItemMissingId {
         menu.addMenuItem(item);
     }
 
-    public void addMenuItem(String name, double price, FoodType foodType, String description) {
-        menu.addMenuItem(name, price, foodType, description);
+    public MenuItem getMenuItem(Integer menuId) {
+        return menu.getMenuItem(menuId);
     }
 
     public OpeningTime getOpeningTime() {
@@ -68,10 +70,12 @@ public class FoodService {
 
     public EnumSet<FoodType> getFoodTypes() {
         EnumSet<FoodType> set = EnumSet.noneOf(FoodType.class);
-        LinkedList<MenuItem> menuList = menu.getMenuList();
+
+        List<MenuItem> menuList = menu.getMenuList();
         for (MenuItem item : menuList) {
             set.add(item.getFoodType());
         }
+
         return set;
     }
 

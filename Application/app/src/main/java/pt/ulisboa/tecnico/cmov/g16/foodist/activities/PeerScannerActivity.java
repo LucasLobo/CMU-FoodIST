@@ -9,12 +9,16 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Messenger;
-import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 import pt.inesc.termite.wifidirect.SimWifiP2pBroadcast;
 import pt.inesc.termite.wifidirect.SimWifiP2pDevice;
@@ -25,6 +29,7 @@ import pt.inesc.termite.wifidirect.service.SimWifiP2pService;
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.Runnable.EstimateQueueRunnable;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.GrpcTask;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.Runnable.FetchImagesRunnable;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.Runnable.JoinQueueRunnable;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.Runnable.LeaveQueueRunnable;
 import pt.ulisboa.tecnico.cmov.g16.foodist.receivers.SimWifiP2pBroadcastReceiver;
@@ -55,6 +60,8 @@ public class PeerScannerActivity extends AppCompatActivity implements SimWifiP2p
         filter.addAction(SimWifiP2pBroadcast.WIFI_P2P_GROUP_OWNERSHIP_CHANGED_ACTION);
         mReceiver = new SimWifiP2pBroadcastReceiver(this);
         registerReceiver(mReceiver, filter);
+
+        fetchImage();
     }
 
     @Override
@@ -103,9 +110,7 @@ public class PeerScannerActivity extends AppCompatActivity implements SimWifiP2p
 
             new GrpcTask(new JoinQueueRunnable(1) {
                 @Override
-                protected void callback(Integer result) {
-                    Log.i(TAG, "callback: " + result);
-                }
+                protected void callback(Integer result) {}
             }).execute();
 
         }
@@ -116,9 +121,7 @@ public class PeerScannerActivity extends AppCompatActivity implements SimWifiP2p
 
             new GrpcTask(new LeaveQueueRunnable(0,33,10) {
                 @Override
-                protected void callback(String result) {
-                    Log.i(TAG, "callback: " + result);
-                }
+                protected void callback(String result) {}
             }).execute();
         }
     };
@@ -128,9 +131,7 @@ public class PeerScannerActivity extends AppCompatActivity implements SimWifiP2p
 
             new GrpcTask(new EstimateQueueRunnable(1) {
                 @Override
-                protected void callback(Integer result) {
-                    Log.i(TAG, "callback: " + result);
-                }
+                protected void callback(Integer result) {}
             }).execute();
 
         }
@@ -208,5 +209,18 @@ public class PeerScannerActivity extends AppCompatActivity implements SimWifiP2p
         findViewById(R.id.idWifiOnButton).setEnabled(false);
         findViewById(R.id.idWifiOffButton).setEnabled(true);
         findViewById(R.id.idInRangeButton).setEnabled(true);
+    }
+
+    public void fetchImage() {
+        final ImageView imageView = findViewById(R.id.testImageView);
+        final TextView textView = findViewById(R.id.testTextView);
+        textView.setText("Loading...");
+        new GrpcTask(new FetchImagesRunnable(0, 0) {
+            @Override
+            protected void callback(ArrayList<Bitmap> bitmaps) {
+                imageView.setImageBitmap(bitmaps.get(0));
+                textView.setText("Done");
+            }
+        }).execute();
     }
 }

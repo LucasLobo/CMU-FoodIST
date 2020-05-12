@@ -1,30 +1,42 @@
 package pt.ulisboa.tecnico.cmov.g16.foodist.model;
 
-import android.widget.ImageView;
+import android.graphics.Bitmap;
 
 import androidx.annotation.NonNull;
 
-import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class MenuItem implements Serializable { //fixme not necessary with current approach
+public class MenuItem {
 
+    private Integer id = -1;
     private String name;
     private double price;
     private String description;
-    private transient LinkedList<ImageView> images;
+    private ArrayList<Bitmap> images = new ArrayList<>();
     private FoodType foodType;
 
+    public MenuItem(Integer id, String name, double price, FoodType foodType, String description) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.foodType = foodType;
+        this.description = description;
+    }
 
-    public MenuItem(String name, double price, FoodType foodType, String description, LinkedList<ImageView> images) {
+    public MenuItem(String name, double price, FoodType foodType, String description) {
         this.name = name;
         this.foodType = foodType;
         this.price = price;
         this.description = description;
-        this.images = images;
     }
 
     // * GETTERS * //
+
+    public Integer getId() {
+        return id;
+    }
+
     public String getName() {
         return name;
     }
@@ -41,15 +53,31 @@ public class MenuItem implements Serializable { //fixme not necessary with curre
         return foodType;
     }
 
-    public LinkedList<ImageView> getImages() {
+    public void addImage(Bitmap bitmap) {
+        images.add(bitmap);
+    }
+
+    public Bitmap getImage(Integer index) {
+        return images.get(index);
+    }
+
+    public ArrayList<Bitmap> getImages() {
         return images;
     }
 
+    public void setImages(ArrayList<Bitmap> images) {
+        this.images = images;
+    }
 
     // * SETTERS * //
 
     public void setName(String name) {
         this.name = name;
+    }
+
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public void setPrice(int price) {

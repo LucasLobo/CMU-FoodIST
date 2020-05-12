@@ -63,7 +63,6 @@ public class LoginActivity extends AppCompatActivity {
                                 @Override
                                 protected void callback(String result) {
                                     if (result.equals("OK")) {
-                                        Log.i(TAG, "callback: user saved");
                                         LoginActivity.this.finish();
                                     } else if (result.equals("INCORRECT_PASSWORD") ||
                                                result.equals("USERNAME_DOES_NOT_EXIST")) {

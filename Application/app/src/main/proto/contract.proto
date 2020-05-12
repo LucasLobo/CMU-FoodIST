@@ -6,6 +6,17 @@ message Auth {
     string password = 2;
 }
 
+message ImageMetaData {
+    int32 foodServiceId = 1;
+    int32 menuItemId = 2;
+    int32 chunksAmount = 3;
+}
+
+message ImageChunk {
+    bytes data = 1;
+    int32 imageIndex = 2;
+    int32 position = 3;
+}
 
 message Profile {
     string status = 1;
@@ -13,10 +24,11 @@ message Profile {
 }
 
 message MenuItem {
-    string name = 1;
-    double price = 2;
-    string description = 3;
-    string foodType = 4;
+    int32 id = 1;
+    string name = 2;
+    double price = 3;
+    string description = 4;
+    string foodType = 5;
 }
 
 message RegisterRequest {
@@ -52,6 +64,26 @@ message SaveMenuItemRequest {
 
 message SaveMenuItemResponse {
     string code = 1;
+    int32 menuId = 2;
+}
+
+message SaveImageToMenuItemRequest {
+    oneof requestType {
+        ImageMetaData metaData = 1;
+        ImageChunk chunk = 2;
+    }
+}
+
+message SaveImageToMenuItemResponse {
+    string code = 1;
+}
+
+message FetchImagesFromMenuRequest {
+    ImageMetaData metadata = 1;
+}
+
+message FetchImagesFromMenuResponse {
+    ImageChunk chunk = 1;
 }
 
 message FetchMenusRequest {
@@ -93,6 +125,8 @@ service GrpcService {
     rpc saveProfile (SaveProfileRequest) returns (SaveProfileResponse);
     rpc fetchProfile (FetchProfileRequest) returns (FetchProfileResponse);
     rpc saveMenuItem (SaveMenuItemRequest) returns (SaveMenuItemResponse);
+    rpc saveImage (stream SaveImageToMenuItemRequest) returns (SaveImageToMenuItemResponse);
+    rpc fetchImages (FetchImagesFromMenuRequest) returns (stream FetchImagesFromMenuResponse);
     rpc fetchMenus (FetchMenusRequest) returns (FetchMenusResponse);
     rpc joinQueue (JoinQueueRequest) returns (JoinQueueResponse);
     rpc leaveQueue (LeaveQueueRequest) returns (LeaveQueueResponse);

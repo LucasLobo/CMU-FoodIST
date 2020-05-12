@@ -2,6 +2,7 @@ package com.grpc.server.model;
 
 
 
+import com.google.protobuf.ByteString;
 import com.grpc.server.util.LinearRegression;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ public class FoodService {
 
 	private Integer id;
 
-	private final List<MenuItem> menuItems = new ArrayList<>();
+	private final HashMap<Integer,MenuItem> menuItems = new HashMap<>();
 	private final HashMap<Integer, Integer> queue = new HashMap<>();
 	private final LinearRegression lr = new LinearRegression();
 
@@ -25,11 +26,19 @@ public class FoodService {
 	}
 
 	public void addToMenu(MenuItem item) {
-		menuItems.add(item);
+		menuItems.put(item.getId(), item);
+	}
+
+	public void addImageToMenu(Integer menuId, ByteString image) {
+		menuItems.get(menuId).addImage(image);
 	}
 
 	public List<MenuItem> getMenuItems() {
-		return menuItems;
+		return new ArrayList<>(menuItems.values());
+	}
+
+	public MenuItem getMenuItem(Integer menuItemId) {
+		return menuItems.get(menuItemId);
 	}
 
 	public void removeFromQueue(Integer userId, Integer time) throws UserNotInQueueException {

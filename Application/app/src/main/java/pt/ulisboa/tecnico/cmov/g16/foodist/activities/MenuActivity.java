@@ -62,9 +62,8 @@ public class MenuActivity extends AppCompatActivity {
                 MenuItem item = adapter.getItem(i);
                 Intent intent = new Intent(MenuActivity.this, MenuItemActivity.class);
                 intent.putExtra("foodServiceId", foodServiceId);
-                intent.putExtra("itemIndex", menu.getMenuList().indexOf(item));
+                intent.putExtra("menuItemId", item.getId());
                 startActivity(intent);
-
             }
         });
     }
@@ -72,6 +71,7 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        adapter.setList(menu.getMenuList());
         if (user.shouldApplyConstraintsFilter()) {
             adapter.setDietaryConstraints(user.getDietaryConstraints());
         } else {

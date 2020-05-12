@@ -12,7 +12,7 @@ import pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.GrpcRunnable;
 
 import static pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.util.Log.appendLogs;
 
-public abstract class SaveMenuItemRunnable extends GrpcRunnable<String> {
+public abstract class SaveMenuItemRunnable extends GrpcRunnable<SaveMenuItemRunnable.SaveMenuItemResult> {
 
     private MenuItem item;
     private Integer foodServiceId;
@@ -44,7 +44,10 @@ public abstract class SaveMenuItemRunnable extends GrpcRunnable<String> {
         SaveMenuItemResponse response = blockingStub.saveMenuItem(request);
 
         String code = response.getCode();
-        setResult(code);
+
+        SaveMenuItemResult result = new SaveMenuItemResult(response.getMenuId(), code);
+        setResult(result);
+
         switch (code) {
             case "OK":
             case "FOOD_SERVICE_NOT_FOUND":
@@ -64,5 +67,23 @@ public abstract class SaveMenuItemRunnable extends GrpcRunnable<String> {
         }
 
         return logs.toString();
+    }
+
+    protected static final class SaveMenuItemResult {
+        private Integer menuId;
+        private String code;
+
+        SaveMenuItemResult(Integer menuId, String code) {
+            this.menuId = menuId;
+            this.code = code;
+        }
+
+        public Integer getMenuId() {
+            return menuId;
+        }
+
+        public String getCode() {
+            return code;
+        }
     }
 }

@@ -222,7 +222,7 @@ public class UserProfileActivity extends AppCompatActivity {
             @Override
             protected void callback(String result) {
                 if (result == null) {
-                    Log.i(TAG, "callback: unknown error");
+                    Log.e(TAG, "SaveProfileRunnable: unknown error");
                 } else if (result.equals("INCORRECT_PASSWORD") ||
                         result.equals("USERNAME_DOES_NOT_EXIST")) {
                     user.logout();

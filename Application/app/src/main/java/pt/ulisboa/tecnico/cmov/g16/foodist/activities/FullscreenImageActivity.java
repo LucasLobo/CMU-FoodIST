@@ -1,6 +1,8 @@
 package pt.ulisboa.tecnico.cmov.g16.foodist.activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.Data;
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodService;
 
 public class FullscreenImageActivity extends AppCompatActivity {
 
@@ -24,9 +27,13 @@ public class FullscreenImageActivity extends AppCompatActivity {
         data = (Data) getApplicationContext();
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
-        image= data.getFoodService(extras.getInt("foodServiceId")).getMenu().getMenuList().get(extras.getInt("itemIndex")).getImages().get(extras.getInt("imageIndex"));
+        FoodService foodService = data.getFoodService(extras.getInt("foodServiceId"));
+        Integer menuItemId = extras.getInt("menuItemId");
+        Integer imageIndex = extras.getInt("imageIndex");
+
+        Bitmap bitmap = foodService.getMenuItem(menuItemId).getImage(imageIndex);
         ImageView imageView = findViewById(R.id.imageView);
-        imageView.setImageDrawable(image.getDrawable());
+        imageView.setImageBitmap(bitmap);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

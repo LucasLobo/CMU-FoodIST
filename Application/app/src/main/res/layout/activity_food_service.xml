@@ -41,7 +41,6 @@
                     app:layout_constraintTop_toTopOf="parent"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
                     android:textStyle="bold"
-                    android:text="Bar 0"
                     />
 
                 <TextView

@@ -1,6 +1,7 @@
 package pt.ulisboa.tecnico.cmov.g16.foodist.model;
 
 import android.app.Application;
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.jakewharton.threetenabp.AndroidThreeTen;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.GrpcTask;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.Runnable.FetchImagesRunnable;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.Runnable.FetchMenusRunnable;
 
 
@@ -44,32 +46,6 @@ public class Data extends Application {
         return user;
     }
 
-    public String serialize(Object item){
-        try {
-            ByteArrayOutputStream bo = new ByteArrayOutputStream();
-            ObjectOutputStream so = new ObjectOutputStream(bo);
-            so.writeObject(item);
-            so.flush();
-            return bo.toString();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        return null;
-    }
-
-    public Object deserialize(String obj){
-        String serializedObject = "";
-        try {
-            byte objBytes[] = serializedObject.getBytes();
-            ByteArrayInputStream bi = new ByteArrayInputStream(objBytes);
-            ObjectInputStream si = new ObjectInputStream(bi);
-            return si.readObject();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        return null;
-    }
-
     private void initData() {
         initUser();
         initFoodServices();
@@ -86,10 +62,6 @@ public class Data extends Application {
 
         FoodService alwaysOpen = new FoodService(id++, "Always Open", 38.7352722896, -9.13268566132);
         alwaysOpen.addSchedule(0,0,23,59);
-        alwaysOpen.addMenuItem("Meat menu", 5, FoodType.MEAT,"Menu with meat");
-        alwaysOpen.addMenuItem("Fish menu", 5, FoodType.FISH, "Menu with fish");
-        alwaysOpen.addMenuItem("Vegan menu", 5, FoodType.VEGAN, "Vegan menu");
-        alwaysOpen.addMenuItem("Vegetarian menu", 5, FoodType.VEGETARIAN, "Vegetarian menu");
         foodServiceHashMap.put(alwaysOpen.getId(), alwaysOpen);
 
         FoodService centralBar = new FoodService(id++, "Central Bar", 38.736606, -9.139532);
@@ -178,9 +150,19 @@ public class Data extends Application {
                     if (result == null) return;
                     for (MenuItem menuItem : result) {
                         entry.getValue().addMenuItem(menuItem);
+                        fetchMenuImages(entry.getValue(), menuItem);
                     }
                 }
             }).execute();
         }
+    }
+
+    private void fetchMenuImages(final FoodService foodService, final MenuItem item) {
+        new GrpcTask(new FetchImagesRunnable(foodService.getId(), item.getId()) {
+            @Override
+            protected void callback(ArrayList<Bitmap> result) {
+                if (result != null) item.setImages(result);
+            }
+        }).execute();
     }
 }

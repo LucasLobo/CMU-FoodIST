@@ -3,6 +3,7 @@ package pt.ulisboa.tecnico.cmov.g16.foodist.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -26,6 +27,8 @@ import pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.GrpcTask;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.Runnable.SaveMenuItemRunnable;
 
 public class NewMenuItemActivity extends AppCompatActivity {
+
+    private static final String TAG = "NewMenuItemActivity";
 
     Data data;
     Spinner typeOfFood;
@@ -70,12 +73,9 @@ public class NewMenuItemActivity extends AppCompatActivity {
                     MenuItem item = new MenuItem(title.getText().toString(),
                             Double.parseDouble(price.getText().toString()),
                             FoodType.valueOf(typeOfFood.getSelectedItem().toString().toUpperCase()),
-                            description.getText().toString(),
-                            images);
+                            description.getText().toString());
 
-                    data.getFoodService(foodServiceId).getMenu().getMenuList().add(item);
                     saveMenu(item, foodServiceId);
-                    Toast.makeText(getApplicationContext(), title.getText().toString() + " created successfully!", Toast.LENGTH_LONG).show();
                     finish();
                 }catch (NumberFormatException e){
                     Toast.makeText(getApplicationContext(), "Please setup a valid price", Toast.LENGTH_LONG).show();
@@ -130,12 +130,12 @@ public class NewMenuItemActivity extends AppCompatActivity {
         return true;
     }
 
-    public void saveMenu(MenuItem item, Integer foodServiceId){
-
+    public void saveMenu(final MenuItem item, final Integer foodServiceId) {
         new GrpcTask(new SaveMenuItemRunnable(item, foodServiceId) {
             @Override
-            protected void callback(String result) {
-
+            protected void callback(SaveMenuItemResult result) {
+                item.setId(result.getMenuId());
+                data.getFoodService(foodServiceId).addMenuItem(item);
             }
         }).execute();
     }

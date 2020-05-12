@@ -77,7 +77,7 @@ public abstract class FetchProfileRunnable extends GrpcRunnable<FetchProfileRunn
         return logs.toString();
     }
 
-    protected static class FetchProfileResult {
+    protected static final class FetchProfileResult {
         private String code;
         private User.UserStatus status;
         private EnumSet<FoodType> dietaryConstraints;

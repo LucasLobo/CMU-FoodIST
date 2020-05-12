@@ -2,31 +2,31 @@ package pt.ulisboa.tecnico.cmov.g16.foodist.model;
 
 import android.widget.ImageView;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
+
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.exceptions.MenuItemMissingId;
 
 public class Menu {
 
     private Date lastUpdated;
-    private LinkedList<MenuItem> menuList;
+    private HashMap<Integer, MenuItem> menus;
 
     public Menu(){
-        menuList = new LinkedList<>();
+        menus = new HashMap<>();
         lastUpdated = new Date();
     }
-
 
     public String getLastUpdated() {
         return lastUpdated.toString();
     }
 
-    void addMenuItem(MenuItem item) {
-        menuList.add(item);
-    }
-
-    public void addMenuItem(String name, double price, FoodType foodType, String description) {
-        MenuItem item = new MenuItem(name, price, foodType, description, new LinkedList<ImageView>());
-        menuList.add(item);
+    void addMenuItem(MenuItem item) throws MenuItemMissingId {
+        if (item.getId() == -1) throw new MenuItemMissingId();
+        menus.put(item.getId(), item);
     }
 
     public void removeMenuItem(){
@@ -41,16 +41,12 @@ public class Menu {
 
     // * GETTERS * //
 
-    public LinkedList<MenuItem> getMenuList(){
-        return menuList;
+    public List<MenuItem> getMenuList(){
+        return new ArrayList<>(menus.values());
     }
 
-    public LinkedList<String> getMenuListString(){
-        LinkedList<String> list = new LinkedList<>();
-        for(int i = 0; i!=menuList.size(); i++){
-            list.add(menuList.get(i).toString());
-        }
-        return list;
+    public MenuItem getMenuItem(Integer id) {
+        return menus.get(id);
     }
 
 
