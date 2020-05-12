@@ -1,4 +1,4 @@
-package pt.ulisboa.tecnico.cmov.g16.foodist.model.tracjectory;
+package pt.ulisboa.tecnico.cmov.g16.foodist.model.trajectory;
 
 import com.google.android.gms.maps.model.LatLng;
 

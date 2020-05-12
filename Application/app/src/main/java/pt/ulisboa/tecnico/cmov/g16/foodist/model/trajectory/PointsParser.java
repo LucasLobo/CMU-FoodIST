@@ -1,4 +1,4 @@
-package pt.ulisboa.tecnico.cmov.g16.foodist.model.tracjectory;
+package pt.ulisboa.tecnico.cmov.g16.foodist.model.trajectory;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -17,7 +17,7 @@ import java.util.List;
 
 public class PointsParser extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
     TaskLoadedCallback taskCallback;
-    String directionMode = "walking";
+    String directionMode;
 
     DataParser parser;
     JSONObject jObject;
@@ -29,12 +29,12 @@ public class PointsParser extends AsyncTask<String, Integer, List<List<HashMap<S
 
     // Parsing the data in non-ui thread
     @Override
-    protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
+    protected List<List<HashMap<String, String>>> doInBackground(String... strings) {
 
         List<List<HashMap<String, String>>> routes = null;
 
         try {
-            jObject = new JSONObject(jsonData[0]);
+            jObject = new JSONObject(strings[0]);
             parser = new DataParser();
 
             // Starts parsing data
@@ -50,6 +50,15 @@ public class PointsParser extends AsyncTask<String, Integer, List<List<HashMap<S
     // Executes in UI thread, after the parsing process
     @Override
     protected void onPostExecute(List<List<HashMap<String, String>>> result) {
+        PolylineOptions lineOptions = null;
+        lineOptions = getPath(result);
+        // Drawing polyline in the Google Map for the i-th route
+        HashMap<String, String> durationAndDistance = parser.getDuration(jObject);
+        taskCallback.onTaskDone(lineOptions, durationAndDistance.get("duration"), durationAndDistance.get("distance"));
+
+    }
+
+    private PolylineOptions getPath(List<List<HashMap<String, String>>> result){
         ArrayList<LatLng> points;
         PolylineOptions lineOptions = null;
         // Traversing through all the routes
@@ -70,16 +79,10 @@ public class PointsParser extends AsyncTask<String, Integer, List<List<HashMap<S
             // Adding all the points in the route to LineOptions
             lineOptions.addAll(points);
             lineOptions.width(10);
-            lineOptions.color(Color.GREEN);
+            lineOptions.color(Color.BLUE);
             Log.d("mylog", "onPostExecute lineoptions decoded");
         }
-
-        // Drawing polyline in the Google Map for the i-th route
-        if (lineOptions != null) {
-            taskCallback.onTaskDone(lineOptions, parser.getDuration(jObject).get("duration"), parser.getDuration(jObject).get("distance"));
-
-        } else {
-            Log.d("mylog", "without Polylines drawn");
-        }
+        return lineOptions;
     }
+
 }

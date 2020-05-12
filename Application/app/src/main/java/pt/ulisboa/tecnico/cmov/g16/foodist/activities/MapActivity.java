@@ -1,22 +1,17 @@
 package pt.ulisboa.tecnico.cmov.g16.foodist.activities;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -28,23 +23,19 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.CampusLocation;
-import pt.ulisboa.tecnico.cmov.g16.foodist.model.tracjectory.DirectionsJSONParser;
-import pt.ulisboa.tecnico.cmov.g16.foodist.model.tracjectory.FetchURL;
-import pt.ulisboa.tecnico.cmov.g16.foodist.model.tracjectory.TaskLoadedCallback;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.trajectory.FetchURL;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.trajectory.TaskLoadedCallback;
 
-public class MapActivity extends FragmentActivity implements OnMapReadyCallback, TaskLoadedCallback {
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, TaskLoadedCallback {
 
     private GoogleMap mMap;
     private LatLng destination;
     private Polyline mPolyline;
+
+    private String distance = "UNKNOWN";
+    private String arrivalTime = "UNKNOWN";
 
     private int LOCATION_PERMISSION_ID = 45;
 
@@ -52,7 +43,10 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Intent intent = getIntent();
+        String name = intent.getStringExtra("foodServiceName");
+        setTitle(name);
         double destLat = intent.getDoubleExtra("Latitude", CampusLocation.Campus.ALAMEDA.latitude); // Change to UNKNOWN - after changing null UNKNOWN's value
         double destLog = intent.getDoubleExtra("Longitude", CampusLocation.Campus.ALAMEDA.longitude); // Change to UNKNOWN - after changing null UNKNOWN's value
         destination = new LatLng(destLat, destLog);
@@ -60,10 +54,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mapFragment);
         mapFragment.getMapAsync(this);
-        onPause();
 
     }
-
 
     /**
      * Manipulates the map once available.
@@ -88,47 +80,26 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     }
 
     private void drawRoute(LatLng origin, LatLng destination) {
-        String url = getDirectionsUrl(origin, destination);
-        new FetchURL(MapActivity.this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR ,url, "walking");
+        FetchURL fetchURL = new FetchURL(MapActivity.this);
+        String url = fetchURL.getDirectionsUrl(origin, destination);
+        fetchURL.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR ,url, "true");
     }
 
-    private String getDirectionsUrl(LatLng origin, LatLng destination) {
-        // Origin of route
-        String str_origin = "origin="+origin.latitude+","+origin.longitude;
-
-        // Destination of route
-        String str_dest = "destination="+destination.latitude+","+destination.longitude;
-
-        // Mode
-        String mode = "mode=walking";
-
-        // Key
-        String key = "key=" + getString(R.string.google_directions_key);
-
-        String departureTime = "departure_time=now";
-
-        // Building the parameters to the web service
-        String parameters = str_origin + "&" + str_dest + "&" + mode + "&" + departureTime + "&" + key;
-
-        // Output format
-        String output = "json";
-
-        // Building the url to the web service
-        String url = "https://maps.googleapis.com/maps/api/directions/"+output+"?"+parameters;
-
-        return url;
-    }
 
     @Override
-    public void onTaskDone(Object... values) {
-        if (mPolyline != null)
-            mPolyline.remove();
-        mPolyline = mMap.addPolyline((PolylineOptions) values[0]);
+    public void onTaskDone(Object... values) { // Está kinda sempre a calcular.
+        if(values[0] != null){
+            if(mPolyline != null)
+                mPolyline.remove();
+            mPolyline = mMap.addPolyline((PolylineOptions) values[0]);
+            arrivalTime = (String) values[1];
+            distance = (String) values[2];
+        }
         MarkerOptions options = new MarkerOptions();
         options.position(destination);
-        options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-        options.title("Duration: " + values[1]);
-        options.snippet("Distance: " + values[2]);
+        options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+        options.title("Duration: " + arrivalTime);
+        options.snippet("Distance: " + distance);
         mMap.addMarker(options);
     }
     private boolean checkPermissions() { //did the user grant permission
@@ -140,5 +111,21 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_ID);
     }
 
+
+    @Override
+    public boolean onOptionsItemSelected(android.view.MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+        return true;
+    }
 
 }

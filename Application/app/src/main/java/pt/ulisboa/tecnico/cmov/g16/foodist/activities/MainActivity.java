@@ -22,21 +22,22 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-import android.util.Log;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.Data;
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 import pt.ulisboa.tecnico.cmov.g16.foodist.adapters.FoodServiceListRecyclerAdapter;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.CampusLocation;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.User;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.trajectory.TaskLoadedCallback;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements TaskLoadedCallback {
     private static final String TAG = "MainActivity";
 
     private int LOCATION_PERMISSION_ID = 44;
@@ -163,6 +164,8 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onLocationResult(LocationResult locationResult) {
                     user.setLocation(locationResult.getLastLocation());
+                    adapter.setUserLocation(new LatLng(locationResult.getLastLocation().getLatitude(), locationResult.getLastLocation().getLongitude()));
+
                     if (user.getLocation().getCampus().equals(CampusLocation.Campus.UNKNOWN)) {
                         String[] options = {getString(CampusLocation.Campus.ALAMEDA.id), getString(CampusLocation.Campus.TAGUS.id), getString(CampusLocation.Campus.CTN.id)};
 
@@ -199,5 +202,11 @@ public class MainActivity extends AppCompatActivity {
     public void openTermiteActivity(View view) {
         Intent intent = new Intent(this, PeerScannerActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onTaskDone(Object... values) {
+        adapter.getFoodServicesDistanceTime().put(Integer.parseInt((String) values[3]), (String) values[1]);
+        adapter.notifyDataSetChanged();
     }
 }

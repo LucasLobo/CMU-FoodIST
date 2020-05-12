@@ -2,6 +2,7 @@ package pt.ulisboa.tecnico.cmov.g16.foodist.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +13,11 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashMap;
 
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 import pt.ulisboa.tecnico.cmov.g16.foodist.activities.FoodServiceActivity;
@@ -21,8 +25,9 @@ import pt.ulisboa.tecnico.cmov.g16.foodist.model.CampusLocation;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodService;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodType;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.User;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.trajectory.FetchURL;
 
-public class FoodServiceListRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>   {
+public class FoodServiceListRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final String TAG = "FoodServiceListRecycler";
     private static final int TYPE_HEADER = 0;
@@ -34,13 +39,17 @@ public class FoodServiceListRecyclerAdapter extends RecyclerView.Adapter<Recycle
     private CampusLocation.Campus currentCampus;
     private User.UserStatus userStatus;
     private EnumSet<FoodType> dietaryConstraints;
+    private LatLng userLocation = new LatLng(0,0);
+    private HashMap<Integer, String> foodServicesDistanceTime;
     private boolean foodServicesWereFiltered = false;
     private boolean shouldFilterDietaryConstraints = true;
+    private boolean newUserLocation = true;
 
     public FoodServiceListRecyclerAdapter(Context context, ArrayList<FoodService> foodServiceList) {
         this.context = context;
         this.foodServiceList = foodServiceList;
         this.filteredFoodServiceList = foodServiceList;
+        foodServicesDistanceTime = new HashMap<>();
     }
 
     public void setCampus(CampusLocation.Campus campus) {
@@ -53,6 +62,13 @@ public class FoodServiceListRecyclerAdapter extends RecyclerView.Adapter<Recycle
 
     public void setDietaryConstraints(EnumSet<FoodType> set) {
         dietaryConstraints = set;
+    }
+
+    public void setUserLocation(LatLng userLocation){
+        if(!this.userLocation.equals(userLocation)) {
+            this.userLocation = userLocation;
+            newUserLocation = true;
+        }
     }
 
     public void toggleConstrainsFilter() {
@@ -77,8 +93,13 @@ public class FoodServiceListRecyclerAdapter extends RecyclerView.Adapter<Recycle
             }
 
             filteredList.add(foodService);
+            if(newUserLocation)
+                foodServicesDistanceTime.clear();
+            if(!foodServicesDistanceTime.containsKey(foodService.getId()))
+                calculateDistanceTime(foodService);
         }
         filteredFoodServiceList = filteredList;
+        newUserLocation = false;
         notifyDataSetChanged();
     }
 
@@ -114,12 +135,13 @@ public class FoodServiceListRecyclerAdapter extends RecyclerView.Adapter<Recycle
             final FoodService foodService = filteredFoodServiceList.get(getPosition(position));
             castHolder.name.setText(foodService.getName());
             castHolder.queueTime.setText(context.getResources().getString(R.string.time_min, 10));
-            castHolder.walkTime.setText(context.getResources().getString(R.string.time_min, 7));
+            castHolder.walkTime.setText(displayDistanceTime(foodServicesDistanceTime.get(foodService.getId())));
             castHolder.parentLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, FoodServiceActivity.class);
                     intent.putExtra("id", foodService.getId());
+                    intent.putExtra("distanceTime", foodServicesDistanceTime.get(foodService.getId()));
                     context.startActivity(intent);
                 }
             });
@@ -130,6 +152,9 @@ public class FoodServiceListRecyclerAdapter extends RecyclerView.Adapter<Recycle
     public int getItemCount() {
         if (showNotice()) return filteredFoodServiceList.size() + 1;
         return filteredFoodServiceList.size();
+    }
+    public HashMap<Integer,String> getFoodServicesDistanceTime(){
+        return foodServicesDistanceTime;
     }
 
     @Override
@@ -150,6 +175,19 @@ public class FoodServiceListRecyclerAdapter extends RecyclerView.Adapter<Recycle
 
     private boolean showNotice() {
         return !shouldFilterDietaryConstraints || foodServicesWereFiltered;
+    }
+
+    private void calculateDistanceTime(FoodService foodService){
+        FetchURL fetchURL = new FetchURL(context);
+        String url = fetchURL.getDirectionsUrl(userLocation,
+                new LatLng(foodService.getLocation().getLatitude(), foodService.getLocation().getLongitude()));
+        fetchURL.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url, "false", Integer.toString(foodService.getId()));
+    }
+
+    private String displayDistanceTime(Object object){
+        if(object == null)
+            return "Calculating...";
+        return object.toString();
     }
 
     static class FoodServiceListItemViewHolder extends RecyclerView.ViewHolder {
@@ -174,4 +212,5 @@ public class FoodServiceListRecyclerAdapter extends RecyclerView.Adapter<Recycle
             notice = itemView.findViewById(R.id.food_service_list_header);
         }
     }
+
 }

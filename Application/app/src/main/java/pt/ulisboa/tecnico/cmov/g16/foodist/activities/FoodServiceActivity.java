@@ -38,6 +38,7 @@ public class FoodServiceActivity extends AppCompatActivity {
     Data data;
     FoodService foodService;
     GoogleMap mMap;
+    String distanceTime;
 
 
     @Override
@@ -49,7 +50,7 @@ public class FoodServiceActivity extends AppCompatActivity {
         data = (Data) getApplicationContext();
         Intent intent = getIntent();
         int id = intent.getIntExtra("id", -1);
-
+        distanceTime = intent.getStringExtra("distanceTime");
         if (id == -1) {
             finish();
         }
@@ -74,6 +75,7 @@ public class FoodServiceActivity extends AppCompatActivity {
                         Intent intent = new Intent(FoodServiceActivity.this, MapActivity.class);
                         intent.putExtra("Latitude", foodService.getLocation().getLatitude());
                         intent.putExtra("Longitude", foodService.getLocation().getLongitude());
+                        intent.putExtra("foodServiceName", foodService.getName());
                         startActivity(intent);
                     }
                 });
@@ -144,7 +146,7 @@ public class FoodServiceActivity extends AppCompatActivity {
         campus.setText(foodService.getLocation().getCampus().id);
 
         TextView walkingTime = findViewById(R.id.food_service_walking_time);
-        walkingTime.setText(getString(R.string.walking_time, 5));
+        walkingTime.setText(getString(R.string.walking_time, distanceTime));
 
         LinearLayout menuList = findViewById(R.id.food_service_menu);
         menuList.setOnClickListener(new View.OnClickListener() {
