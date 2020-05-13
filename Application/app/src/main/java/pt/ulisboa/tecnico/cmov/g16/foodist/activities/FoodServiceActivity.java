@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -30,6 +31,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodService;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodType;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.OpeningTime;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.User;
 
@@ -90,6 +92,19 @@ public class FoodServiceActivity extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 return true;
+
+            case R.id.share:
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "Let's eat at " + foodService.getName() + "!"
+                        + "\nCampus: " + getString(foodService.getCampus().id)
+                        + "\nAvailable Food Types: " + getFoodTypes());
+                sendIntent.setType("text/plain");
+
+                Intent shareIntent = Intent.createChooser(sendIntent, "Share:");
+                startActivity(shareIntent);
+
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -97,6 +112,8 @@ public class FoodServiceActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_food_service_share, menu);
         return true;
     }
 
@@ -164,8 +181,16 @@ public class FoodServiceActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
 
-
+    private String getFoodTypes() {
+        StringBuilder foodTypes = new StringBuilder();
+        String separator = "";
+        for (FoodType foodType : foodService.getFoodTypes()) {
+            foodTypes.append(separator).append(getString(foodType.resourceId));
+            separator = ", ";
+        }
+        return foodTypes.toString();
     }
 
 }

@@ -6,6 +6,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.MenuInflater;
 
 import android.view.View;
 import android.widget.Button;
@@ -15,8 +16,11 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.ByteArrayOutputStream;
+
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.Data;
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodService;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.Menu;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.MenuItem;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.GrpcTask;
@@ -27,10 +31,11 @@ public class MenuItemActivity extends AppCompatActivity {
     private static final String TAG = "MenuItemActivity";
 
     private static final int PICK_IMAGE = 100;
+
+    private Data data;
+    private FoodService foodService;
     private MenuItem menuItem;
     private LinearLayout imageLayout;
-
-    Data data;
     private int foodServiceId;
 
     @Override
@@ -50,7 +55,8 @@ public class MenuItemActivity extends AppCompatActivity {
             finish();
         }
 
-        Menu menu = data.getFoodService(foodServiceId).getMenu();
+        foodService = data.getFoodService(foodServiceId);
+        Menu menu = foodService.getMenu();
         menuItem = menu.getMenuItem(menuItemId);
         setTitle(menuItem.getName());
         setupView();
@@ -68,6 +74,29 @@ public class MenuItemActivity extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 return true;
+
+            case R.id.share:
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                if(menuItem.getImageIds().size() != 0) {
+                    Integer randomImageId = menuItem.getRandomImageId();
+                    Bitmap image = data.getImage(randomImageId);
+                    Uri imgUri = getImageUri(image);
+
+                    sendIntent.putExtra(Intent.EXTRA_STREAM, imgUri);
+                }
+
+                sendIntent.putExtra(Intent.EXTRA_TEXT,
+                        "Let's try the " + menuItem.getName() + " at " + foodService.getName() +
+                        "\nFood Type: " + getString(menuItem.getFoodType().resourceId) +
+                        "\nPrice: " + getString(R.string.price_value,menuItem.getPrice()));
+
+                sendIntent.setType("*/*");
+
+                Intent shareIntent = Intent.createChooser(sendIntent, "Share:");
+                startActivity(shareIntent);
+
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -75,6 +104,8 @@ public class MenuItemActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(android.view.Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_food_service_share, menu);
         return true;
     }
 
@@ -147,4 +178,11 @@ public class MenuItemActivity extends AppCompatActivity {
         }).execute();
     }
 
+
+    public Uri getImageUri(Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
 }
