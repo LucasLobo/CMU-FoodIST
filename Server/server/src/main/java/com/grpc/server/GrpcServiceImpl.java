@@ -1,7 +1,6 @@
 package com.grpc.server;
 
 import com.google.protobuf.ByteString;
-import com.google.protobuf.Descriptors;
 import com.grpc.Contract;
 import com.grpc.Contract.*;
 import com.grpc.GrpcServiceGrpc;
@@ -44,7 +43,7 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
 
     @Override
     public synchronized void register(RegisterRequest request, StreamObserver<RegisterResponse> responseObserver) {
-        System.out.println("Register Request Received:\n" + request);
+        System.out.print("*** Register Request Received\n" + request);
 
         AuthMessage authMessage = auth(request.getAuth());
 
@@ -63,14 +62,14 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
         }
 
         RegisterResponse response = RegisterResponse.newBuilder().setCode(code).build();
-        System.out.println(code);
+        System.out.println(">>> " + code + "\n");
         responseObserver.onNext(response);
         responseObserver.onCompleted();
     }
 
     @Override
     public synchronized void saveProfile(SaveProfileRequest request, StreamObserver<SaveProfileResponse> responseObserver) {
-        System.out.println("Profile Request Received:\n" + request);
+        System.out.print("*** Save Profile Request Received\n" + request);
 
         AuthMessage authMessage = auth(request.getAuth());
 
@@ -87,20 +86,18 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
         }
 
         SaveProfileResponse response = SaveProfileResponse.newBuilder().setCode(code).build();
-        System.out.println(code);
+        System.out.println(">>> " + code + "\n");
         responseObserver.onNext(response);
         responseObserver.onCompleted();
     }
 
     @Override
     public void fetchProfile(FetchProfileRequest request, StreamObserver<FetchProfileResponse> responseObserver) {
-        System.out.println("Fetch Profile Request Received:\n" + request);
+        System.out.print("*** Fetch Profile Request Received:\n" + request);
 
         AuthMessage authMessage = auth(request.getAuth());
-
 		String username = request.getAuth().getUsername().toLowerCase();
         User user = users.get(username);
-
         Profile.Builder profileBuilder = Profile.newBuilder();
 
         String code = authMessage.name();
@@ -108,14 +105,10 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
             List<String> constraints = user.getConstraints();
             profileBuilder.addAllConstraints(constraints);
             profileBuilder.setStatus(user.getStatus());
-
-            System.out.println(user.getStatus());
-            System.out.println(user.getConstraints());
+            System.out.println(">>> " + user.getStatus());
+            System.out.println(">>> " + user.getConstraints());
         }
-
-
-        System.out.println(code);
-
+        System.out.println(">>> " + code + "\n");
         FetchProfileResponse response = FetchProfileResponse.newBuilder()
                 .setCode(code)
                 .setProfile(profileBuilder.build())
@@ -126,7 +119,7 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
 
     @Override
     public synchronized void saveMenuItem(SaveMenuItemRequest request, StreamObserver<SaveMenuItemResponse> responseObserver) {
-        System.out.println("Save Menu Request Received:\n" + request);
+        System.out.print("*** Save Menu Request Received\n" + request);
 
         Integer foodServiceId = request.getFoodServiceId();
         Contract.MenuItem item = request.getMenuItem();
@@ -140,6 +133,7 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
             MenuItem menuItem = new MenuItem(menuId.getAndIncrement(), item.getName(), item.getPrice(), item.getDescription(), item.getFoodType());
             foodService.addToMenu(menuItem);
             responseBuilder.setMenuId(menuItem.getId());
+            System.out.println(">>> " + menuItem.getId());
             code = "OK";
         } catch (NullPointerException e) {
             code = "FOOD_SERVICE_NOT_FOUND";
@@ -147,13 +141,14 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
 
         SaveMenuItemResponse response = responseBuilder.setCode(code).build();
 
+        System.out.println(">>> " + code + "\n");
         responseObserver.onNext(response);
         responseObserver.onCompleted();
     }
 
     @Override
     public StreamObserver<SaveImageToMenuItemRequest> saveImage(StreamObserver<SaveImageToMenuItemResponse> responseObserver) {
-        System.out.print("Save Image Request Received:");
+        System.out.println("*** Save Image Request Received");
         return new StreamObserver<SaveImageToMenuItemRequest>() {
             Integer foodServiceId;
             Integer menuItemId;
@@ -184,7 +179,7 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
                 for (ByteString bytestring : image) {
                     imageBytestring = imageBytestring.concat(bytestring);
                 }
-                System.out.println("Chunks:" + chunksAmount);
+                System.out.println(">>> OK\n");
                 FoodService foodService = foodServices.get(foodServiceId);
                 foodService.addImageToMenu(menuItemId, imageBytestring);
                 SaveImageToMenuItemResponse response = SaveImageToMenuItemResponse.newBuilder().setCode("OK").build();
@@ -196,7 +191,7 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
 
     @Override
     public void fetchImages(FetchImagesFromMenuRequest request, StreamObserver<FetchImagesFromMenuResponse> responseObserver) {
-        System.out.println("Fetch Image Request Received:\n");
+        System.out.println("*** Fetch Image Request Received:");
 
         int menuItemId = request.getMetadata().getMenuItemId();
         int foodServiceId = request.getMetadata().getFoodServiceId();
@@ -217,12 +212,13 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
                 responseObserver.onNext(response);
             }
         }
+        System.out.println(">>> " + images.size() + " image(s) fetched\n");
         responseObserver.onCompleted();
     }
 
     @Override
     public void fetchMenus(FetchMenusRequest request, StreamObserver<FetchMenusResponse> responseObserver) {
-        System.out.println("Fetch Menu Request Received:\n" + request);
+//        System.out.print("*** Fetch Menu Request Received:\n" + request);
 
         int foodServiceId = request.getFoodServiceId();
 
@@ -240,7 +236,7 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
                         .build();
                 responseBuilder.addMenuItems(item);
             }
-
+//            System.out.println(">>> OK\n");
         } catch (NullPointerException ignored) {
         }
 
@@ -250,7 +246,7 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
 
     @Override
     public void joinQueue(JoinQueueRequest request, StreamObserver<JoinQueueResponse> responseObserver) {
-        System.out.println("Join Queue Request Received:\n" + request);
+        System.out.print("*** Join Queue Request Received:\n" + request);
 
         int foodServiceId = request.getFoodServiceId();
         FoodService foodService = foodServices.get(foodServiceId);
@@ -264,7 +260,7 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
         }
 
         JoinQueueResponse response = JoinQueueResponse.newBuilder().setUserQueueId(userQueueId).build();
-        System.out.println("User queue id: " + userQueueId);
+        System.out.println(">>> UserQueueId: " + userQueueId + "\n");
         responseObserver.onNext(response);
         responseObserver.onCompleted();
 
@@ -272,7 +268,7 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
 
     @Override
     public void leaveQueue(LeaveQueueRequest request, StreamObserver<LeaveQueueResponse> responseObserver) {
-        System.out.println("Leave Queue Request Received:\n" + request);
+        System.out.print("*** Leave Queue Request Received:\n" + request);
 
         int duration = request.getDuration();
         int foodServiceId = request.getFoodServiceId();
@@ -283,7 +279,6 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
         LeaveQueueResponse response;
         try {
             foodService.removeFromQueue(userQueueId, duration);
-            System.out.println("UserId: " + userQueueId + " duration:" + duration);
             code = "OK";
         } catch (UserNotInQueueException e) {
             code = "USER_NOT_IN_QUEUE";
@@ -292,14 +287,14 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
         }
 
         response = LeaveQueueResponse.newBuilder().setResult(code).build();
-        System.out.println(code);
+        System.out.println(">>> " + code + "\n");
         responseObserver.onNext(response);
         responseObserver.onCompleted();
     }
 
     @Override
     public void estimateQueueTime(EstimateQueueTimeRequest request, StreamObserver<EstimateQueueTimeResponse> responseObserver) {
-        System.out.println("Estimate Queue Request Received:\n" + request);
+//       System.out.print("*** Estimate Queue Request Received:\n" + request);
 
         int foodServiceId = request.getFoodServiceId();
 
@@ -307,11 +302,11 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
         int queueTime;
         try {
             queueTime = (int) Math.round(foodService.estimateQueueTime());
-            System.out.println("QueueTime:" + queueTime);
         } catch (NullPointerException e) {
             queueTime = -1;
         }
 
+//        System.out.println(">>> QueueTime: " + queueTime + "\n");
         EstimateQueueTimeResponse response = EstimateQueueTimeResponse.newBuilder().setTime(queueTime).build();
         responseObserver.onNext(response);
         responseObserver.onCompleted();

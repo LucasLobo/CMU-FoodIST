@@ -167,6 +167,7 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     private void setUpStatus() {
+        statusSpinner.setOnItemSelectedListener(null);
         final UserStatusAdapter adapter = new UserStatusAdapter(this);
         statusSpinner.setAdapter(adapter);
         statusSpinner.setSelection(adapter.getPosition(user.getStatus()), false);

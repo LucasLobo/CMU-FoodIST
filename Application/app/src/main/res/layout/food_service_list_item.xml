@@ -42,7 +42,7 @@
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:layout_marginTop="3.5dp"
-            android:src="@drawable/ic_access_time_black_24dp"
+            android:src="@drawable/ic_access_time"
             android:tint="@color/textPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -64,7 +64,7 @@
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:layout_marginTop="3.5dp"
-            android:src="@drawable/ic_directions_walk_black_24dp"
+            android:src="@drawable/ic_directions_walk"
             android:tint="@color/textPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

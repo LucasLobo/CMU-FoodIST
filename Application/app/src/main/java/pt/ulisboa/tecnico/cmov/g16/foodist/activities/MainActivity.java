@@ -20,7 +20,6 @@ import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -112,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
 
     private void initFoodServiceRecyclerView() {
         RecyclerView rv = findViewById(R.id.food_service_list);
-        adapter = new FoodServiceListRecyclerAdapter(this, data.getFoodServiceList());
+        adapter = new FoodServiceListRecyclerAdapter(this, data.getFoodServiceList(), data);
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -197,11 +196,6 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
                 }
             }, Looper.myLooper());
         }
-    }
-
-    public void openTermiteActivity(View view) {
-        Intent intent = new Intent(this, PeerScannerActivity.class);
-        startActivity(intent);
     }
 
     @Override

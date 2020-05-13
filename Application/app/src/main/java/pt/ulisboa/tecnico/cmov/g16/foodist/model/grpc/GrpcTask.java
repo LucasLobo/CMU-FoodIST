@@ -44,7 +44,6 @@ public class GrpcTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-        Log.i(TAG, "onPostExecute: " + result);
         grpcRunnable.callback();
     }
 

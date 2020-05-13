@@ -20,6 +20,7 @@ public class FoodService {
     private Integer id;
     private String name;
     private Menu menu;
+    private Integer queueTime;
 
 
     public FoodService(Integer id, String name, Double latitude, Double longitude) {
@@ -28,6 +29,7 @@ public class FoodService {
         this.location = new CampusLocation(latitude, longitude);
         this.openingTime = new OpeningTime();
         this.menu = new Menu();
+        this.queueTime = -2;
     }
 
     public Integer getId() {
@@ -100,5 +102,13 @@ public class FoodService {
 
     public Menu getMenu(){
         return menu;
+    }
+
+    public Integer getQueueTime() {
+        return queueTime;
+    }
+
+    public void setQueueTime(Integer queueTime) {
+        this.queueTime = queueTime;
     }
 }

@@ -5,6 +5,9 @@
 
     <string name="unknown_error">An unknown error occurred</string>
     <string name="unknown_error_code">An unknown error (%s) occurred</string>
+    <string name="calculating">Calculating…</string>
+    <string name="unknown">Unknown</string>
+    <string name="channel_name">FoodIST</string>
 
 
     <!-- MAIN ACTIVITY -->
@@ -54,13 +57,14 @@
     <string name="cancelButton">WiFi Off</string>
     <string name="inRangeButton">In Range</string>
 
-    <string name="time_min">%1d min</string>
+    <string name="time_min">%1d seconds</string>
 
     <!-- FOOD SERVICE ACTIVITY -->
     <string name="location">Location</string>
     <string name="menu_price">Aprox. price: %1d€</string>
     <string name="walking_time">%1s away</string>
-    <string name="waiting_time">Waiting time: %1d mins</string>
+    <string name="waiting_time">Waiting time: %1d seconds</string>
+    <string name="unknown_queue">Unknown queue time</string>
     <string name="closed">Closed right now</string>
     <string name="open">Currently open</string>
     <string name="opening_time">%02d:%02d - %02d:%02d</string>

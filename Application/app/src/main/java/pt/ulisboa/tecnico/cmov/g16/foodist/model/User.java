@@ -2,6 +2,9 @@ package pt.ulisboa.tecnico.cmov.g16.foodist.model;
 
 import android.location.Location;
 
+import org.threeten.bp.LocalTime;
+
+import java.time.Instant;
 import java.util.EnumSet;
 import java.util.HashMap;
 
@@ -31,7 +34,8 @@ public class User {
     // The server returns a userQueueId when the user joins a queue.
     // User should send a leave Queue request to about these queues after not hearing from a beacon
     // for  a given amount of time
-    private HashMap<Integer, Integer> activeQueues;
+    private HashMap<Integer, Integer> activeQueuesId;
+    private HashMap<Integer, LocalTime> activeQueuesTime;
 
     private UserStatus status;
     private CampusLocation location;
@@ -43,6 +47,8 @@ public class User {
         location = new CampusLocation();
         status = UserStatus.GENERAL_PUBLIC;
         locAuto = true; //automatic location finder is on
+        activeQueuesId = new HashMap<>();
+        activeQueuesTime = new HashMap<>();
     }
 
     public UserStatus getStatus() {
@@ -115,6 +121,28 @@ public class User {
 
     public void setLocAuto(boolean locAuto) {
         this.locAuto = locAuto;
+    }
+
+    public HashMap<Integer, Integer> getActiveQueuesId() {
+        return activeQueuesId;
+    }
+
+    public void addActiveQueue(Integer foodServiceId, Integer activeQueueUserId, LocalTime queueEnterTime) {
+        this.activeQueuesId.put(foodServiceId, activeQueueUserId);
+        this.activeQueuesTime.put(foodServiceId, queueEnterTime);
+    }
+
+    public void removeActiveQueue(Integer foodServiceId) {
+        this.activeQueuesId.remove(foodServiceId);
+        this.activeQueuesTime.remove(foodServiceId);
+    }
+
+    public Integer getQueueId(Integer foodServiceId) {
+        return this.activeQueuesId.get(foodServiceId);
+    }
+
+    public LocalTime getQueueJoinTime(Integer foodServiceId) {
+        return this.activeQueuesTime.get(foodServiceId);
     }
 
     public void login(String username, String password) {

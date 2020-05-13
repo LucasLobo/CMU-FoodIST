@@ -3,6 +3,8 @@ package pt.ulisboa.tecnico.cmov.g16.foodist.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,9 +24,12 @@ import java.util.HashMap;
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 import pt.ulisboa.tecnico.cmov.g16.foodist.activities.FoodServiceActivity;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.CampusLocation;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.Data;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodService;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodType;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.User;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.GrpcTask;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.Runnable.EstimateQueueRunnable;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.trajectory.FetchURL;
 
 public class FoodServiceListRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -45,11 +50,15 @@ public class FoodServiceListRecyclerAdapter extends RecyclerView.Adapter<Recycle
     private boolean shouldFilterDietaryConstraints = true;
     private boolean newUserLocation = true;
 
-    public FoodServiceListRecyclerAdapter(Context context, ArrayList<FoodService> foodServiceList) {
+    private Handler handler;
+    private Runnable runnable;
+
+    public FoodServiceListRecyclerAdapter(Context context, ArrayList<FoodService> foodServiceList, Data data) {
         this.context = context;
         this.foodServiceList = foodServiceList;
         this.filteredFoodServiceList = foodServiceList;
         foodServicesDistanceTime = new HashMap<>();
+        refresh();
     }
 
     public void setCampus(CampusLocation.Campus campus) {
@@ -76,6 +85,20 @@ public class FoodServiceListRecyclerAdapter extends RecyclerView.Adapter<Recycle
         updateList();
     }
 
+    private void refresh(){
+        handler = new Handler();
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                for (FoodService foodService : foodServiceList){
+                    calculateQueueTime(foodService);
+                }
+                handler.postDelayed(runnable, 10000);
+            }
+        };
+        handler.post(runnable);
+    }
+
     public void updateList() {
         foodServicesWereFiltered = false;
         ArrayList<FoodService> filteredList = new ArrayList<>();
@@ -93,10 +116,15 @@ public class FoodServiceListRecyclerAdapter extends RecyclerView.Adapter<Recycle
             }
 
             filteredList.add(foodService);
-            if(newUserLocation)
+            if (newUserLocation) {
                 foodServicesDistanceTime.clear();
-            if(!foodServicesDistanceTime.containsKey(foodService.getId()))
+            }
+
+            if(!foodServicesDistanceTime.containsKey(foodService.getId())) {
                 calculateDistanceTime(foodService);
+                calculateQueueTime(foodService);
+            }
+
         }
         filteredFoodServiceList = filteredList;
         newUserLocation = false;
@@ -134,7 +162,15 @@ public class FoodServiceListRecyclerAdapter extends RecyclerView.Adapter<Recycle
             FoodServiceListItemViewHolder castHolder = (FoodServiceListItemViewHolder) holder;
             final FoodService foodService = filteredFoodServiceList.get(getPosition(position));
             castHolder.name.setText(foodService.getName());
-            castHolder.queueTime.setText(context.getResources().getString(R.string.time_min, 10));
+
+            if (foodService.getQueueTime() == -2) {
+                castHolder.queueTime.setText(R.string.calculating);
+            } else if (foodService.getQueueTime() == -1) {
+                castHolder.queueTime.setText(context.getString(R.string.time_min, 0));
+            } else if (foodService.getQueueTime() >= 0) {
+                castHolder.queueTime.setText(context.getString(R.string.time_min, foodService.getQueueTime()));
+            }
+
             castHolder.walkTime.setText(displayDistanceTime(foodServicesDistanceTime.get(foodService.getId())));
             castHolder.parentLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -184,9 +220,22 @@ public class FoodServiceListRecyclerAdapter extends RecyclerView.Adapter<Recycle
         fetchURL.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url, "false", Integer.toString(foodService.getId()));
     }
 
+    private void calculateQueueTime(final FoodService foodService) {
+        new GrpcTask(new EstimateQueueRunnable(foodService.getId()) {
+            @Override
+            protected void callback(Integer queueTime) {
+                if (!foodService.getQueueTime().equals(queueTime)) {
+                    foodService.setQueueTime(queueTime);
+                    int index = filteredFoodServiceList.indexOf(foodService);
+                    notifyItemChanged(index);
+                }
+            }
+        }).execute();
+    }
+
     private String displayDistanceTime(Object object){
         if(object == null)
-            return "Calculating...";
+            return context.getString(R.string.calculating);
         return object.toString();
     }
 
@@ -212,5 +261,4 @@ public class FoodServiceListRecyclerAdapter extends RecyclerView.Adapter<Recycle
             notice = itemView.findViewById(R.id.food_service_list_header);
         }
     }
-
 }

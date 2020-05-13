@@ -134,7 +134,14 @@ public class FoodServiceActivity extends AppCompatActivity {
         openingTime.setText(scheduleString.toString());
 
         TextView aproxWaiting = findViewById(R.id.food_service_aprox_waiting);
-        aproxWaiting.setText(getString(R.string.waiting_time,5));
+
+        if (foodService.getQueueTime() == -2) {
+            aproxWaiting.setText(R.string.calculating);
+        } else if (foodService.getQueueTime() == -1) {
+            aproxWaiting.setText(getString(R.string.waiting_time, 0));
+        } else if (foodService.getQueueTime() >= 0) {
+            aproxWaiting.setText(getString(R.string.waiting_time, foodService.getQueueTime()));
+        }
 
 
         TextView constraintsNotice = findViewById(R.id.food_service_food_constraints_notice);
