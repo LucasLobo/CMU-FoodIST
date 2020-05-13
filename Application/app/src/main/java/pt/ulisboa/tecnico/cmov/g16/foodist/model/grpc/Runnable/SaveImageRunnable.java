@@ -22,7 +22,7 @@ import pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.util.Chunks;
 
 import static pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.util.Log.appendLogs;
 
-public abstract class SaveImageRunnable extends GrpcRunnable<Bitmap> {
+public abstract class SaveImageRunnable extends GrpcRunnable<Integer> {
 
     private static final String TAG = "SaveImageRunnable";
 
@@ -57,6 +57,8 @@ public abstract class SaveImageRunnable extends GrpcRunnable<Bitmap> {
             @Override
             public void onNext(SaveImageToMenuItemResponse response) {
                 String code = response.getCode();
+                Integer imageId = response.getImageId();
+                setResult(imageId);
                 switch (code) {
                     case "OK":
                         appendLogs(
@@ -94,7 +96,7 @@ public abstract class SaveImageRunnable extends GrpcRunnable<Bitmap> {
             byte[][] chunkedByteArrays = Chunks.splitArray(imageBytes, 1024);
             int numberOfChunks = chunkedByteArrays.length;
 
-            ImageMetaData imageMetaData = ImageMetaData.newBuilder().setFoodServiceId(foodServiceId).setMenuItemId(menuItemId).setChunksAmount(numberOfChunks).build();
+            ImageMetaData imageMetaData = ImageMetaData.newBuilder().setFoodServiceId(foodServiceId).setMenuItemId(menuItemId).build();
             SaveImageToMenuItemRequest request = SaveImageToMenuItemRequest.newBuilder().setMetaData(imageMetaData).build();
             requestStreamObserver.onNext(request);
 

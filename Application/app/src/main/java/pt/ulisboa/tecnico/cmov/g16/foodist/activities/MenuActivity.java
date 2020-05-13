@@ -13,6 +13,7 @@ import java.util.EnumSet;
 
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.Data;
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodService;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodType;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.Menu;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.MenuItem;
@@ -38,11 +39,13 @@ public class MenuActivity extends AppCompatActivity {
         if(foodServiceId == -1)
             finish();
         data = (Data) getApplicationContext();
-        menu = data.getFoodService(foodServiceId).getMenu();
+        FoodService foodService = data.getFoodService(foodServiceId);
+        menu = foodService.getMenu();
         user = data.getUser();
+        setTitle(getString(R.string.menu_name, foodService.getName()));
 
         adapter = new MenuItemAdapter(this, menu.getMenuList());
-        listView = findViewById(R.id.list);
+        listView = findViewById(R.id.menu_list);
         listView.setAdapter(adapter);
 
 

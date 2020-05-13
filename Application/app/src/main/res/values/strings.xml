@@ -61,7 +61,6 @@
 
     <!-- FOOD SERVICE ACTIVITY -->
     <string name="location">Location</string>
-    <string name="menu_price">Aprox. price: %1d€</string>
     <string name="walking_time">%1s away</string>
     <string name="waiting_time">Waiting time: %1d seconds</string>
     <string name="unknown_queue">Unknown queue time</string>
@@ -72,7 +71,14 @@
 
     <!-- MENU ACTIVITY -->
     <string name="menu">Menu</string>
+    <string name="new_menu_name">Menu name</string>
     <string name="create_menu">Create new menu item</string>
+    <string name="add_item">Add new menu item</string>
+    <string name="menu_name">%s\'s Menu</string>
+    <string name="add_image">Add image</string>
+    <string name="food_type">Food type:</string>
+    <string name="price_title">Price:</string>
+    <string name="price_value">%.2f€</string>
 
     <!-- CONTEXT MENU MAIN ACTIVITY -->
     <string name="menu_user_profile">Profile</string>

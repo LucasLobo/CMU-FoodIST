@@ -1,11 +1,12 @@
 package pt.ulisboa.tecnico.cmov.g16.foodist.model;
 
-import android.graphics.Bitmap;
 
 import androidx.annotation.NonNull;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 public class MenuItem {
 
@@ -13,15 +14,16 @@ public class MenuItem {
     private String name;
     private double price;
     private String description;
-    private ArrayList<Bitmap> images = new ArrayList<>();
+    private Set<Integer> imageIds = new HashSet<>();
     private FoodType foodType;
 
-    public MenuItem(Integer id, String name, double price, FoodType foodType, String description) {
+    public MenuItem(Integer id, String name, double price, FoodType foodType, String description, List<Integer> imageIds) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.foodType = foodType;
         this.description = description;
+        this.imageIds.addAll(imageIds);
     }
 
     public MenuItem(String name, double price, FoodType foodType, String description) {
@@ -53,20 +55,25 @@ public class MenuItem {
         return foodType;
     }
 
-    public void addImage(Bitmap bitmap) {
-        images.add(bitmap);
+    public final Set<Integer> getImageIds() {
+        return imageIds;
     }
 
-    public Bitmap getImage(Integer index) {
-        return images.get(index);
+    public Integer getRandomImageId() {
+        int size = imageIds.size();
+        if (size == 0) return -1;
+
+        int item = new Random().nextInt(size); // In real life, the Random object should be rather more shared than this
+        int i = 0;
+        for (Integer imageId : imageIds) {
+            if (i == item) return imageId;
+            i++;
+        }
+        return -1;
     }
 
-    public ArrayList<Bitmap> getImages() {
-        return images;
-    }
-
-    public void setImages(ArrayList<Bitmap> images) {
-        this.images = images;
+    public void addImageId(Integer imageId) {
+        imageIds.add(imageId);
     }
 
     // * SETTERS * //

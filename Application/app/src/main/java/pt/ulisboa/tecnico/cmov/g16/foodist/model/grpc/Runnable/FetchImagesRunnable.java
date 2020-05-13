@@ -5,27 +5,27 @@ import android.graphics.BitmapFactory;
 
 import com.google.protobuf.ByteString;
 import com.grpc.Contract.ImageMetaData;
-import com.grpc.Contract.FetchImagesFromMenuResponse;
-import com.grpc.Contract.FetchImagesFromMenuRequest;
+import com.grpc.Contract.FetchImagesResponse;
+import com.grpc.Contract.FetchImagesRequest;
 import com.grpc.GrpcServiceGrpc;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.GrpcRunnable;
 
 import static pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.util.Log.appendLogs;
 
-public abstract class FetchImagesRunnable extends GrpcRunnable<ArrayList<Bitmap>> {
+public abstract class FetchImagesRunnable extends GrpcRunnable<HashMap<Integer, Bitmap>> {
     private static final String TAG = "FetchImageRunnable";
 
-    private Integer foodServiceId;
-    private Integer menuItemId;
+    private Set<Integer> imageIds;
 
-    public FetchImagesRunnable(Integer foodServiceId, Integer menuItemId) {
-        this.foodServiceId = foodServiceId;
-        this.menuItemId = menuItemId;
+    public FetchImagesRunnable(Set<Integer> imageIds) {
+        this.imageIds = imageIds;
     }
 
     @Override
@@ -37,39 +37,38 @@ public abstract class FetchImagesRunnable extends GrpcRunnable<ArrayList<Bitmap>
         StringBuffer logs = new StringBuffer();
         appendLogs(logs, "*** FetchImage");
 
-        ImageMetaData metaData = ImageMetaData.newBuilder().setFoodServiceId(foodServiceId).setMenuItemId(menuItemId).build();
-        FetchImagesFromMenuRequest request = FetchImagesFromMenuRequest.newBuilder().setMetadata(metaData).build();
-
-        Iterator<FetchImagesFromMenuResponse> responseIterator = blockingStub.fetchImages(request);
+        FetchImagesRequest request = FetchImagesRequest.newBuilder().addAllImageId(imageIds).build();
+        Iterator<FetchImagesResponse> responseIterator = blockingStub.fetchImages(request);
 
         HashMap<Integer, ArrayList<ByteString>> imagesByteStringArrays = new HashMap<>();
 
         while (responseIterator.hasNext()) {
-            FetchImagesFromMenuResponse response = responseIterator.next();
+            FetchImagesResponse response = responseIterator.next();
 
             ByteString chunk = response.getChunk().getData();
-            int imageIndex = response.getChunk().getImageIndex();
+            int imageId = response.getChunk().getImageId();
             int position = response.getChunk().getPosition();
 
-            ArrayList<ByteString> imageByteStringArray = imagesByteStringArrays.get(imageIndex);
+            ArrayList<ByteString> imageByteStringArray = imagesByteStringArrays.get(imageId);
             if (imageByteStringArray == null) {
                 imageByteStringArray = new ArrayList<>();
-                imagesByteStringArrays.put(imageIndex, imageByteStringArray);
+                imagesByteStringArrays.put(imageId, imageByteStringArray);
             }
             imageByteStringArray.add(position, chunk);
         }
 
-        ArrayList<Bitmap> bitmaps = new ArrayList<>();
-        for (ArrayList<ByteString> imageByteStringArray : imagesByteStringArrays.values()) {
+        HashMap<Integer, Bitmap> bitmaps = new HashMap<>();
+        for (Map.Entry<Integer, ArrayList<ByteString>> imageByteStringArrayEntrySet : imagesByteStringArrays.entrySet()) {
+
+            Integer imageId = imageByteStringArrayEntrySet.getKey();
             ByteString imageBytestring = ByteString.EMPTY;
-            for (ByteString bytestring : imageByteStringArray) {
+            for (ByteString bytestring : imageByteStringArrayEntrySet.getValue()) {
                 imageBytestring = imageBytestring.concat(bytestring);
             }
 
             byte[] imageBytes = imageBytestring.toByteArray();
             Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-            bitmaps.add(bitmap);
-
+            bitmaps.put(imageId, bitmap);
         }
 
         setResult(bitmaps);

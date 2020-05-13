@@ -1,8 +1,7 @@
 package com.grpc.server.model;
 
-import com.google.protobuf.ByteString;
-
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MenuItem {
 
@@ -11,7 +10,7 @@ public class MenuItem {
 	private final double price;
 	private final String description;
 	private final String foodType;
-	private final ArrayList<ByteString> images = new ArrayList<>();
+	private final Set<Integer> imageIds = new HashSet<>();
 
 	public MenuItem(Integer id, String name, double price, String description, String foodType) {
 		this.id = id;
@@ -41,11 +40,11 @@ public class MenuItem {
 		return foodType;
 	}
 
-	public void addImage(ByteString image) {
-		images.add(image);
+	public void addImageId(Integer imageId) {
+		imageIds.add(imageId);
 	}
 
-	public ArrayList<ByteString> getImages() {
-		return images;
+	public Set<Integer> getImageIds() {
+		return imageIds;
 	}
 }

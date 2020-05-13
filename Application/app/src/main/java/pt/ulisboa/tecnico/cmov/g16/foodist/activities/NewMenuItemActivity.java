@@ -3,10 +3,8 @@ package pt.ulisboa.tecnico.cmov.g16.foodist.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -48,7 +46,7 @@ public class NewMenuItemActivity extends AppCompatActivity {
 
         data = (Data) getApplicationContext();
 
-        typeOfFood = findViewById(R.id.foodType);
+        typeOfFood = findViewById(R.id.menu_item_food_type_value);
         setupSpinner();
         imageLayout = findViewById(R.id.imageSlots);
 
@@ -65,18 +63,15 @@ public class NewMenuItemActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 EditText title = findViewById(R.id.title);
-                EditText price = findViewById(R.id.price);
+                EditText price = findViewById(R.id.menu_item_price_value);
                 EditText description = findViewById(R.id.description);
 
                 try {
-
                     MenuItem item = new MenuItem(title.getText().toString(),
                             Double.parseDouble(price.getText().toString()),
                             FoodType.valueOf(typeOfFood.getSelectedItem().toString().toUpperCase()),
                             description.getText().toString());
-
                     saveMenu(item, foodServiceId);
-                    finish();
                 }catch (NumberFormatException e){
                     Toast.makeText(getApplicationContext(), "Please setup a valid price", Toast.LENGTH_LONG).show();
                 }
@@ -136,6 +131,7 @@ public class NewMenuItemActivity extends AppCompatActivity {
             protected void callback(SaveMenuItemResult result) {
                 item.setId(result.getMenuId());
                 data.getFoodService(foodServiceId).addMenuItem(item);
+                finish();
             }
         }).execute();
     }

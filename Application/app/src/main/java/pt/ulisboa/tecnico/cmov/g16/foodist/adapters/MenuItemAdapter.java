@@ -6,17 +6,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
+import pt.ulisboa.tecnico.cmov.g16.foodist.model.Data;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.MenuItem;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodType;
 
@@ -64,21 +63,20 @@ public class MenuItemAdapter extends ArrayAdapter<MenuItem> implements Filterabl
 
         }
 
-        MenuItem item = filteredList.get(position);
+        MenuItem menuItem = filteredList.get(position);
 
-        TextView title = listItem.findViewById(R.id.title);
-        title.setText(item.getName());
+        TextView title = listItem.findViewById(R.id.menu_item_title);
+        title.setText(menuItem.getName());
 
-        TextView foodType = listItem.findViewById(R.id.foodType);
-        foodType.setText(item.getFoodType().resourceId);
-        ImageView image = listItem.findViewById(R.id.foodImage);
+        TextView foodType = listItem.findViewById(R.id.menu_item_food_type_title);
+        foodType.setText(menuItem.getFoodType().resourceId);
+        ImageView image = listItem.findViewById(R.id.menu_item_image);
 
-        ArrayList<Bitmap> images = item.getImages();
-        if (images.size() > 0) {
-            image.setImageBitmap(images.get(images.size()-1));
-        }
-        else {
-            image.setImageResource(android.R.drawable.ic_delete);
+        Integer randomImageId = menuItem.getRandomImageId();
+        if (randomImageId != -1) {
+            Data data = (Data) mContext.getApplicationContext();
+            Bitmap bitmap = data.getImage(randomImageId);
+            image.setImageBitmap(bitmap);
         }
 
         return listItem;

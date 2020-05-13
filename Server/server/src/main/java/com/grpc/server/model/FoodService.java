@@ -2,7 +2,6 @@ package com.grpc.server.model;
 
 
 
-import com.google.protobuf.ByteString;
 import com.grpc.server.util.LinearRegression;
 
 import java.util.ArrayList;
@@ -29,8 +28,8 @@ public class FoodService {
 		menuItems.put(item.getId(), item);
 	}
 
-	public void addImageToMenu(Integer menuId, ByteString image) {
-		menuItems.get(menuId).addImage(image);
+	public void addImageToMenu(Integer menuId, Integer imageId) {
+		menuItems.get(menuId).addImageId(imageId);
 	}
 
 	public List<MenuItem> getMenuItems() {

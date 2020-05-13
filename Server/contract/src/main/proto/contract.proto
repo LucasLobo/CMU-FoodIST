@@ -9,12 +9,12 @@ message Auth {
 message ImageMetaData {
     int32 foodServiceId = 1;
     int32 menuItemId = 2;
-    int32 chunksAmount = 3;
+    int32 imageId = 3;
 }
 
 message ImageChunk {
     bytes data = 1;
-    int32 imageIndex = 2;
+    int32 imageId = 2;
     int32 position = 3;
 }
 
@@ -29,6 +29,7 @@ message MenuItem {
     double price = 3;
     string description = 4;
     string foodType = 5;
+    repeated int32 imageId = 6;
 }
 
 message RegisterRequest {
@@ -76,13 +77,14 @@ message SaveImageToMenuItemRequest {
 
 message SaveImageToMenuItemResponse {
     string code = 1;
+    int32 imageId = 2;
 }
 
-message FetchImagesFromMenuRequest {
-    ImageMetaData metadata = 1;
+message FetchImagesRequest {
+    repeated int32 imageId = 1;
 }
 
-message FetchImagesFromMenuResponse {
+message FetchImagesResponse {
     ImageChunk chunk = 1;
 }
 
@@ -126,7 +128,7 @@ service GrpcService {
     rpc fetchProfile (FetchProfileRequest) returns (FetchProfileResponse);
     rpc saveMenuItem (SaveMenuItemRequest) returns (SaveMenuItemResponse);
     rpc saveImage (stream SaveImageToMenuItemRequest) returns (SaveImageToMenuItemResponse);
-    rpc fetchImages (FetchImagesFromMenuRequest) returns (stream FetchImagesFromMenuResponse);
+    rpc fetchImages (FetchImagesRequest) returns (stream FetchImagesResponse);
     rpc fetchMenus (FetchMenusRequest) returns (FetchMenusResponse);
     rpc joinQueue (JoinQueueRequest) returns (JoinQueueResponse);
     rpc leaveQueue (LeaveQueueRequest) returns (LeaveQueueResponse);

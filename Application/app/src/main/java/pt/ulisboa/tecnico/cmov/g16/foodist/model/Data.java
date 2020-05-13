@@ -16,7 +16,7 @@ import android.os.IBinder;
 import android.os.Messenger;
 import android.graphics.Bitmap;
 import android.util.Log;
-import android.widget.Toast;
+import android.util.LruCache;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -27,8 +27,10 @@ import org.threeten.bp.LocalTime;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import pt.inesc.termite.wifidirect.SimWifiP2pBroadcast;
 import pt.inesc.termite.wifidirect.SimWifiP2pDevice;
@@ -46,7 +48,6 @@ import pt.ulisboa.tecnico.cmov.g16.foodist.receivers.SimWifiP2pBroadcastReceiver
 
 import static org.threeten.bp.temporal.ChronoUnit.SECONDS;
 
-
 public class Data extends Application implements SimWifiP2pManager.PeerListListener {
 
     private static final String TAG = "Data";
@@ -57,6 +58,13 @@ public class Data extends Application implements SimWifiP2pManager.PeerListListe
 
     HashMap<Integer, FoodService> foodServiceHashMap;
     HashMap<String, FoodService> foodServiceBeaconNames;
+
+    LruCache<Integer, Bitmap> cachedImages = new LruCache<Integer, Bitmap>(100 * 1024 * 1024) {
+        protected int sizeOf(Integer key, Bitmap value) {
+            return value.getByteCount();
+        }
+    };
+
     User user;
 
     public static final String CHANNEL_ID = "channel";
@@ -83,17 +91,6 @@ public class Data extends Application implements SimWifiP2pManager.PeerListListe
 
     }
 
-    private void createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = getString(R.string.channel_name);
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-    }
-
-
     public ArrayList<FoodService> getFoodServiceList() {
         return new ArrayList<>(foodServiceHashMap.values());
     }
@@ -106,9 +103,50 @@ public class Data extends Application implements SimWifiP2pManager.PeerListListe
         return user;
     }
 
+    public void joinQueue(final Integer fsId){
+        new GrpcTask(new JoinQueueRunnable(fsId) {
+            @Override
+            protected void callback(Integer userQueueId) {
+                Log.i(TAG, "callback: " + userQueueId);
+                getUser().addActiveQueue(fsId, userQueueId, LocalTime.now());
+            }
+        }).execute();
+    }
+
+    public void leaveQueue(Integer userQueueId, final Integer fsId){
+        LocalTime queueJoinTime = user.getQueueJoinTime(fsId);
+        int durationSeconds = (int) SECONDS.between(queueJoinTime, LocalTime.now());
+        new GrpcTask(new LeaveQueueRunnable(userQueueId, fsId, durationSeconds) {
+            @Override
+            protected void callback(String result) {
+                Log.i(TAG, "callback: " + result);
+                getUser().removeActiveQueue(fsId);
+            }
+        }).execute();
+    }
+
+
+    public Bitmap getImage(Integer imageId) {
+        return cachedImages.get(imageId);
+    }
+
+    public void addImage(Integer imageId, Bitmap bitmap) {
+        cachedImages.put(imageId, bitmap);
+    }
+
     private void initData() {
         initUser();
         initFoodServices();
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_name);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
     private void initUser() {
@@ -228,7 +266,7 @@ public class Data extends Application implements SimWifiP2pManager.PeerListListe
                     if (result == null) return;
                     for (MenuItem menuItem : result) {
                         entry.getValue().addMenuItem(menuItem);
-                        fetchMenuImages(entry.getValue(), menuItem);
+                        fetchMenuImages(menuItem);
                     }
                 }
             }).execute();
@@ -323,34 +361,20 @@ public class Data extends Application implements SimWifiP2pManager.PeerListListe
 
     }
 
-    public void joinQueue(final Integer fsId){
-        new GrpcTask(new JoinQueueRunnable(fsId) {
-            @Override
-            protected void callback(Integer userQueueId) {
-                Log.i(TAG, "callback: " + userQueueId);
-                getUser().addActiveQueue(fsId, userQueueId, LocalTime.now());
-            }
-        }).execute();
-    }
 
-    public void leaveQueue(Integer userQueueId, final Integer fsId){
-        LocalTime queueJoinTime = user.getQueueJoinTime(fsId);
-        int durationSeconds = (int) SECONDS.between(queueJoinTime, LocalTime.now());
-        new GrpcTask(new LeaveQueueRunnable(userQueueId, fsId, durationSeconds) {
+    public void fetchMenuImages(final MenuItem menuItem) {
+        Set<Integer> imageIdsCopy = new HashSet<>(menuItem.getImageIds());
+        imageIdsCopy.removeAll(this.cachedImages.snapshot().keySet());
+        if (imageIdsCopy.size() == 0) return;
+        new GrpcTask(new FetchImagesRunnable(imageIdsCopy) {
             @Override
-            protected void callback(String result) {
-                Log.i(TAG, "callback: " + result);
-                getUser().removeActiveQueue(fsId);
-            }
-        }).execute();
-    }
+            protected void callback(HashMap<Integer, Bitmap> result) {
+                if (result != null) {
 
-
-    private void fetchMenuImages(final FoodService foodService, final MenuItem item) {
-        new GrpcTask(new FetchImagesRunnable(foodService.getId(), item.getId()) {
-            @Override
-            protected void callback(ArrayList<Bitmap> result) {
-                if (result != null) item.setImages(result);
+                    for (Map.Entry<Integer, Bitmap> entry : result.entrySet()) {
+                        cachedImages.put(entry.getKey(), entry.getValue());
+                    }
+                }
             }
         }).execute();
     }

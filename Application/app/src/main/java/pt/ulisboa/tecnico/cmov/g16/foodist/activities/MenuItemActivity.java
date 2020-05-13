@@ -2,12 +2,11 @@ package pt.ulisboa.tecnico.cmov.g16.foodist.activities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -16,35 +15,23 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.protobuf.ByteString;
-import com.grpc.Contract;
-
-import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.Data;
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.Menu;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.MenuItem;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.GrpcTask;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.Runnable.SaveImageRunnable;
-import pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.util.Chunks;
 
 public class MenuItemActivity extends AppCompatActivity {
 
     private static final String TAG = "MenuItemActivity";
 
     private static final int PICK_IMAGE = 100;
-    private Data data;
-    private MenuItem item;
+    private MenuItem menuItem;
     private LinearLayout imageLayout;
 
+    Data data;
     private int foodServiceId;
-    private int menuItemId;
-
-    ImageView testView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +43,7 @@ public class MenuItemActivity extends AppCompatActivity {
         imageLayout = findViewById(R.id.imageSlots);
         Intent intent = getIntent();
 
-        menuItemId = intent.getIntExtra("menuItemId", -1);
+        int menuItemId = intent.getIntExtra("menuItemId", -1);
         foodServiceId = intent.getIntExtra("foodServiceId", -1);
 
         if (foodServiceId == -1 || menuItemId == -1) {
@@ -64,9 +51,15 @@ public class MenuItemActivity extends AppCompatActivity {
         }
 
         Menu menu = data.getFoodService(foodServiceId).getMenu();
-        item = menu.getMenuItem(menuItemId);
-
+        menuItem = menu.getMenuItem(menuItemId);
+        setTitle(menuItem.getName());
         setupView();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        data.fetchMenuImages(menuItem);
     }
 
     @Override
@@ -86,10 +79,10 @@ public class MenuItemActivity extends AppCompatActivity {
     }
 
     private void setupView(){
-        ((TextView) findViewById(R.id.title)).setText(item.getName());
-        ((TextView) findViewById(R.id.price)).setText(String.valueOf(item.getPrice()));
-        ((TextView) findViewById(R.id.foodType)).setText(item.getFoodType().resourceId);
-        ((TextView) findViewById(R.id.description)).setText(item.getDescription());
+        ((TextView) findViewById(R.id.title)).setText(menuItem.getName());
+        ((TextView) findViewById(R.id.menu_item_price_value)).setText(getString(R.string.price_value, menuItem.getPrice()));
+        ((TextView) findViewById(R.id.menu_item_food_type_value)).setText(menuItem.getFoodType().resourceId);
+        ((TextView) findViewById(R.id.description)).setText(menuItem.getDescription());
 
         Button importImageButton = findViewById(R.id.importImageButton);
         importImageButton.setOnClickListener(new View.OnClickListener() {
@@ -99,12 +92,11 @@ public class MenuItemActivity extends AppCompatActivity {
             }
         });
 
-        ArrayList<Bitmap> list = item.getImages();
-        for (int i = 0; i < list.size(); i++) {
-            Bitmap bitmap = list.get(i);
+        for (Integer imageId : menuItem.getImageIds()) {
+            Bitmap bitmap = data.getImage(imageId);
             ImageView imageView = new ImageView(this);
             imageView.setImageBitmap(bitmap);
-            setUpImageView(imageView, i);
+            setUpImageView(imageView, imageId);
         }
     }
 
@@ -123,14 +115,12 @@ public class MenuItemActivity extends AppCompatActivity {
                 imageView.setImageURI(uri);
 
                 final Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-                item.addImage(bitmap);
-                setUpImageView(imageView, item.getImages().size() - 1);
-                saveImage(foodServiceId, menuItemId, bitmap);
+                saveImage(foodServiceId, menuItem, bitmap, imageView);
             }
         }
     }
 
-    private void setUpImageView(ImageView imageView, final int index) {
+    private void setUpImageView(ImageView imageView, final int imageId) {
         imageView.setVisibility(View.VISIBLE);
         imageLayout.addView(imageView);
         imageView.setOnClickListener(new View.OnClickListener() {
@@ -138,19 +128,22 @@ public class MenuItemActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MenuItemActivity.this, FullscreenImageActivity.class);
                 Bundle extras = new Bundle();
-                extras.putInt("foodServiceId", foodServiceId);
-                extras.putInt("menuItemId", menuItemId);
-                extras.putInt("imageIndex", index);
+                extras.putInt("imageId", imageId);
+                extras.putString("menuName", menuItem.getName());
                 intent.putExtras(extras);
                 startActivity(intent);
             }
         });
     }
 
-    public void saveImage(Integer foodServiceId, Integer menuItemId, Bitmap bitmap){
-        new GrpcTask(new SaveImageRunnable(foodServiceId, menuItemId, bitmap) {
+    public void saveImage(Integer foodServiceId, final MenuItem menuItem, final Bitmap bitmap, final ImageView imageView){
+        new GrpcTask(new SaveImageRunnable(foodServiceId, menuItem.getId(), bitmap) {
             @Override
-            protected void callback(Bitmap bitmapResult) {}
+            protected void callback(Integer imageId) {
+                menuItem.addImageId(imageId);
+                data.addImage(imageId, bitmap);
+                setUpImageView(imageView, imageId);
+            }
         }).execute();
     }
 

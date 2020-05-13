@@ -17,7 +17,6 @@ import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodService;
 public class FullscreenImageActivity extends AppCompatActivity {
 
     Data data;
-    ImageView image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,13 +26,13 @@ public class FullscreenImageActivity extends AppCompatActivity {
         data = (Data) getApplicationContext();
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
-        FoodService foodService = data.getFoodService(extras.getInt("foodServiceId"));
-        Integer menuItemId = extras.getInt("menuItemId");
-        Integer imageIndex = extras.getInt("imageIndex");
+        String menuName = extras.getString("menuName");
+        Integer imageId = extras.getInt("imageId");
 
-        Bitmap bitmap = foodService.getMenuItem(menuItemId).getImage(imageIndex);
+        Bitmap bitmap = data.getImage(imageId);
         ImageView imageView = findViewById(R.id.imageView);
         imageView.setImageBitmap(bitmap);
+        setTitle(menuName);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
