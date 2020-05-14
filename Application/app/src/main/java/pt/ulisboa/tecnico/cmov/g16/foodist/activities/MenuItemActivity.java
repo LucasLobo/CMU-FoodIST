@@ -14,12 +14,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.ByteArrayOutputStream;
 
 import java.util.ArrayList;
+import java.util.Set;
+
 import pt.ulisboa.tecnico.cmov.g16.foodist.adapters.MenuItemImagesAdapter;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.Data;
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
@@ -35,6 +38,7 @@ public class MenuItemActivity extends AppCompatActivity {
 
     private static final int PICK_IMAGE = 100;
 
+    private CardView cardView;
     private RecyclerView recyclerView;
     private Data data;
     private FoodService foodService;
@@ -124,7 +128,13 @@ public class MenuItemActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.title)).setText(menuItem.getName());
         ((TextView) findViewById(R.id.menu_item_price_value)).setText(getString(R.string.price_value, menuItem.getPrice()));
         ((TextView) findViewById(R.id.menu_item_food_type_value)).setText(menuItem.getFoodType().resourceId);
-        ((TextView) findViewById(R.id.description)).setText(menuItem.getDescription());
+
+        String description = menuItem.getDescription();
+        if (description.isEmpty()) {
+            (findViewById(R.id.description)).setVisibility(View.GONE);
+        } else {
+            ((TextView) findViewById(R.id.description)).setText(menuItem.getDescription());
+        }
 
         Button importImageButton = findViewById(R.id.importImageButton);
         importImageButton.setOnClickListener(new View.OnClickListener() {
@@ -138,9 +148,14 @@ public class MenuItemActivity extends AppCompatActivity {
     private void setupRecycler() {
         recyclerView = findViewById(R.id.imageListView);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
-        adapter = new MenuItemImagesAdapter(this, new ArrayList<>(menuItem.getImageIds()), menuItem.getName());
+        Set<Integer> imageIds = menuItem.getImageIds();
+        adapter = new MenuItemImagesAdapter(this, new ArrayList<>(imageIds), menuItem.getName());
         recyclerView.setAdapter(adapter);
         recyclerView.setNestedScrollingEnabled(false);
+
+        cardView = findViewById(R.id.menu_item_recyclerview_holder);
+        if (imageIds.size() == 0) cardView.setVisibility(View.GONE);
+        else cardView.setVisibility(View.VISIBLE);
     }
 
 
@@ -170,6 +185,7 @@ public class MenuItemActivity extends AppCompatActivity {
                 menuItem.addImageId(imageId);
                 data.addImage(imageId, bitmap);
                 adapter.addImage(imageId);
+                cardView.setVisibility(View.VISIBLE);
             }
         }).execute();
     }

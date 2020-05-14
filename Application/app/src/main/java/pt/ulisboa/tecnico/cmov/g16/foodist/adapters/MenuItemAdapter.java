@@ -77,12 +77,15 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuIt
     public void onBindViewHolder(@NonNull final MenuItemViewHolder holder, int position) {
         final MenuItem menuItem = getItem(position);
         holder.title.setText(menuItem.getName());
+        holder.price.setText(context.getString(R.string.price_value, menuItem.getPrice()));
         holder.foodType.setText(menuItem.getFoodType().resourceId);
 
         Integer randomImageId = menuItem.getRandomImageId();
         if (randomImageId != -1) {
             Bitmap bitmap = data.getImage(randomImageId);
+            holder.noImage.setVisibility(View.INVISIBLE);
             holder.image.setImageBitmap(bitmap);
+            holder.image.setVisibility(View.VISIBLE);
         }
 
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
@@ -104,14 +107,18 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuIt
     static class MenuItemViewHolder extends RecyclerView.ViewHolder {
         CardView parentLayout;
         TextView title;
+        TextView price;
         TextView foodType;
+        ImageView noImage;
         ImageView image;
 
         MenuItemViewHolder(@NonNull View itemView) {
             super(itemView);
             parentLayout = itemView.findViewById(R.id.menu_recyclerview_item_card_view);
             title = itemView.findViewById(R.id.menu_recyclerview_item_name);
+            price = itemView.findViewById(R.id.menu_recyclerview_item_price);
             foodType = itemView.findViewById(R.id.menu_recyclerview_item_food_type);
+            noImage = itemView.findViewById(R.id.menu_recyclerview_item_no_image);
             image = itemView.findViewById(R.id.menu_recyclerview_item_image);
         }
     }

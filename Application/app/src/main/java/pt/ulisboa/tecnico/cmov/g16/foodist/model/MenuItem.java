@@ -63,7 +63,7 @@ public class MenuItem {
         int size = imageIds.size();
         if (size == 0) return -1;
 
-        int item = new Random().nextInt(size); // In real life, the Random object should be rather more shared than this
+        int item = new Random().nextInt(size);
         int i = 0;
         for (Integer imageId : imageIds) {
             if (i == item) return imageId;

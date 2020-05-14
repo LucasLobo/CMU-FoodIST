@@ -1,5 +1,6 @@
 package pt.ulisboa.tecnico.cmov.g16.foodist.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -97,6 +98,9 @@ public class NewMenuItemActivity extends AppCompatActivity {
             protected void callback(SaveMenuItemResult result) {
                 item.setId(result.getMenuId());
                 data.getFoodService(foodServiceId).addMenuItem(item);
+                Intent intent = new Intent();
+                intent.putExtra("menuId", result.getMenuId());
+                NewMenuItemActivity.this.setResult(Activity.RESULT_OK, intent);
                 finish();
             }
         }).execute();

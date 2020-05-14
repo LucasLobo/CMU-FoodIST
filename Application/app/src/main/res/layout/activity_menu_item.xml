@@ -108,6 +108,7 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/menu_item_recyclerview_holder"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             app:cardElevation="1dp"

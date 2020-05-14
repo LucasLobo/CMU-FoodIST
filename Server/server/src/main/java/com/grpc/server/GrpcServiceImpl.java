@@ -16,7 +16,6 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
@@ -30,9 +29,9 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
     private final HashMap<Integer, FoodService> foodServices = new HashMap<>();
     private final HashMap<Integer, ByteString> images = new HashMap<>();
 
-    private final AtomicInteger userQueueId = new AtomicInteger(0);
-    private final AtomicInteger menuId = new AtomicInteger(0);
-    private final AtomicInteger imageId = new AtomicInteger(0);
+    private final AtomicInteger userQueueId = new AtomicInteger(1);
+    private final AtomicInteger menuId = new AtomicInteger(1);
+    private final AtomicInteger imageId = new AtomicInteger(1);
 
     public static GrpcServiceImpl getInstance() {
         if (instance == null) {
@@ -327,11 +326,11 @@ public class GrpcServiceImpl extends GrpcServiceGrpc.GrpcServiceImplBase {
 	}
 
 	private void initData() {
-        for (int id = 0; id < 17; id++) {
+        for (int id = 1; id < 18; id++) {
             foodServices.put(id, new FoodService(id));
         }
 
-        FoodService foodService = foodServices.get(0);
+        FoodService foodService = foodServices.get(1);
         MenuItem menuItem = new MenuItem(menuId.getAndIncrement(), "Meat Menu", 5, "Menu with Meat", "MEAT");
         foodService.addToMenu(menuItem);
 

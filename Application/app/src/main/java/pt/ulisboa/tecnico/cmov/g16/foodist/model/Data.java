@@ -87,8 +87,6 @@ public class Data extends Application implements SimWifiP2pManager.PeerListListe
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
 
         createNotificationChannel();
-
-
     }
 
     public ArrayList<FoodService> getFoodServiceList() {
@@ -157,7 +155,7 @@ public class Data extends Application implements SimWifiP2pManager.PeerListListe
         this.foodServiceHashMap = new HashMap<>();
         this.foodServiceBeaconNames = new HashMap<>();
 
-        int id = 0;
+        int id = 1;
 
         FoodService alwaysOpen = new FoodService(id++, "Always Open", 38.7352722896, -9.13268566132);
         alwaysOpen.addSchedule(0,0,23,59);
@@ -303,7 +301,7 @@ public class Data extends Application implements SimWifiP2pManager.PeerListListe
         String title = "";
         String msg = "";
 
-        int id = 0;
+        int id = 1;
 
         boolean setNotif = false;
         for (SimWifiP2pDevice device : peers.getDeviceList()) {
@@ -370,7 +368,6 @@ public class Data extends Application implements SimWifiP2pManager.PeerListListe
             @Override
             protected void callback(HashMap<Integer, Bitmap> result) {
                 if (result != null) {
-
                     for (Map.Entry<Integer, Bitmap> entry : result.entrySet()) {
                         cachedImages.put(entry.getKey(), entry.getValue());
                     }

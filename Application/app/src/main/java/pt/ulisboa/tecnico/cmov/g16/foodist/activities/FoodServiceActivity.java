@@ -4,20 +4,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.ListView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
@@ -31,9 +29,7 @@ import pt.ulisboa.tecnico.cmov.g16.foodist.model.Data;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -45,13 +41,13 @@ import pt.ulisboa.tecnico.cmov.g16.foodist.model.User;
 
 public class FoodServiceActivity extends AppCompatActivity {
 
-    Data data;
-    FoodService foodService;
-    GoogleMap mMap;
-    String distanceTime;
-    MenuItemAdapter adapter;
-    User user;
-
+    private Data data;
+    private FoodService foodService;
+    private GoogleMap mMap;
+    private String distanceTime;
+    private MenuItemAdapter adapter;
+    private User user;
+    static int CREATE_MENU_ITEM = 2335;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -188,7 +184,7 @@ public class FoodServiceActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(FoodServiceActivity.this, NewMenuItemActivity.class);
                 intent.putExtra("foodServiceId", foodService.getId());
-                startActivity(intent);
+                startActivityForResult(intent, CREATE_MENU_ITEM);
             }
         });
 
@@ -206,6 +202,17 @@ public class FoodServiceActivity extends AppCompatActivity {
             separator = ", ";
         }
         return foodTypes.toString();
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == CREATE_MENU_ITEM) {
+            int menuId = data.getExtras().getInt("menuId");
+            Intent intent = new Intent(this, MenuItemActivity.class);
+            intent.putExtra("foodServiceId", foodService.getId());
+            intent.putExtra("menuItemId", menuId);
+            startActivity(intent);
+        }
     }
 
 
