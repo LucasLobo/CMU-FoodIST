@@ -42,7 +42,7 @@
 
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <data android:scheme="g20" android:host="foodist" />
+                <data android:scheme="http" android:host="foodist" />
             </intent-filter>
         </activity>
         <activity
