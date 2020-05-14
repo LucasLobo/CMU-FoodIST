@@ -52,9 +52,6 @@
         <activity
             android:name=".activities.LoginActivity"
             android:label="@string/login_signup" />
-        <activity
-            android:name=".activities.MenuActivity"
-            android:label="@string/menu" />
         <activity android:name=".activities.MenuItemActivity" />
         <activity
             android:name=".activities.NewMenuItemActivity"
