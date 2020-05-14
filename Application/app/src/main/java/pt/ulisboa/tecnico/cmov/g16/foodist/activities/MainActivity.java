@@ -27,6 +27,9 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.Data;
@@ -55,6 +58,13 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
 
         initToolbar();
         initFoodServiceRecyclerView();
+        MapFragment mDummyMapInit = (MapFragment) getFragmentManager().findFragmentById(R.id.mapFragment);
+        mDummyMapInit.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                //Do nothing;
+            }
+        });
     }
 
     @Override
@@ -203,4 +213,5 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
         adapter.getFoodServicesDistanceTime().put(Integer.parseInt((String) values[3]), (String) values[1]);
         adapter.notifyDataSetChanged();
     }
+
 }

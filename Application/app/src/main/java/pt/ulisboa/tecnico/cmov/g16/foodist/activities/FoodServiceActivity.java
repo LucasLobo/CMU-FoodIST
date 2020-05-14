@@ -1,7 +1,10 @@
 package pt.ulisboa.tecnico.cmov.g16.foodist.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -10,15 +13,20 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 
 import org.threeten.bp.LocalTime;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 
+import pt.ulisboa.tecnico.cmov.g16.foodist.adapters.MenuItemAdapter;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.Data;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -37,10 +45,12 @@ import pt.ulisboa.tecnico.cmov.g16.foodist.model.User;
 
 public class FoodServiceActivity extends AppCompatActivity {
 
-    private Data data;
-    private FoodService foodService;
-    private GoogleMap mMap;
-    private String distanceTime;
+    Data data;
+    FoodService foodService;
+    GoogleMap mMap;
+    String distanceTime;
+    MenuItemAdapter adapter;
+    User user;
 
 
     @Override
@@ -58,32 +68,8 @@ public class FoodServiceActivity extends AppCompatActivity {
         }
 
         foodService = data.getFoodService(id);
+        user = data.getUser();
         populate(id);
-
-        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapFragment);
-        mapFragment.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                mMap = googleMap;
-                LatLng destination = new LatLng(foodService.getLocation().getLatitude(), foodService.getLocation().getLongitude());
-                mMap.addMarker(new MarkerOptions().position(destination).title(foodService.getName()));
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(destination));
-                mMap.setMyLocationEnabled(true);
-                mMap.setMinZoomPreference(15);
-                mMap.setMaxZoomPreference(25);
-                mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-                    @Override
-                    public void onMapClick(LatLng latLng) {
-                        Intent intent = new Intent(FoodServiceActivity.this, MapActivity.class);
-                        intent.putExtra("Latitude", foodService.getLocation().getLatitude());
-                        intent.putExtra("Longitude", foodService.getLocation().getLongitude());
-                        intent.putExtra("foodServiceName", foodService.getName());
-                        startActivity(intent);
-                    }
-                });
-            }
-    });
-
     }
 
     @Override
@@ -172,15 +158,43 @@ public class FoodServiceActivity extends AppCompatActivity {
         TextView walkingTime = findViewById(R.id.food_service_walking_time);
         walkingTime.setText(getString(R.string.walking_time, distanceTime));
 
-        LinearLayout menuList = findViewById(R.id.food_service_menu);
-        menuList.setOnClickListener(new View.OnClickListener() {
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapFragment);
+        mapFragment.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                mMap = googleMap;
+                LatLng destination = new LatLng(foodService.getLocation().getLatitude(), foodService.getLocation().getLongitude());
+                mMap.addMarker(new MarkerOptions().position(destination).title(foodService.getName()));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(destination));
+                mMap.setMinZoomPreference(15);
+                mMap.setMaxZoomPreference(25);
+                mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                    @Override
+                    public void onMapClick(LatLng latLng) {
+                        Intent intent = new Intent(FoodServiceActivity.this, MapActivity.class);
+                        intent.putExtra("Latitude", foodService.getLocation().getLatitude());
+                        intent.putExtra("Longitude", foodService.getLocation().getLongitude());
+                        intent.putExtra("foodServiceName", foodService.getName());
+                        startActivity(intent);
+                    }
+                });
+            }
+        });
+
+        Button buttonNewMenuItem = findViewById(R.id.buttonNewMenuItem);
+        buttonNewMenuItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(FoodServiceActivity.this, MenuActivity.class);
-                intent.putExtra("foodServiceId", id);
+                Intent intent = new Intent(FoodServiceActivity.this, NewMenuItemActivity.class);
+                intent.putExtra("foodServiceId", foodService.getId());
                 startActivity(intent);
             }
         });
+
+        RecyclerView recyclerView = findViewById(R.id.menu_list);
+        adapter = new MenuItemAdapter(this, foodService.getMenu().getMenuList(), foodService.getId());
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     private String getFoodTypes() {
@@ -193,4 +207,15 @@ public class FoodServiceActivity extends AppCompatActivity {
         return foodTypes.toString();
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        adapter.setList(foodService.getMenu().getMenuList());
+        if (user.shouldApplyConstraintsFilter()) {
+            adapter.setDietaryConstraints(user.getDietaryConstraints());
+        } else {
+            adapter.setDietaryConstraints(EnumSet.noneOf(FoodType.class));
+        }
+    }
 }

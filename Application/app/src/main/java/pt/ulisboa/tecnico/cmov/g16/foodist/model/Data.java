@@ -38,7 +38,7 @@ import pt.inesc.termite.wifidirect.SimWifiP2pDeviceList;
 import pt.inesc.termite.wifidirect.SimWifiP2pManager;
 import pt.inesc.termite.wifidirect.service.SimWifiP2pService;
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
-import pt.ulisboa.tecnico.cmov.g16.foodist.activities.MenuActivity;
+import pt.ulisboa.tecnico.cmov.g16.foodist.activities.FoodServiceActivity;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.GrpcTask;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.Runnable.FetchImagesRunnable;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.Runnable.FetchMenusRunnable;
@@ -337,7 +337,7 @@ public class Data extends Application implements SimWifiP2pManager.PeerListListe
 
         if(setNotif) {
             // Create an Intent for the activity you want to start
-            Intent resultIntent = new Intent(this, MenuActivity.class);
+            Intent resultIntent = new Intent(this, FoodServiceActivity.class);
             resultIntent.putExtra("foodServiceId", id);
             // Create the TaskStackBuilder and add the intent, which inflates the back stack
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);

@@ -77,6 +77,7 @@
     <string name="add_item">Add new menu item</string>
     <string name="menu_name">%s\'s Menu</string>
     <string name="add_image">Add image</string>
+    <string name="content_description_image">Menu image</string>
     <string name="food_type">Food type:</string>
     <string name="price_title">Price:</string>
     <string name="price_value">%.2f€</string>

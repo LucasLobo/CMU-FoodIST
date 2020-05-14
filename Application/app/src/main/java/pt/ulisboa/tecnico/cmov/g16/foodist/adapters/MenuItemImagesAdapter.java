@@ -73,13 +73,11 @@ public class MenuItemImagesAdapter extends RecyclerView.Adapter<MenuItemImagesAd
 
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        final View view;
         ImageView imageView;
 
 
         ViewHolder(@NonNull View view) {
             super(view);
-            this.view = view;
             imageView = view.findViewById(R.id.itemImageView);
         }
     }
