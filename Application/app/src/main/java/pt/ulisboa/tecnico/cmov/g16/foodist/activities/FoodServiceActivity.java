@@ -191,6 +191,7 @@ public class FoodServiceActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.menu_list);
         adapter = new MenuItemAdapter(this, foodService.getMenu().getMenuList(), foodService.getId());
         recyclerView.setAdapter(adapter);
+        recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
