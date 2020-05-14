@@ -178,6 +178,7 @@ public class FoodServiceActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                 });
+                mMap.getUiSettings().setAllGesturesEnabled(false);
             }
         });
 
