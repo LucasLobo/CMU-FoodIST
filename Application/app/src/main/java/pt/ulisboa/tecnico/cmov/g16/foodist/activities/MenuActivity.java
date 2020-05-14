@@ -1,6 +1,7 @@
 package pt.ulisboa.tecnico.cmov.g16.foodist.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -10,6 +11,7 @@ import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.EnumSet;
+import java.util.List;
 
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.Data;
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
@@ -69,6 +71,7 @@ public class MenuActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
     }
 
     @Override

@@ -14,6 +14,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
@@ -28,6 +29,8 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
+
+import java.util.List;
 
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.Data;
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
@@ -55,6 +58,29 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
 
         initToolbar();
         initFoodServiceRecyclerView();
+
+        Intent receivedIntent = getIntent();
+        if(Intent.ACTION_VIEW.equals(receivedIntent.getAction())){
+            Uri uri = receivedIntent.getData();
+            List<String> params = uri.getPathSegments();
+            String isFoodService = params.get(0);
+            String fsId = params.get(1);
+            if(isFoodService.equals("foodservice")){
+                Intent intent = new Intent(getApplicationContext(), FoodServiceActivity.class);
+                intent.putExtra("id", Integer.valueOf(fsId));
+                startActivity(intent);
+            }
+            else if(isFoodService.equals("menuitem")){
+                String menuItemId = params.get(2);
+
+                Intent intent = new Intent(getApplicationContext(), MenuItemActivity.class);
+                intent.putExtra("menuItemId", Integer.valueOf(menuItemId));
+                intent.putExtra("foodServiceId", Integer.valueOf(fsId));
+                startActivity(intent);
+            }
+
+
+        }
     }
 
     @Override

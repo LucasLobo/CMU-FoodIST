@@ -100,8 +100,8 @@ public class MenuItemActivity extends AppCompatActivity {
                 sendIntent.putExtra(Intent.EXTRA_TEXT,
                         "Let's try the " + menuItem.getName() + " at " + foodService.getName() +
                         "\nFood Type: " + getString(menuItem.getFoodType().resourceId) +
-                        "\nPrice: " + getString(R.string.price_value,menuItem.getPrice()));
-
+                        "\nPrice: " + getString(R.string.price_value,menuItem.getPrice()) +
+                        "\ng20://foodist/menuitem/" + foodService.getId() + "/" + menuItem.getId());
                 sendIntent.setType("*/*");
 
                 Intent shareIntent = Intent.createChooser(sendIntent, "Share:");

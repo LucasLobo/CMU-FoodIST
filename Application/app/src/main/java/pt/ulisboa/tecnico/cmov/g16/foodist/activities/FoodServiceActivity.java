@@ -98,7 +98,9 @@ public class FoodServiceActivity extends AppCompatActivity {
                 sendIntent.setAction(Intent.ACTION_SEND);
                 sendIntent.putExtra(Intent.EXTRA_TEXT, "Let's eat at " + foodService.getName() + "!"
                         + "\nCampus: " + getString(foodService.getCampus().id)
-                        + "\nAvailable Food Types: " + getFoodTypes());
+                        + "\nAvailable Food Types: " + getFoodTypes()
+                        + "\ng20://foodist/foodservice/" + foodService.getId());
+
                 sendIntent.setType("text/plain");
 
                 Intent shareIntent = Intent.createChooser(sendIntent, "Share:");
