@@ -2,19 +2,14 @@ package pt.ulisboa.tecnico.cmov.g16.foodist.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import java.util.LinkedList;
 
 import pt.ulisboa.tecnico.cmov.g16.foodist.adapters.FoodTypeAdapter;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.Data;
@@ -30,10 +25,7 @@ public class NewMenuItemActivity extends AppCompatActivity {
 
     Data data;
     Spinner typeOfFood;
-    private LinearLayout imageLayout;
-    private LinkedList<ImageView> images = new LinkedList<>();
 
-    private static final int PICK_IMAGE = 100;
     private int foodServiceId;
 
     @Override
@@ -48,15 +40,6 @@ public class NewMenuItemActivity extends AppCompatActivity {
 
         typeOfFood = findViewById(R.id.menu_item_food_type_value);
         setupSpinner();
-        imageLayout = findViewById(R.id.imageSlots);
-
-        Button importButton = findViewById(R.id.importImageButton);
-        importButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                chooseImageFromGallery();
-            }
-        });
 
         Button saveButton = findViewById(R.id.saveButton);
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -92,23 +75,6 @@ public class NewMenuItemActivity extends AppCompatActivity {
         typeOfFood.setAdapter(adapterDietary);
     }
 
-    private void chooseImageFromGallery(){
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-        startActivityForResult(galleryIntent, PICK_IMAGE);
-    }
-
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && requestCode == PICK_IMAGE) {
-            if (data != null) {
-                ImageView imageView = new ImageView(this);
-                imageView.setImageURI(data.getData());
-                images.add(imageView);
-                imageView.setVisibility(View.VISIBLE);
-                imageLayout.addView(imageView);
-            }
-        }
-    }
     @Override
     public boolean onOptionsItemSelected(android.view.MenuItem item) {
         switch (item.getItemId()) {

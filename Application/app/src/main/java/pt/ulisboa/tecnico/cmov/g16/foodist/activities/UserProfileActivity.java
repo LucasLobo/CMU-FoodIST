@@ -8,24 +8,21 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
-
+import pt.ulisboa.tecnico.cmov.g16.foodist.adapters.FoodConstraintAdapter;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.CampusLocation;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.Data;
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 import pt.ulisboa.tecnico.cmov.g16.foodist.adapters.CampusAdapter;
-import pt.ulisboa.tecnico.cmov.g16.foodist.adapters.FoodTypeAdapter;
 import pt.ulisboa.tecnico.cmov.g16.foodist.adapters.UserStatusAdapter;
-import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodType;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.User;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.GrpcTask;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.Runnable.SaveProfileRunnable;
@@ -35,22 +32,16 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private static final String TAG = "UserProfileActivity";
 
-    Data data;
-    User user;
+    private Data data;
+    private User user;
 
-    ListView listProfileView;
-    ListView listConstraintsView;
+    private RecyclerView constraintListView;
+    private TextView userNameView;
+    private Button loginButton;
+    private Spinner campusSpinner;
+    private Switch locAut;
+    private Spinner statusSpinner;
 
-    TextView userNameView;
-    Button loginButton;
-    Spinner campusSpinner;
-    Switch locAut;
-    Spinner statusSpinner;
-    Button addConstraintsButton;
-
-
-
-    //----------------------------------------OnCreate----------------------------------------------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,9 +54,7 @@ public class UserProfileActivity extends AppCompatActivity {
         locAut = findViewById(R.id.loc_aut);
 
         statusSpinner = findViewById(R.id.selectStatus);
-        addConstraintsButton = findViewById(R.id.addConstraints);
-        listProfileView = findViewById(R.id.profileView);
-        listConstraintsView = findViewById(R.id.constraintsView);
+        constraintListView = findViewById(R.id.profileView);
         loginButton = findViewById(R.id.login);
         userNameView = findViewById(R.id.username);
     }
@@ -118,52 +107,10 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     private void setUpConstraints() {
-        /*_____________________________________DIETARY____________________________________________*/
-        final FoodTypeAdapter adapterDietary = new FoodTypeAdapter(this);
-        final FoodTypeAdapter adapterCurrentDietary = new FoodTypeAdapter(this, new ArrayList<>(user.getDietaryConstraints()));
-        listConstraintsView.setAdapter(adapterCurrentDietary);
-
-        addConstraintsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listProfileView.setAdapter(adapterDietary);
-                listProfileView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                        FoodType dietary = adapterDietary.getItem(position);
-
-                        if (!user.getDietaryConstraints().contains(dietary)) {
-                            user.addDietaryConstraints(dietary);
-                            if (user.isLoggedIn()) {
-                                saveProfile();
-                            }
-                            adapterCurrentDietary.add(dietary);
-                            adapterCurrentDietary.notifyDataSetChanged();
-                        }
-                        else {
-                            Toast.makeText(UserProfileActivity.this, "You already have this constraint in your dietary.", Toast.LENGTH_SHORT).show();
-                        }
-                        listProfileView.setAdapter(null);
-                    }
-                });
-            }
-        });
-
-        listConstraintsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                FoodType dietary = adapterCurrentDietary.getItem(position);
-                user.removeDietaryConstraints(dietary);
-                if (user.isLoggedIn()) {
-                    saveProfile();
-                }
-                adapterCurrentDietary.remove(dietary);
-                adapterCurrentDietary.notifyDataSetChanged();
-            }
-
-        });
+        final FoodConstraintAdapter adapterDietary = new FoodConstraintAdapter(user);
+        constraintListView.setLayoutManager(new LinearLayoutManager(this));
+        constraintListView.setHasFixedSize(true);
+        constraintListView.setAdapter(adapterDietary);
     }
 
     private void setUpStatus() {
@@ -177,9 +124,6 @@ public class UserProfileActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 User.UserStatus status = adapter.getItem(position);
                 user.setStatus(status);
-                if (user.isLoggedIn()) {
-                    saveProfile();
-                }
             }
 
             @Override
@@ -191,6 +135,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private void setUpCampus() {
         locAut.setChecked(user.isLocAuto());
+        campusSpinner.setOnItemSelectedListener(null);
         final CampusAdapter adapter = new CampusAdapter(this);
         campusSpinner.setAdapter(adapter);
         campusSpinner.setSelection(adapter.getPosition(user.getCampus()), false);
@@ -231,5 +176,11 @@ public class UserProfileActivity extends AppCompatActivity {
                 }
             }
         }).execute();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (user.isLoggedIn()) saveProfile();
     }
 }

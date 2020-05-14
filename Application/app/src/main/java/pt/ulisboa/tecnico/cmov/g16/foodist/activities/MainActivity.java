@@ -41,10 +41,10 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
 
     private int LOCATION_PERMISSION_ID = 44;
 
-    FoodServiceListRecyclerAdapter adapter;
-    Toolbar toolbar;
-    Data data;
-    User user;
+    private FoodServiceListRecyclerAdapter adapter;
+    private Toolbar toolbar;
+    private Data data;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements TaskLoadedCallbac
 
     private void initFoodServiceRecyclerView() {
         RecyclerView rv = findViewById(R.id.food_service_list);
-        adapter = new FoodServiceListRecyclerAdapter(this, data.getFoodServiceList(), data);
+        adapter = new FoodServiceListRecyclerAdapter(this, data.getFoodServiceList());
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
     }

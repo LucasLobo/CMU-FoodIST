@@ -6,9 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import java.util.EnumSet;
 import java.util.LinkedList;
@@ -19,7 +20,7 @@ import pt.ulisboa.tecnico.cmov.g16.foodist.model.Data;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.MenuItem;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodType;
 
-public class MenuItemAdapter extends ArrayAdapter<MenuItem> implements Filterable {
+public class MenuItemAdapter extends ArrayAdapter<MenuItem> {
 
     private Context mContext;
     private List<MenuItem> originalList;
@@ -56,15 +57,14 @@ public class MenuItemAdapter extends ArrayAdapter<MenuItem> implements Filterabl
 
 
 
-    public View getView(int position, View convertView, ViewGroup parent) {
+    @NonNull
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View listItem = convertView;
         if (listItem == null) {
             listItem = LayoutInflater.from(mContext).inflate(R.layout.menu_item, parent, false);
-
         }
 
         MenuItem menuItem = filteredList.get(position);
-
         TextView title = listItem.findViewById(R.id.menu_item_title);
         title.setText(menuItem.getName());
 

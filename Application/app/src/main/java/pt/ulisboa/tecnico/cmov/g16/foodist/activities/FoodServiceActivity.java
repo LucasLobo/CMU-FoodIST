@@ -37,10 +37,10 @@ import pt.ulisboa.tecnico.cmov.g16.foodist.model.User;
 
 public class FoodServiceActivity extends AppCompatActivity {
 
-    Data data;
-    FoodService foodService;
-    GoogleMap mMap;
-    String distanceTime;
+    private Data data;
+    private FoodService foodService;
+    private GoogleMap mMap;
+    private String distanceTime;
 
 
     @Override

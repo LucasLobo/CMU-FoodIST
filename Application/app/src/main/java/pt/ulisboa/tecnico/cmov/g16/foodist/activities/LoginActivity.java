@@ -21,15 +21,15 @@ import pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.Runnable.SaveProfileRunnab
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
 
-    Data data;
-    User user;
+    private Data data;
+    private User user;
 
-    EditText username;
-    EditText password;
-    TextView error;
+    private EditText username;
+    private EditText password;
+    private TextView error;
 
-    String usernameString;
-    String passwordString;
+    private String usernameString;
+    private String passwordString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

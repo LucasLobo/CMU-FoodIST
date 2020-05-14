@@ -8,6 +8,7 @@
     <string name="calculating">Calculating…</string>
     <string name="unknown">Unknown</string>
     <string name="channel_name">FoodIST</string>
+    <string name="euro">€</string>
 
 
     <!-- MAIN ACTIVITY -->
@@ -79,6 +80,7 @@
     <string name="food_type">Food type:</string>
     <string name="price_title">Price:</string>
     <string name="price_value">%.2f€</string>
+    <string name="description">Description</string>
 
     <!-- CONTEXT MENU MAIN ACTIVITY -->
     <string name="menu_user_profile">Profile</string>

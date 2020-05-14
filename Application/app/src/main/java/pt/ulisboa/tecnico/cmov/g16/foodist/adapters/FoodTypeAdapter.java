@@ -22,10 +22,6 @@ public class FoodTypeAdapter extends ArrayAdapter<FoodType> {
         super(context, 0, FoodType.values());
     }
 
-    public FoodTypeAdapter(Context context, List<FoodType> list) {
-        super(context, 0, list);
-    }
-
     @NonNull
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {

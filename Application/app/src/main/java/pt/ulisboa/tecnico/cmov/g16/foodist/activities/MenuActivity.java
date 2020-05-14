@@ -23,10 +23,10 @@ import pt.ulisboa.tecnico.cmov.g16.foodist.model.User;
 public class MenuActivity extends AppCompatActivity {
 
     private Menu menu;
-    Data data;
-    User user;
-    ListView listView;
-    MenuItemAdapter adapter;
+    private Data data;
+    private User user;
+    private ListView listView;
+    private MenuItemAdapter adapter;
     private int foodServiceId;
 
     @Override

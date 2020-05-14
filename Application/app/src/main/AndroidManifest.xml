@@ -27,7 +27,7 @@
 
         <activity
             android:name=".activities.MapActivity"
-            android:label="@string/title_activity_map"></activity>
+            android:label="@string/title_activity_map" />
 
         <uses-library android:name="com.google.android.maps" />
 
@@ -44,7 +44,6 @@
         <activity
             android:name=".activities.UserProfileActivity"
             android:label="@string/profile" />
-        <activity android:name=".activities.PeerScannerActivity" />
         <activity android:name=".activities.FoodServiceActivity" />
         <activity
             android:name=".activities.LoginActivity"

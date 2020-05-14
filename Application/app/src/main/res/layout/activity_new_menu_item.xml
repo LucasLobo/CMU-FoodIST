@@ -31,13 +31,13 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/menu_item_price_value"
+            android:id="@+id/menu_item_euro"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
             android:layout_marginLeft="2dp"
             android:layout_marginTop="32dp"
-            android:text="€"
+            android:text="@string/euro"
             android:textSize="18sp"
             app:layout_constraintStart_toEndOf="@id/menu_item_price_value"
             app:layout_constraintTop_toBottomOf="@id/title" />
@@ -51,7 +51,7 @@
             android:layout_marginTop="26dp"
             android:ems="10"
             android:hint="5"
-            android:inputType="number"
+            android:inputType="numberDecimal"
             android:textSize="14sp"
             app:layout_constraintStart_toEndOf="@id/menu_item_price_title"
             app:layout_constraintTop_toBottomOf="@id/title" />
@@ -65,7 +65,7 @@
             android:layout_marginTop="32dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:text="Price:"
+            android:text="@string/price_title"
             android:textSize="18sp"
             app:layout_constraintEnd_toStartOf="@id/menu_item_price_value"
             app:layout_constraintStart_toStartOf="parent"
@@ -77,8 +77,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:text="Type of food:"
+            android:layout_marginTop="26dp"
+            android:text="@string/food_type"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/menu_item_price_value" />
@@ -95,8 +95,8 @@
 
         <EditText
             android:id="@+id/description"
-            android:layout_width="393dp"
-            android:layout_height="81dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="48dp"
@@ -105,57 +105,12 @@
             android:ems="10"
             android:focusable="auto"
             android:gravity="start|top"
-            android:hint="This food consists of ..."
+            android:hint="@string/description"
             android:inputType="textMultiLine"
             android:longClickable="true"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.545"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/menu_item_food_type_title" />
-
-        <View
-            android:id="@+id/divider"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="64dp"
-            android:layout_marginBottom="64dp"
-            android:background="?android:attr/listDivider"
-            app:layout_constraintBottom_toTopOf="@id/importImageButton"
-            app:layout_constraintTop_toBottomOf="@id/description"
-            tools:layout_editor_absoluteX="11dp" />
-
-        <Button
-            android:id="@+id/importImageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="40dp"
-            android:text="Import Image"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/description" />
-
-        <ScrollView
-            android:id="@+id/scrollView3"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginBottom="16dp"
-            app:layout_constraintBottom_toTopOf="@id/saveButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/importImageButton">
-
-            <LinearLayout
-                android:id="@+id/imageSlots"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" />
-        </ScrollView>
 
         <Button
             android:id="@+id/saveButton"

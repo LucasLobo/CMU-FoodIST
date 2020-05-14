@@ -11,13 +11,16 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.ByteArrayOutputStream;
 
+import java.util.ArrayList;
+import pt.ulisboa.tecnico.cmov.g16.foodist.adapters.MenuItemImagesAdapter;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.Data;
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodService;
@@ -32,11 +35,15 @@ public class MenuItemActivity extends AppCompatActivity {
 
     private static final int PICK_IMAGE = 100;
 
+    private RecyclerView recyclerView;
     private Data data;
     private FoodService foodService;
     private MenuItem menuItem;
-    private LinearLayout imageLayout;
+
+    private MenuItemImagesAdapter adapter;
+
     private int foodServiceId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +52,7 @@ public class MenuItemActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         data = (Data) getApplicationContext();
-        imageLayout = findViewById(R.id.imageSlots);
+
         Intent intent = getIntent();
 
         int menuItemId = intent.getIntExtra("menuItemId", -1);
@@ -59,7 +66,11 @@ public class MenuItemActivity extends AppCompatActivity {
         Menu menu = foodService.getMenu();
         menuItem = menu.getMenuItem(menuItemId);
         setTitle(menuItem.getName());
+
+        setupRecycler();
         setupView();
+        adapter.notifyDataSetChanged();
+
     }
 
     @Override
@@ -122,17 +133,18 @@ public class MenuItemActivity extends AppCompatActivity {
                 chooseImageFromGallery();
             }
         });
+    }
 
-        for (Integer imageId : menuItem.getImageIds()) {
-            Bitmap bitmap = data.getImage(imageId);
-            ImageView imageView = new ImageView(this);
-            imageView.setImageBitmap(bitmap);
-            setUpImageView(imageView, imageId);
-        }
+    private void setupRecycler() {
+        recyclerView = findViewById(R.id.imageListView);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        adapter = new MenuItemImagesAdapter(this, new ArrayList<>(menuItem.getImageIds()), menuItem.getName());
+        recyclerView.setAdapter(adapter);
+        recyclerView.setNestedScrollingEnabled(false);
     }
 
 
-    private void chooseImageFromGallery(){
+    private void chooseImageFromGallery() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         startActivityForResult(galleryIntent, PICK_IMAGE);
     }
@@ -144,36 +156,20 @@ public class MenuItemActivity extends AppCompatActivity {
                 Uri uri = data.getData();
                 ImageView imageView = new ImageView(this);
                 imageView.setImageURI(uri);
-
                 final Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-                saveImage(foodServiceId, menuItem, bitmap, imageView);
+                saveImage(foodServiceId, menuItem, bitmap);
             }
         }
     }
 
-    private void setUpImageView(ImageView imageView, final int imageId) {
-        imageView.setVisibility(View.VISIBLE);
-        imageLayout.addView(imageView);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MenuItemActivity.this, FullscreenImageActivity.class);
-                Bundle extras = new Bundle();
-                extras.putInt("imageId", imageId);
-                extras.putString("menuName", menuItem.getName());
-                intent.putExtras(extras);
-                startActivity(intent);
-            }
-        });
-    }
 
-    public void saveImage(Integer foodServiceId, final MenuItem menuItem, final Bitmap bitmap, final ImageView imageView){
+    public void saveImage(Integer foodServiceId, final MenuItem menuItem, final Bitmap bitmap) {
         new GrpcTask(new SaveImageRunnable(foodServiceId, menuItem.getId(), bitmap) {
             @Override
             protected void callback(Integer imageId) {
                 menuItem.addImageId(imageId);
                 data.addImage(imageId, bitmap);
-                setUpImageView(imageView, imageId);
+                adapter.addImage(imageId);
             }
         }).execute();
     }

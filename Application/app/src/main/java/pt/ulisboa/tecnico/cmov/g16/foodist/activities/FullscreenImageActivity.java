@@ -16,7 +16,7 @@ import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodService;
 
 public class FullscreenImageActivity extends AppCompatActivity {
 
-    Data data;
+    private Data data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

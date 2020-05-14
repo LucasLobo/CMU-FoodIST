@@ -53,7 +53,7 @@ public class FoodServiceListRecyclerAdapter extends RecyclerView.Adapter<Recycle
     private Handler handler;
     private Runnable runnable;
 
-    public FoodServiceListRecyclerAdapter(Context context, ArrayList<FoodService> foodServiceList, Data data) {
+    public FoodServiceListRecyclerAdapter(Context context, ArrayList<FoodService> foodServiceList) {
         this.context = context;
         this.foodServiceList = foodServiceList;
         this.filteredFoodServiceList = foodServiceList;
