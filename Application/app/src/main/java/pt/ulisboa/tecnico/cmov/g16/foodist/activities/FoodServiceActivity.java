@@ -5,17 +5,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 
@@ -81,7 +77,7 @@ public class FoodServiceActivity extends AppCompatActivity {
                 sendIntent.putExtra(Intent.EXTRA_TEXT, "Let's eat at " + foodService.getName() + "!"
                         + "\nCampus: " + getString(foodService.getCampus().id)
                         + "\nAvailable Food Types: " + getFoodTypes()
-                        + "\nhttp://foodist/foodservice/" + foodService.getId());
+                        + "\nhttp://foodist.pt/foodservice/" + foodService.getId());
 
                 sendIntent.setType("text/plain");
 
@@ -137,7 +133,7 @@ public class FoodServiceActivity extends AppCompatActivity {
         TextView aproxWaiting = findViewById(R.id.food_service_aprox_waiting);
 
         if (foodService.getQueueTime() == -2) {
-            aproxWaiting.setText(R.string.calculating);
+            aproxWaiting.setVisibility(View.GONE);
         } else if (foodService.getQueueTime() == -1) {
             aproxWaiting.setText(getString(R.string.waiting_time, 0));
         } else if (foodService.getQueueTime() >= 0) {
@@ -154,7 +150,11 @@ public class FoodServiceActivity extends AppCompatActivity {
         campus.setText(foodService.getLocation().getCampus().id);
 
         TextView walkingTime = findViewById(R.id.food_service_walking_time);
-        walkingTime.setText(getString(R.string.walking_time, distanceTime));
+        if (distanceTime == null) {
+            walkingTime.setVisibility(View.GONE);
+        } else {
+            walkingTime.setText(getString(R.string.walking_time, distanceTime));
+        }
 
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapFragment);
         mapFragment.getMapAsync(new OnMapReadyCallback() {
