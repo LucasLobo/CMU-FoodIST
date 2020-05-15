@@ -1,7 +1,5 @@
 package com.grpc.server.util;
 
-import java.util.ArrayList;
-
 public class LinearRegression {
 
 	int n = 0;

@@ -6,7 +6,6 @@ import com.grpc.Contract.FetchProfileResponse;
 import com.grpc.GrpcServiceGrpc;
 
 import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.List;
 
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodType;

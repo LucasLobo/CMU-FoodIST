@@ -4,7 +4,6 @@ import android.location.Location;
 
 import org.threeten.bp.LocalTime;
 
-import java.time.Instant;
 import java.util.EnumSet;
 import java.util.HashMap;
 

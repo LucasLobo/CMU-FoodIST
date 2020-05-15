@@ -11,17 +11,11 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.grpc.Contract;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 import pt.ulisboa.tecnico.cmov.g16.foodist.activities.FullscreenImageActivity;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.Data;
-import pt.ulisboa.tecnico.cmov.g16.foodist.model.MenuItem;
 
 public class MenuItemImagesAdapter extends RecyclerView.Adapter<MenuItemImagesAdapter.ViewHolder> {
 

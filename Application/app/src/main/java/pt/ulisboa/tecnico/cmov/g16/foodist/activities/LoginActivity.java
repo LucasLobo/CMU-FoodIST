@@ -3,7 +3,6 @@ package pt.ulisboa.tecnico.cmov.g16.foodist.activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;

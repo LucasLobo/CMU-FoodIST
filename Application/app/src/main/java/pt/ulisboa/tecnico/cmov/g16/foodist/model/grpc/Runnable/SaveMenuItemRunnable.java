@@ -5,7 +5,6 @@ import com.grpc.Contract.SaveMenuItemResponse;
 import com.grpc.Contract.SaveMenuItemRequest;
 import com.grpc.GrpcServiceGrpc;
 
-
 import io.grpc.StatusRuntimeException;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.MenuItem;
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.GrpcRunnable;

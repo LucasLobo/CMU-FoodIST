@@ -2,7 +2,6 @@ package pt.ulisboa.tecnico.cmov.g16.foodist.activities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.Data;
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
-import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodService;
 
 public class FullscreenImageActivity extends AppCompatActivity {
 

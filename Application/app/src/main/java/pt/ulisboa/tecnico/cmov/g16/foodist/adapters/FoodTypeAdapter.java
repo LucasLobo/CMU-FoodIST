@@ -9,12 +9,7 @@ import android.widget.CheckedTextView;
 
 import androidx.annotation.NonNull;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodType;
-import pt.ulisboa.tecnico.cmov.g16.foodist.model.User;
 
 public class FoodTypeAdapter extends ArrayAdapter<FoodType> {
 

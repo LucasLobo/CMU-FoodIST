@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
 public class DataParser {
 
     public List<List<HashMap<String, String>>> parse(JSONObject jObject) {

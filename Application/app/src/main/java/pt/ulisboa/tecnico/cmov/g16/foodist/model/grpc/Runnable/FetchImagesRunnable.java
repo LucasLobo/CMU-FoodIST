@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import com.google.protobuf.ByteString;
-import com.grpc.Contract.ImageMetaData;
 import com.grpc.Contract.FetchImagesResponse;
 import com.grpc.Contract.FetchImagesRequest;
 import com.grpc.GrpcServiceGrpc;

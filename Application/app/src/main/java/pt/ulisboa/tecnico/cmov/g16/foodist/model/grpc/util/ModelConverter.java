@@ -1,12 +1,9 @@
 package pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.util;
 
-import android.widget.ImageView;
-
 import com.grpc.Contract;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.LinkedList;
 import java.util.List;
 
 import pt.ulisboa.tecnico.cmov.g16.foodist.model.FoodType;

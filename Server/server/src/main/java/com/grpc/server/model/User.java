@@ -1,7 +1,5 @@
 package com.grpc.server.model;
 
-import javax.xml.stream.Location;
-import java.util.ArrayList;
 import java.util.List;
 
 public class User {

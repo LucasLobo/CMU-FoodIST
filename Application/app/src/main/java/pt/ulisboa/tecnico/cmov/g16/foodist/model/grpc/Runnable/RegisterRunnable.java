@@ -1,6 +1,5 @@
 package pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.Runnable;
 
-
 import com.grpc.Contract.Auth;
 import com.grpc.Contract.RegisterRequest;
 import com.grpc.Contract.RegisterResponse;

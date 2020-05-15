@@ -1,12 +1,10 @@
 package pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.grpc.GrpcServiceGrpc;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.text.MessageFormat;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;

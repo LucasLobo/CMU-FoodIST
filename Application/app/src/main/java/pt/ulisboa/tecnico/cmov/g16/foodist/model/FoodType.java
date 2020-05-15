@@ -1,7 +1,5 @@
 package pt.ulisboa.tecnico.cmov.g16.foodist.model;
 
-import androidx.annotation.NonNull;
-
 import pt.ulisboa.tecnico.cmov.g16.foodist.R;
 
 public enum FoodType {

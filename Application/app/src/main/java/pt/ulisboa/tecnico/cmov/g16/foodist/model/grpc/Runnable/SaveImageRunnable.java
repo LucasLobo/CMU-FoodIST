@@ -1,9 +1,6 @@
 package pt.ulisboa.tecnico.cmov.g16.foodist.model.grpc.Runnable;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Log;
-
 import com.google.protobuf.ByteString;
 import com.grpc.Contract.ImageChunk;
 import com.grpc.Contract.ImageMetaData;
@@ -12,7 +9,6 @@ import com.grpc.Contract.SaveImageToMenuItemResponse;
 import com.grpc.GrpcServiceGrpc;
 
 import java.io.ByteArrayOutputStream;
-import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
