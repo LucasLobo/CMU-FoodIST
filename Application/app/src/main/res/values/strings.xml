@@ -1,0 +1,81 @@
+<resources>
+    <string name="app_name">FoodIST 20</string>
+    <string name="title_food_service_list">Food services</string>
+
+    <string name="unknown_error">An unknown error occurred</string>
+    <string name="unknown_error_code">An unknown error (%s) occurred</string>
+    <string name="calculating">Calculating…</string>
+    <string name="channel_name">FoodIST</string>
+    <string name="euro">€</string>
+
+
+    <!-- MAIN ACTIVITY -->
+    <string name="results_filtered">Some food services were filtered due to dietary constraints.</string>
+    <string name="no_dietary_constraints">Dietary constraints are not being applied.</string>
+
+    <!--USER PROFILE ACTIVITY-->
+    <string name="profile">Profile</string>
+    <string name="status">Status:</string>
+    <string name="campus">Campus:</string>
+    <string name="dietary">Dietary Constraints:</string>
+    <string name="dietary_explain">What you don\'t eat</string>
+
+    <string name="login_signup">Sign up or Log in</string>
+    <string name="logout">Log out</string>
+    <string name="please_sign_in">Please sign in.</string>
+    <string name="loc_aut">Automatic Location Finder</string>
+
+    <string name="alameda">Alameda</string>
+    <string name="tagus">Taguspark</string>
+    <string name="CTN">CTN</string>
+    <string name="unknown_campus">Unknown</string>
+
+    <string name="student">Student</string>
+    <string name="professor">Professor</string>
+    <string name="researcher">Researcher</string>
+    <string name="staff">Staff</string>
+    <string name="generalPublic">General Public</string>
+
+    <string name="meat">Meat</string>
+    <string name="fish">Fish</string>
+    <string name="vegetarian">Vegetarian</string>
+    <string name="vegan">Vegan</string>
+
+    <!--USER LOGIN ACTIVITY-->
+    <string name="usernameLogin">Username</string>
+    <string name="passwordLogin">Password</string>
+    <string name="signIn">Login</string>
+    <string name="username_password_missing">Username and/or password cannot be empty</string>
+    <string name="username_already_taken">Username is already in use</string>
+    <string name="incorrect_credentials">Incorrect username or password</string>
+
+    <!--TERMITE-->
+
+    <string name="time_min">%1d seconds</string>
+
+    <!-- FOOD SERVICE ACTIVITY -->
+    <string name="location">Location</string>
+    <string name="walking_time">%1s away</string>
+    <string name="waiting_time">Waiting time: %1d seconds</string>
+    <string name="closed">Closed right now</string>
+    <string name="open">Currently open</string>
+    <string name="opening_time">%02d:%02d - %02d:%02d</string>
+    <string name="empty_menu_notice">This food service has an empty menu which might not meet your dietary constraints.</string>
+
+    <!-- MENU ACTIVITY -->
+    <string name="menu">Menu</string>
+    <string name="new_menu_name">Menu name</string>
+    <string name="create_menu">Create new menu item</string>
+    <string name="add_item">Add new menu item</string>
+    <string name="add_image">Add image</string>
+    <string name="content_description_image">Menu image</string>
+    <string name="food_type">Food type:</string>
+    <string name="price_title">Price:</string>
+    <string name="price_value">%.2f€</string>
+    <string name="description">Description</string>
+
+    <!-- CONTEXT MENU MAIN ACTIVITY -->
+    <string name="menu_user_profile">Profile</string>
+    <string name="menu_toggle">Toggle dietary constraints filter</string>
+    <string name="title_activity_map">Map</string>
+</resources>

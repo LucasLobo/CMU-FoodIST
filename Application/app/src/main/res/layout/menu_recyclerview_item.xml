@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/menu_recyclerview_item_card_view"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    app:cardElevation="1dp"
+    app:cardCornerRadius="5dp"
+    android:layout_marginBottom="15dp"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/menu_recyclerview_item_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginLeft="32dp"
+            android:gravity="center_vertical"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/menu_recyclerview_item_food_type"
+            app:layout_constraintEnd_toStartOf="@+id/menu_recyclerview_item_price"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="Menu Title" />
+
+        <TextView
+            android:id="@+id/menu_recyclerview_item_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginRight="32dp"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/menu_recyclerview_item_food_type"
+            app:layout_constraintEnd_toStartOf="@+id/menu_recyclerview_item_no_image"
+            app:layout_constraintStart_toEndOf="@id/menu_recyclerview_item_name"
+            app:layout_constraintTop_toTopOf="@+id/menu_recyclerview_item_name"
+            tools:text="5.00€" />
+
+        <TextView
+            android:id="@+id/menu_recyclerview_item_food_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/menu_recyclerview_item_name"
+            app:layout_constraintTop_toBottomOf="@id/menu_recyclerview_item_name"
+            tools:text="Food Type" />
+
+        <ImageView
+            android:id="@+id/menu_recyclerview_item_no_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:contentDescription="@string/content_description_image"
+            android:src="@drawable/ic_do_not_disturb"
+            android:tint="@color/backgroundLight"
+            android:scaleType="centerCrop"
+            android:padding="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/menu_recyclerview_item_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:contentDescription="@string/content_description_image"
+            android:visibility="gone"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
